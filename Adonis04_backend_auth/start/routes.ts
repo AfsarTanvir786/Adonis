@@ -1,7 +1,6 @@
 import router from '@adonisjs/core/services/router'
 import { HttpContext } from '@adonisjs/core/http'
 import { middleware } from './kernel.js'
-import auth from '@adonisjs/auth/services/main'
 
 router.get('/', async () => {
   return {
@@ -89,10 +88,20 @@ const UsersController = () => import('#controllers/users_controller')
 router.group(() => {
   router.get('/users', [UsersController, 'index'])           // Get all users
   router.get('/users/paginated', [UsersController, 'paginatedList'])  // Get paginated users
-  router.get('/users/:id', [UsersController, 'show'])        // Get single user
-  router.post('/users', [UsersController, 'store'])          // Create user
-  router.put('/users/:id', [UsersController, 'update'])      // Update user
-  router.delete('/users/:id', [UsersController, 'destroy'])  // Delete user
+  router.get('/user/:id', [UsersController, 'show'])        // Get single user
+  router.post('/user', [UsersController, 'store'])          // Create user
+  router.put('/user/:id', [UsersController, 'update'])      // Update user
+  router.delete('/user/:id', [UsersController, 'destroy'])  // Delete user
+}).prefix('/api')
+
+const OrdersController = () => import('#controllers/orders_controller')
+
+router.group(() => {
+  router.get('/orders', [OrdersController, 'index'])           // Get all users
+  router.get('/orders/paginated', [OrdersController, 'paginatedList'])  // Get paginated users
+  router.get('/order/:id', [OrdersController, 'show'])        // Get single user
+  router.post('/order', [OrdersController, 'store'])          // Create user
+  router.delete('/order/:id', [OrdersController, 'destroy'])  // Delete user
 }).prefix('/api')
 
 router.get('/api/dashboard', async () => {
