@@ -1,60 +1,56 @@
-import User from '#models/user'
-import { UserService } from '#services/user_service'
-import type { HttpContext } from '@adonisjs/core/http'
+import User from '#models/user';
+import { UserService } from '#controllers/user/user_service';
+import type { HttpContext } from '@adonisjs/core/http';
+import { paginatedUserValidator } from './user_validator.js';
 
 export default class UsersController {
-  private userService: UserService
+  private userService: UserService;
 
   constructor() {
-    this.userService = new UserService()
+    this.userService = new UserService();
   }
 
-  /**
-   * Get all users
-   * GET /users
-   */
   async index({ response }: HttpContext) {
     try {
-      const userList: User[] = await this.userService.getUserList()
+      const userList: User[] = await this.userService.getUserList();
       return response.ok({
         success: true,
         data: userList,
-      })
+      });
     } catch (error) {
       return response.internalServerError({
         success: false,
         message: error.message,
-      })
+      });
     }
   }
 
-  /**
-   * Get paginated users
-   * GET /users?page=1&limit=10
-   */
   async paginatedList({ request, response }: HttpContext) {
     try {
-      const page = Number(request.input('page', 1))
-      const limit = Number(request.input('limit', 10))
-
-      const userList = await this.userService.getPaginatedUsers(page, limit)
+      const payload = await request.validateUsing(paginatedUserValidator)
+      const {page, limit, sort_by, sort_order} = payload;
+      
+      const userList = await this.userService.getPaginatedUsers(
+        page,
+        limit,
+        sort_by,
+        sort_order,
+      );
 
       return response.ok({
         success: true,
         data: userList,
-      })
+      });
     } catch (error) {
       return response.internalServerError({
         success: false,
         message: error.message,
-      })
+      });
     }
   }
+}
 
-  /**
-   * Get single user
-   * GET /users/:id
-   */
+/* 
   async show({ params, response }: HttpContext) {
     try {
       const user = await this.userService.getUserById(Number(params.id))
@@ -70,10 +66,6 @@ export default class UsersController {
     }
   }
   
-  /**
-   * Create new user
-   * POST /users
-   */
   async store({ request, response }: HttpContext) {
     try {
       const data = request.only(['email', 'password', 'fullName'])
@@ -91,11 +83,6 @@ export default class UsersController {
       })
     }
   }
-
-  /**
-   * Update user
-   * PUT /users/:id
-   */
   async update({ params, request, response }: HttpContext) {
     try {
       const data = request.only(['email', 'password', 'fullName'])
@@ -114,10 +101,6 @@ export default class UsersController {
     }
   }
 
-  /**
-   * Delete user
-   * DELETE /users/:id
-   */
   async destroy({ params, response }: HttpContext) {
     try {
       await this.userService.deleteUser(params.id)
@@ -132,5 +115,4 @@ export default class UsersController {
         message: error.message,
       })
     }
-  }
-}
+  } */

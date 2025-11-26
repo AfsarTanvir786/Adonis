@@ -1,5 +1,5 @@
 import Order from '#models/order'
-import { OrderService } from '#services/order_service'
+import { OrderService } from '#controllers/order/order_service'
 import type { HttpContext } from '@adonisjs/core/http'
 
 export default class OrdersController {
@@ -15,7 +15,7 @@ export default class OrdersController {
       return response.ok({
         success: true,
         data: orderList,
-      })
+      });
     } catch (error) {
       return response.internalServerError({
         success: false,
