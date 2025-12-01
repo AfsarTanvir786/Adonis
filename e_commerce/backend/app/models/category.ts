@@ -11,10 +11,10 @@ export default class Category extends BaseModel {
   declare name: string;
 
   @column()
-  declare description: string;
+  declare description: string | null;
 
   @hasMany(() => Product)
-  declare products: HasMany<typeof Product>
+  declare products: HasMany<typeof Product>;
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime;

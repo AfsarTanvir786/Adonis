@@ -3,10 +3,8 @@ import { AccessToken } from '@adonisjs/auth/access_tokens';
 import AuthRepository from '../repositories/auth_repository.js';
 import { inject } from '@adonisjs/core';
 @inject()
-
 export class AuthService {
-
-  constructor(private authRepository: AuthRepository) { }
+  constructor(private authRepository: AuthRepository) {}
 
   public async createUser(user: Partial<User>) {
     return this.authRepository.createUser(user);
@@ -32,4 +30,3 @@ export class AuthService {
     return await this.authRepository.getUserList();
   }
 }
-
