@@ -4,6 +4,7 @@ import { middleware } from './kernel.js';
 import CategoriesController from '#controllers/categories_controller';
 import ProductsController from '#controllers/products_controller';
 import CartsController from '#controllers/carts_controller';
+import CartItemsController from '#controllers/cart_items_controller';
 
 router.get('/', async () => {
   return {
@@ -53,4 +54,14 @@ router
     router.delete('/:id', [CartsController, 'delete']);
   })
   .prefix('/api/carts');
+
+router
+  .group(() => {
+    router.get('/', [CartItemsController, 'list']);
+    router.get('/:id', [CartItemsController, 'show']);
+    router.post('/', [CartItemsController, 'create']);
+    router.put('/:id', [CartItemsController, 'update']);
+    router.delete('/:id', [CartItemsController, 'delete']);
+  })
+  .prefix('/api/cartItems');
 
