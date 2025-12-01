@@ -2,6 +2,7 @@ import AuthController from '#controllers/auth_controller';
 import router from '@adonisjs/core/services/router';
 import { middleware } from './kernel.js';
 import CategoriesController from '#controllers/categories_controller';
+import ProductsController from '#controllers/products_controller';
 
 router.get('/', async () => {
   return {
@@ -24,7 +25,7 @@ router
   })
   .prefix('/api/auth');
 
-  router
+router
   .group(() => {
     router.get('/:id', [CategoriesController, 'index']);
     router.post('/', [CategoriesController, 'create']);
@@ -32,3 +33,13 @@ router
     router.get('/', [CategoriesController, 'getCategoryList']);
   })
   .prefix('/api/category');
+
+router
+  .group(() => {
+    router.get('/', [ProductsController, 'list']);
+    router.get('/:id', [ProductsController, 'show']);
+    router.post('/', [ProductsController, 'create']);
+    router.put('/:id', [ProductsController, 'update']);
+    router.delete('/:id', [ProductsController, 'delete']);
+  })
+  .prefix('/api/products');
