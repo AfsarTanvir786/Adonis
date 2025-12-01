@@ -15,7 +15,7 @@ export default class Cart extends BaseModel {
   declare customer: BelongsTo<typeof User>;
 
   @hasMany(() => CartItem)
-  declare items: HasMany<typeof CartItem>
+  declare items: HasMany<typeof CartItem>;
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime;

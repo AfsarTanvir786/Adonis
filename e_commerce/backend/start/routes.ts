@@ -3,6 +3,7 @@ import router from '@adonisjs/core/services/router';
 import { middleware } from './kernel.js';
 import CategoriesController from '#controllers/categories_controller';
 import ProductsController from '#controllers/products_controller';
+import CartsController from '#controllers/carts_controller';
 
 router.get('/', async () => {
   return {
@@ -43,3 +44,13 @@ router
     router.delete('/:id', [ProductsController, 'delete']);
   })
   .prefix('/api/products');
+
+router
+  .group(() => {
+    router.get('/', [CartsController, 'list']);
+    router.get('/:id', [CartsController, 'show']);
+    router.post('/', [CartsController, 'create']);
+    router.delete('/:id', [CartsController, 'delete']);
+  })
+  .prefix('/api/carts');
+
