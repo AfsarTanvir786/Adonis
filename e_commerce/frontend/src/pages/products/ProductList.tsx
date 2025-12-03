@@ -9,11 +9,9 @@ function ProductList() {
 
     return (
         <div className="m-2 p-2 justify-around">
-            <div>
-                {productList?.map((p) => (
-                    <SingleProduct key={p.id} product={p} />
-                ))}
-            </div>
+            {productList?.map((p) => (
+                <SingleProduct key={p.id} product={p} />
+            ))}
         </div>
     );
 }
