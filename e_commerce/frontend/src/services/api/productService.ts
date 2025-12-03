@@ -14,7 +14,11 @@ export const productService = {
         return response.data.data;
     },
 
-    async create(payload: Partial<Product>): Promise<Product> {
+    async create(payload: Partial<Product & { category_id: number }>): Promise<Product> {
+        await delay(1000);
+        payload.stock = Number(payload.stock) || 0;
+        payload.price = Number(payload.price) || 0;
+        payload.category_id = Number(payload.categoryId) || 1;
         const response = await api.post('/products', payload);
         return response.data.data;
     },
