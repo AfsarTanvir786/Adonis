@@ -34,7 +34,7 @@ router
     router.put('/:id', [CategoriesController, 'update']);
     router.get('/', [CategoriesController, 'getCategoryList']);
   })
-  .prefix('/api/category');
+  .prefix('/api/categories');
 
 router
   .group(() => {
