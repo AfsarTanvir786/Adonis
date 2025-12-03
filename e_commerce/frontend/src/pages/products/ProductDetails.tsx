@@ -45,6 +45,10 @@ function ProductDetails(){
                     {product.price}
                 </p>
                 <p className="mb-2">
+                    <b>Stock: </b>
+                    {product.stock}
+                </p>
+                <p className="mb-2">
                     <b>Category: </b>
                     {product.categoryId}
                 </p>

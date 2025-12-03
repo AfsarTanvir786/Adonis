@@ -11,7 +11,7 @@ import Layout from './models/Layout';
 import ProductList from './pages/products/ProductList';
 import ProductEdit from './pages/products/ProductEdit';
 import ProductDetails from './pages/products/ProductDetails';
-import ProductCreate from './pages/products/productCreate';
+import ProductCreate from './pages/products/ProductCreate';
 import ProductIndex from './pages/products/Index';
 
 function App() {
@@ -23,7 +23,7 @@ function App() {
                 <Route path="products" element={<ProductIndex />}>
                     <Route index element={<ProductList />} />
                     <Route path="create" element={<ProductCreate />} />
-                    <Route path="edit" element={<ProductEdit />} />
+                    <Route path="edit/:id" element={<ProductEdit />} />
                     <Route path="details/:id" element={<ProductDetails />} />
                     <Route
                         path="*"
