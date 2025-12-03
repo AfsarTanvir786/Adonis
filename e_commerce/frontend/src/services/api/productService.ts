@@ -1,0 +1,34 @@
+import type { Product } from '@/types/type';
+import { api } from './api';
+import { delay } from '@/utils/delay';
+
+export const productService = {
+    async list(): Promise<Product[]> {
+        await delay(1000);
+        const response = await api.get('/products');
+        return response.data.data;
+    },
+
+    async get(id: number): Promise<Product> {
+        const response = await api.get(`/products/${id}`);
+        return response.data.data;
+    },
+
+    async create(payload: Partial<Product & { category_id: number }>): Promise<Product> {
+        await delay(1000);
+        payload.stock = Number(payload.stock) || 0;
+        payload.price = Number(payload.price) || 0;
+        payload.category_id = Number(payload.categoryId) || 1;
+        const response = await api.post('/products', payload);
+        return response.data.data;
+    },
+
+    async update(id: number, payload: Partial<Product>): Promise<Product> {
+        const response = await api.put(`/products/${id}`, payload);
+        return response.data.data;
+    },
+
+    async remove(id: number): Promise<void> {
+        await api.delete(`/products/${id}`);
+    },
+};
