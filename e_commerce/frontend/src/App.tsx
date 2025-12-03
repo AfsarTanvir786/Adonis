@@ -24,7 +24,7 @@ function App() {
                     <Route index element={<ProductList />} />
                     <Route path="create" element={<ProductCreate />} />
                     <Route path="edit" element={<ProductEdit />} />
-                    <Route path="details" element={<ProductDetails />} />
+                    <Route path="details/:id" element={<ProductDetails />} />
                     <Route
                         path="*"
                         element={<Error404 title={'Could Not Find Product.'} />}
