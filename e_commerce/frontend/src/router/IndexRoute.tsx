@@ -1,6 +1,5 @@
 import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router';
-import Layout from '@/models/Layout';
-import Home from '@/Home';
+import Layout from '@/components/layout/Layout';
 import Error404 from '@/components/errors/Error404';
 import { productRoutes } from './ProductRoute';
 import { categoryRoutes } from './CategoryRoute';
@@ -9,7 +8,6 @@ import { authRoutes } from './AuthRoute';
 export const router = createBrowserRouter(
     createRoutesFromElements(
         <Route path="/" element={<Layout />}>
-            <Route path="home" element={<Home />} />
             {productRoutes}
             {categoryRoutes}
             {authRoutes}
