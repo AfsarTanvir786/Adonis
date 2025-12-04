@@ -8,6 +8,7 @@ export default class AuthRepository {
     return {
       accessToken: access_tokens,
       expiresAt: access_tokens.expiresAt,
+      user: user,
     };
   }
 
@@ -23,9 +24,9 @@ export default class AuthRepository {
 
     return {
       message: 'Login successful',
-      token: token,
+      accessToken: token.accessToken,
       expiresAt: token.expiresAt,
-      user,
+      user: token.user,
     };
   }
 
