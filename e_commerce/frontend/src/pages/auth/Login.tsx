@@ -1,15 +1,19 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { authService } from '@/services/api/authService';
+import type { AppDispatch } from '@/store';
+import { authSlice } from '@/store/slices/authSlice';
 import type { User } from '@/types/type';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 
 function Login() {
     const queryClient = useQueryClient();
 
     const { register, handleSubmit, reset } = useForm<Partial<User>>();
+    const dispatch = useDispatch<AppDispatch>();
 
     const { mutate, isPending, error } = useMutation({
         mutationFn: (data: Partial<User>) => authService.login(data),
@@ -17,9 +21,11 @@ function Login() {
             queryClient.setQueryData(['user'], data.user);
             queryClient.invalidateQueries({ queryKey: ['auth'] });
             queryClient.invalidateQueries({ queryKey: ['user'] });
+            dispatch(authSlice.actions.setUser({ user: data.user }));
             reset();
 
             console.log('Login successful, token stored in HTTP-only cookie');
+
             navigate('/products');
         },
     });

@@ -1,10 +1,12 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { authService } from '@/services/api/authService';
+import type { AppDispatch } from '@/store';
+import { setUser } from '@/store/slices/authSlice';
 import type { User } from '@/types/type';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 
 function validateName(name: string): { isValid: boolean; error: string } {
@@ -55,13 +57,18 @@ function Register() {
 
     const { register, handleSubmit, reset } = useForm<Partial<User>>();
 
+    const dispatch = useDispatch<AppDispatch>();
+
     const { mutate, isPending, error } = useMutation({
         mutationFn: (data: Partial<User>) => authService.register(data),
-        onSuccess: () => {
+        onSuccess: (data) => {
             queryClient.invalidateQueries({ queryKey: ['auth'] });
+            dispatch(setUser({ user: data.user }));
             reset();
+            navigate('/products');
         },
     });
+
     const navigate = useNavigate();
 
     const onSubmit = (data: Partial<User>) => {
@@ -76,7 +83,6 @@ function Register() {
         console.log(data);
 
         mutate(data);
-        navigate('/products');
     };
 
     return (

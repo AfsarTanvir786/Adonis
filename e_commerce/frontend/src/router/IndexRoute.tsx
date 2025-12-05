@@ -4,6 +4,7 @@ import Error404 from '@/components/errors/Error404';
 import { productRoutes } from './ProductRoute';
 import { categoryRoutes } from './CategoryRoute';
 import { authRoutes } from './AuthRoute';
+import { customerRoutes } from './CustomerRoute';
 
 export const router = createBrowserRouter(
     createRoutesFromElements(
@@ -11,7 +12,11 @@ export const router = createBrowserRouter(
             {productRoutes}
             {categoryRoutes}
             {authRoutes}
-            <Route path="*" element={<Error404 title="Could Not Find Page." />} />
+            {customerRoutes}
+            <Route
+                path="*"
+                element={<Error404 title="Could Not Find Page." />}
+            />
         </Route>
     )
 );
