@@ -1,5 +1,7 @@
 import { NavLink, useLocation } from 'react-router-dom';
 import { X, Home, Package, ShoppingCart, Users, Settings, BarChart3, Tag } from 'lucide-react';
+import { useSelector } from 'react-redux';
+import type { RootState } from '@/store';
 
 function Sidebar({
     isOpen,
@@ -9,11 +11,13 @@ function Sidebar({
     onClose: () => void;
 }) {
     const location = useLocation();
+    const user = useSelector((state: RootState) => state.authentication.user);
 
     const menuItems = [
         { path: '/home', icon: Home, label: 'Dashboard' },
         { path: '/products', icon: Package, label: 'Products' },
         { path: '/orders', icon: ShoppingCart, label: 'Orders' },
+        { path: '/orderItems', icon: ShoppingCart, label: 'order Items' },
         { path: '/customers', icon: Users, label: 'Customers' },
         { path: '/analytics', icon: BarChart3, label: 'Analytics' },
         { path: '/categories', icon: Tag, label: 'Categories' },
@@ -83,10 +87,10 @@ function Sidebar({
                         </div>
                         <div className="flex-1 min-w-0">
                             <p className="text-sm font-medium text-gray-800 dark:text-white truncate">
-                                John Doe
+                                {user?.fullName || 'no user'}
                             </p>
                             <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
-                                admin@eshop.com
+                                {user?.email || 'no email'}
                             </p>
                         </div>
                     </div>

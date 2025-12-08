@@ -7,11 +7,14 @@ import {
     ShoppingCart,
 } from 'lucide-react';
 import { useState } from 'react';
+import type { RootState } from '@/store';
+import { useSelector } from 'react-redux';
 
 function Header({ onMenuClick }: { onMenuClick: () => void }) {
     const [searchQuery, setSearchQuery] = useState('');
     const [showNotifications, setShowNotifications] = useState(false);
     const [showUserMenu, setShowUserMenu] = useState(false);
+    const user = useSelector((state: RootState) => state.authentication.user);
 
     return (
         <header className="bg-white dark:bg-gray-800 shadow-md fixed w-full top-0 z-50">
@@ -118,11 +121,11 @@ function Header({ onMenuClick }: { onMenuClick: () => void }) {
                             >
                                 <div className="w-8 h-8 bg-linear-to-br from-blue-600 to-purple-600 rounded-full flex items-center justify-center shadow-md">
                                     <span className="text-white text-sm font-semibold">
-                                        JD
+                                        User Menu
                                     </span>
                                 </div>
                                 <span className="hidden sm:block text-sm font-medium text-gray-700 dark:text-gray-200">
-                                    John Doe
+                                    {user.fullName}
                                 </span>
                                 <ChevronDown
                                     className={`w-4 h-4 text-gray-700 dark:text-gray-200 transition-transform ${showUserMenu ? 'rotate-180' : ''}`}

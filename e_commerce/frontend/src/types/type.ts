@@ -35,6 +35,23 @@ export type Cart = {
     updatedAt: Date;
 };
 
+export type Order = {
+    id: number;
+    orderItems: number;
+    totalPrice: number | string; // fix it only number
+    orderStatus: string;
+    paymentStatus: string;
+    customerId: number;
+    createdAt: Date;
+    updatedAt: Date;
+
+    customer?: User;
+};
+
+export type OrderItem = {
+    [key: string]: number;
+};
+
 export type CartItem = {
     id: number;
     cartId: number;

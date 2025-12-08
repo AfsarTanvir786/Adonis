@@ -2,41 +2,30 @@ import type { User } from '@/types/type';
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
 type AuthState = {
-    user: User | null;
-    accessToken: string | null;
+    user: Partial<User>;
     isAuthenticated: boolean;
 };
 
 const initialState: AuthState = {
-    user: null,
-    accessToken: null,
+    user: { fullName: 'no user' },
     isAuthenticated: false,
 };
 
-const authSlice = createSlice({
+export const authSlice = createSlice({
     name: 'authentication',
     initialState: initialState,
     reducers: {
-        setCredentials: (
-            state,
-            action: PayloadAction<{ user: User; accessToken: string }>
-        ) => {
+        setUser: (state, action: PayloadAction<{ user: User }>) => {
             state.user = action.payload.user;
-            state.accessToken = action.payload.accessToken;
             state.isAuthenticated = true;
         },
 
-        logout: (state) => {
-            state.user = null;
-            state.accessToken = null;
+        clearUser: (state) => {
+            state.user = { fullName: 'no user' };
             state.isAuthenticated = false;
-        },
-
-        updateAccessToken: (state, action: PayloadAction<string>) => {
-            state.accessToken = action.payload;
         },
     },
 });
 
-export const { setCredentials, logout, updateAccessToken } = authSlice.actions;
+export const { setUser, clearUser } = authSlice.actions;
 export default authSlice.reducer;
