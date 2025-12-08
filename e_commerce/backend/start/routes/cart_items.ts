@@ -1,5 +1,5 @@
-import router from '@adonisjs/core/services/router'
-import CartItemsController from '#controllers/cart_items_controller'
+import router from '@adonisjs/core/services/router';
+import CartItemsController from '#controllers/cart_items_controller';
 import { middleware } from '#start/kernel';
 
 router

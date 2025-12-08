@@ -6,7 +6,7 @@ export const createOrderValidator = vine.compile(
     totalPrice: vine.number(),
     orderStatus: vine.string(),
     paymentStatus: vine.string(),
-    customerId: vine.number().exists({ table: 'customers', column: 'id' }),
+    customerId: vine.number().exists({ table: 'users', column: 'id' }),
   }),
 );
 
@@ -18,7 +18,7 @@ export const updateOrderValidator = vine.compile(
     paymentStatus: vine.string().optional(),
     customerId: vine
       .number()
-      .exists({ table: 'customers', column: 'id' })
+      .exists({ table: 'users', column: 'id' })
       .optional(),
   }),
 );

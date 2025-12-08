@@ -4,8 +4,8 @@ import OrderItemsController from '#controllers/order_items_controller';
 
 router
   .group(() => {
-      router.get('/', [OrderItemsController, 'list']);
-      router.post('/', [OrderItemsController, 'create']);
+    router.get('/', [OrderItemsController, 'list']);
+    router.post('/', [OrderItemsController, 'create']);
     router.get('/:id', [OrderItemsController, 'show']);
     router.put('/:id', [OrderItemsController, 'update']);
     router.put('/:id', [OrderItemsController, 'delete']);

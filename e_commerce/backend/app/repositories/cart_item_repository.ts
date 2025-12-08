@@ -73,7 +73,7 @@ export default class CartItemRepository {
   }
 
   async getCartItemList() {
-    const list = await CartItem.query().preload('cart').preload('product');
+    const list = await CartItem.all();
 
     return {
       success: true,

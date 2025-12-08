@@ -49,7 +49,7 @@ export default class AuthRepository {
   }
 
   public async getUserList() {
-    const userList = await User.all()
+    const userList = await User.all();
     return {
       data: userList,
     };

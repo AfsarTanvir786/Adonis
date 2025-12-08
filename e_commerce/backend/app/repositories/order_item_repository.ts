@@ -60,7 +60,7 @@ export default class OrderItemRepository {
   }
 
   async getOrderItemList() {
-    const list = await OrderItem.query().preload('order').preload('product');
+    const list = await OrderItem.all();
 
     return {
       success: true,

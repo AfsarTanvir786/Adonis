@@ -59,7 +59,7 @@ export default class ProductRepository {
   }
 
   async getProductList() {
-    const list = await Product.query().preload('category');
+    const list = await Product.all();
 
     return {
       success: true,

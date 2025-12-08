@@ -10,7 +10,7 @@ export default class AuthController {
   public async register({ request, response }: HttpContext) {
     const payload = await request.validateUsing(registerValidator);
     const result = await this.authService.createUser(payload);
-    
+
     // Set HTTP-only cookie
     response.cookie('access_token', result.accessToken.value!.release(), {
       httpOnly: true,
@@ -30,7 +30,7 @@ export default class AuthController {
   public async login({ request, response }: HttpContext) {
     const { email, password } = await request.validateUsing(loginValidator);
     const result = await this.authService.login(email, password);
-    
+
     // Set HTTP-only cookie
     response.cookie('access_token', result.accessToken.value!.release(), {
       httpOnly: true,
@@ -44,6 +44,7 @@ export default class AuthController {
     return response.ok({
       message: result.message,
       user: result.user,
+      access_token: result.accessToken.value!.release(),
     });
   }
 
@@ -58,7 +59,7 @@ export default class AuthController {
       // Token might already be invalid/expired
       console.log('Logout: Token already invalid or expired');
     }
-    
+
     // Always clear the HTTP-only cookie
     response.clearCookie('access_token', {
       httpOnly: true,
@@ -66,7 +67,7 @@ export default class AuthController {
       sameSite: 'lax',
       path: '/',
     });
-    
+
     return response.ok({
       message: 'Successfully logged out',
     });
@@ -80,7 +81,7 @@ export default class AuthController {
 
   public async getUserList({ auth }: HttpContext) {
     await auth.check();
-    
+
     return this.authService.getUserList();
   }
 }

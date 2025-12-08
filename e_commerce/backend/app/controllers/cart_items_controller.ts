@@ -34,7 +34,10 @@ export default class CartItemsController {
   async update({ request, response, params }: HttpContext) {
     const payload = await request.validateUsing(updateCartItemValidator);
 
-    const result = await this.cartItemService.updateCartItem(payload, params.id);
+    const result = await this.cartItemService.updateCartItem(
+      payload,
+      params.id,
+    );
 
     if (!result.success) return response.notFound(result);
 

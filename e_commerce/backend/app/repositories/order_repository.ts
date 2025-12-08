@@ -55,7 +55,7 @@ export default class OrderRepository {
   }
 
   async getOrderList() {
-    const list = await Order.query().preload('user');
+    const list = await Order.all();
 
     return {
       success: true,

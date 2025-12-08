@@ -1,5 +1,8 @@
 import { OrderService } from '#services/order_service';
-import { createOrderValidator, updateOrderValidator } from '#validators/order_validator';
+import {
+  createOrderValidator,
+  updateOrderValidator,
+} from '#validators/order_validator';
 import { inject } from '@adonisjs/core';
 import type { HttpContext } from '@adonisjs/core/http';
 

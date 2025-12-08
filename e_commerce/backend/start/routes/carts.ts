@@ -1,6 +1,6 @@
-import router from '@adonisjs/core/services/router'
-import CartsController from '#controllers/carts_controller'
-import { middleware } from '#start/kernel'
+import router from '@adonisjs/core/services/router';
+import CartsController from '#controllers/carts_controller';
+import { middleware } from '#start/kernel';
 
 router
   .group(() => {

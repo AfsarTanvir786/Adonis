@@ -7,7 +7,7 @@ router
     router.get('/:id', [OrdersController, 'show']);
     router.post('/', [OrdersController, 'create']);
     router.put('/:id', [OrdersController, 'update']);
-    router.put('/:id', [OrdersController, 'delete']);
+    router.delete('/:id', [OrdersController, 'delete']);
     router.get('/', [OrdersController, 'list']);
   })
   .prefix('/api/orders')
