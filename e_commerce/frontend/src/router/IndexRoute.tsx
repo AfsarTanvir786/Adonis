@@ -1,10 +1,16 @@
-import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router';
+import {
+    createBrowserRouter,
+    createRoutesFromElements,
+    Route,
+    RouterProvider,
+} from 'react-router';
 import Layout from '@/components/layout/Layout';
 import Error404 from '@/components/errors/Error404';
 import { productRoutes } from './ProductRoute';
 import { categoryRoutes } from './CategoryRoute';
 import { authRoutes } from './AuthRoute';
 import { customerRoutes } from './CustomerRoute';
+import { orderRoutes } from './OrderRoute';
 
 export const router = createBrowserRouter(
     createRoutesFromElements(
@@ -12,6 +18,7 @@ export const router = createBrowserRouter(
             {productRoutes}
             {categoryRoutes}
             {authRoutes}
+            {orderRoutes}
             {customerRoutes}
             <Route
                 path="*"
