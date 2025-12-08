@@ -5,8 +5,15 @@ import { middleware } from '../kernel.js';
 router
   .group(() => {
     router.get('/:id', [CategoriesController, 'index']);
-    router.post('/', [CategoriesController, 'create']);
-    router.put('/:id', [CategoriesController, 'update']);
+    router
+      .post('/', [CategoriesController, 'create'])
+      .use(middleware.role(['admin', 'employee']));
+    router
+      .put('/:id', [CategoriesController, 'update'])
+      .use(middleware.role(['admin', 'employee']));
+    router
+      .delete('/:id', [CategoriesController, 'update'])
+      .use(middleware.role(['admin', 'employee']));
     router.get('/', [CategoriesController, 'getCategoryList']);
   })
   .prefix('/api/categories')
