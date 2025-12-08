@@ -8,7 +8,7 @@ router
     router.post('/', [OrderItemsController, 'create']);
     router.get('/:id', [OrderItemsController, 'show']);
     router.put('/:id', [OrderItemsController, 'update']);
-    router.put('/:id', [OrderItemsController, 'delete']);
+    router.delete('/:id', [OrderItemsController, 'delete']);
   })
-  .prefix('/api/order-items')
+  .prefix('/api/orderItems')
   .use(middleware.auth());

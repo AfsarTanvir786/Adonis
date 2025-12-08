@@ -4,6 +4,7 @@ import './cart_items.js';
 import './categories.js';
 import './orders.js';
 import './products.js';
+import './order_items.js';
 
 router.get('/', async () => {
   return {
