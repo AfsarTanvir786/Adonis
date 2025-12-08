@@ -11,6 +11,7 @@ import { categoryRoutes } from './CategoryRoute';
 import { authRoutes } from './AuthRoute';
 import { customerRoutes } from './CustomerRoute';
 import { orderRoutes } from './OrderRoute';
+import { orderItemRoutes } from './OrderItemRoute';
 
 export const router = createBrowserRouter(
     createRoutesFromElements(
@@ -19,6 +20,7 @@ export const router = createBrowserRouter(
             {categoryRoutes}
             {authRoutes}
             {orderRoutes}
+            {orderItemRoutes}
             {customerRoutes}
             <Route
                 path="*"

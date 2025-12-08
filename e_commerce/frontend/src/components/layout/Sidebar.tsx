@@ -17,6 +17,7 @@ function Sidebar({
         { path: '/home', icon: Home, label: 'Dashboard' },
         { path: '/products', icon: Package, label: 'Products' },
         { path: '/orders', icon: ShoppingCart, label: 'Orders' },
+        { path: '/orderItems', icon: ShoppingCart, label: 'order Items' },
         { path: '/customers', icon: Users, label: 'Customers' },
         { path: '/analytics', icon: BarChart3, label: 'Analytics' },
         { path: '/categories', icon: Tag, label: 'Categories' },
