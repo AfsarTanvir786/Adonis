@@ -5,10 +5,11 @@ import { productService } from '@/services/api/productService';
 import type { Product } from '@/types/type';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 
 function ProductCreate() {
     const queryClient = useQueryClient();
-
+    const navigate = useNavigate();
     const { register, handleSubmit, reset } = useForm<Partial<Product>>();
 
     const { mutate, isPending, error } = useMutation({
@@ -16,6 +17,7 @@ function ProductCreate() {
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['products'] });
             reset();
+            navigate(`/products`);
         },
     });
 

@@ -1,28 +1,52 @@
 import type { Product } from '@/types/type';
+import { Link } from 'react-router';
 
-function SingleProduct({ product }: { product: Product }) {
+function SingleProduct({
+    product,
+    canManage,
+}: {
+    product: Product;
+    canManage: boolean;
+}) {
     return (
-        <div className="m-4 p-2 rounded-[2vw] bg-[#90a88f]">
-            <div>
-                <h5 className="bg-blen">
-                    <b>Title: </b>
-                    {product.title}
-                </h5>
-            </div>
-            <div>
-                <p className="mb-2">
-                    <b>Description: </b>
-                    {product.description}
-                </p>
-                <p className="mb-2">
-                    <b>Price: </b>
-                    {product.price}
-                </p>
-                <p className="mb-2">
-                    <b>Category: </b>
-                    {product.categoryId}
-                </p>
-            </div>
+        <div className="bg-white rounded-xl shadow-md p-4 border border-gray-200">
+            <h3 className="text-xl font-semibold mb-3">{product.title}</h3>
+
+            <p className="mb-2 text-sm">
+                <span className="font-medium">Description: </span>
+                {product.description}
+            </p>
+
+            <p className="mb-2 text-sm">
+                <span className="font-medium">Price: </span>${product.price}
+            </p>
+
+            <p className="mb-2 text-sm">
+                <span className="font-medium">Category: </span>
+                {product.categoryId}
+            </p>
+
+            {canManage && (
+                <div className="mt-4 flex gap-3">
+                    <button className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-md shadow">
+                        <Link
+                            to={`/products/edit/${product.id}`}
+                            state={canManage}
+                        >
+                            Edit
+                        </Link>
+                    </button>
+
+                    <button className="bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded-md shadow">
+                        <Link
+                            to={`/products/delete/${product.id}`}
+                            state={canManage}
+                        >
+                            Delete
+                        </Link>
+                    </button>
+                </div>
+            )}
         </div>
     );
 }
