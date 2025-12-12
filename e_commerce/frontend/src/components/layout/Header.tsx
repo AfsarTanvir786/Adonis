@@ -9,6 +9,7 @@ import {
 import { useState } from 'react';
 import type { RootState } from '@/store';
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 function Header({ onMenuClick }: { onMenuClick: () => void }) {
     const [searchQuery, setSearchQuery] = useState('');
@@ -136,7 +137,7 @@ function Header({ onMenuClick }: { onMenuClick: () => void }) {
                                 <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 animate-in fade-in slide-in-from-top-2">
                                     <div className="p-2">
                                         <button className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
-                                            Profile
+                                            <Link to="/profile">Profile</Link>
                                         </button>
                                         <button className="w-full text-left px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
                                             Settings

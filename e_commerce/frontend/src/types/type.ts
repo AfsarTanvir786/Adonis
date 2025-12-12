@@ -18,6 +18,8 @@ export type User = {
     password?: string;
     createdAt: Date;
     updatedAt: Date;
+
+    userType: 'admin' | 'guest' | 'customer' | 'employee';
 };
 
 export type Category = {

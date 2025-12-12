@@ -5,13 +5,18 @@ import type { Product } from '@/types/type';
 import { Label } from '@radix-ui/react-label';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 function ProductEdit() {
     const { id } = useParams<{ id: string }>();
     const productId = Number(id);
     const navigate = useNavigate();
     const queryClient = useQueryClient();
+    const { state } = useLocation();
+
+    if (!state) {
+        navigate('/products');
+    }
 
     // 1. Fetching existing product data using React Query
     const {

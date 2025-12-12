@@ -12,6 +12,8 @@ import { authRoutes } from './AuthRoute';
 import { customerRoutes } from './CustomerRoute';
 import { orderRoutes } from './OrderRoute';
 import { orderItemRoutes } from './OrderItemRoute';
+import Profile from '@/pages/profile/Profile';
+import Unauthorized from '@/components/errors/Unauthorized';
 
 export const router = createBrowserRouter(
     createRoutesFromElements(
@@ -22,6 +24,8 @@ export const router = createBrowserRouter(
             {orderRoutes}
             {orderItemRoutes}
             {customerRoutes}
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/unauthorized" element={<Unauthorized />} />
             <Route
                 path="*"
                 element={<Error404 title="Could Not Find Page." />}
