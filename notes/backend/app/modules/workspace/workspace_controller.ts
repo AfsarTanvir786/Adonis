@@ -24,6 +24,14 @@ export default class WorkspacesController {
     return response.created(result)
   }
 
+  async notes({ params, response, auth}: HttpContext) {
+    const result = await this.workspaceService.getWorkspaceNoteList(params.id, auth.user!.companyId)
+
+    if (!result.success) return response.notFound(result)
+
+    return response.ok(result)
+  }
+
   async show({ params, response, auth }: HttpContext) {
     const result = await this.workspaceService.getWorkspace(params.id)
 

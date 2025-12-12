@@ -1,3 +1,4 @@
+import Note from '#models/note'
 import User from '#models/user'
 import Workspace from '#models/workspace'
 
@@ -33,6 +34,24 @@ export default class WorkspaceRepository {
     }
   }
 
+  async getWorkspaceNoteList(workspaceId: number, companyId: number) {
+    const workspace = await Workspace.find(workspaceId);
+
+    if(!workspace || companyId !== workspace.companyId){
+      return {
+        success: false,
+        message: 'Workspace not found.',
+      }
+    }
+
+    const noteList = await Note.query().where('workspace_id', workspaceId).where('type', 'public')
+    return {
+      success: true,
+      message: 'Workspace retrieved.',
+      data: noteList,
+    }
+  }
+
   async updateWorkspace(data: Partial<Workspace>, id: number, user: User) {
     const workspace = await Workspace.find(id)
 
@@ -43,7 +62,7 @@ export default class WorkspaceRepository {
       }
     }
 
-    if(workspace.companyId !== user.companyId || workspace.userId !== user.id) {
+    if (workspace.companyId !== user.companyId || workspace.userId !== user.id) {
       return {
         success: false,
         message: 'Access denied to this workspace.',
@@ -83,12 +102,12 @@ export default class WorkspaceRepository {
       }
     }
 
-     if(workspace.companyId !== user.companyId || workspace.userId !== user.id) {
-       return {
-         success: false,
-         message: 'Access denied to this workspace.',
-       }
-     }
+    if (workspace.companyId !== user.companyId || workspace.userId !== user.id) {
+      return {
+        success: false,
+        message: 'Access denied to this workspace.',
+      }
+    }
 
     await workspace.delete()
 

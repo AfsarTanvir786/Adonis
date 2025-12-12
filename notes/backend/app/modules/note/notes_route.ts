@@ -4,7 +4,7 @@ import { middleware } from '#start/kernel';
 router
   .group(() => {
     router.get('/', [NotesController, 'list'])
-    router.get('/myNotes', [NotesController, 'getMyNoteList'])
+    router.get('/my', [NotesController, 'getMyNoteList'])
     router.post('/', [NotesController, 'create'])
     router.get('/:id', [NotesController, 'show'])
     router.put('/:id', [NotesController, 'update'])

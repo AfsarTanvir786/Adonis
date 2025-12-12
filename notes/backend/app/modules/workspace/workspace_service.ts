@@ -5,7 +5,7 @@ import WorkspaceRepository from './workspace_query.js'
 
 @inject()
 export class WorkspaceService {
-  constructor(private WorkspaceRepository: WorkspaceRepository) {}
+  constructor(private workspaceRepository: WorkspaceRepository) {}
 
   async createWorkspace(data: Partial<Workspace>, user: User) {
     const WorkspacePayload = {
@@ -14,22 +14,26 @@ export class WorkspaceService {
       companyId: user.companyId,
     }
 
-    return this.WorkspaceRepository.createWorkspace(WorkspacePayload)
+    return this.workspaceRepository.createWorkspace(WorkspacePayload)
   }
 
   async getWorkspace(id: number) {
-    return this.WorkspaceRepository.getWorkspace(id)
+    return this.workspaceRepository.getWorkspace(id)
+  }
+
+  async getWorkspaceNoteList(workspaceId: number, companyId: number) {
+    return this.workspaceRepository.getWorkspaceNoteList(workspaceId, companyId)
   }
 
   async updateWorkspace(Workspace: Partial<Workspace>, id: number, user: User) {
-    return this.WorkspaceRepository.updateWorkspace(Workspace, id, user)
+    return this.workspaceRepository.updateWorkspace(Workspace, id, user)
   }
 
   async getWorkspaceList(id: number) {
-    return this.WorkspaceRepository.getWorkspaceList(id)
+    return this.workspaceRepository.getWorkspaceList(id)
   }
 
   async deleteWorkspace(id: number, user: User) {
-    return this.WorkspaceRepository.deleteWorkspace(id, user)
+    return this.workspaceRepository.deleteWorkspace(id, user)
   }
 }
