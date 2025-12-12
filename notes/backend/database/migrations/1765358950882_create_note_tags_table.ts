@@ -23,8 +23,8 @@ export default class extends BaseSchema {
         .onUpdate('CASCADE')
         .notNullable()
 
-      table.timestamp('created_at').notNullable()
-      table.timestamp('updated_at').nullable()
+      table.timestamp('created_at')
+      table.timestamp('updated_at')
 
       table.unique(['note_id', 'tag_id'])
       table.index(['tag_id'])

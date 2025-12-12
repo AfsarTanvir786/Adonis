@@ -11,5 +11,5 @@ router
     router.put('/:id', [CompanysController, 'update'])
     router.delete('/:id', [CompanysController, 'delete'])
   })
-  .prefix('/api/companys')
+  .prefix('/api/companies')
   .use(middleware.auth())

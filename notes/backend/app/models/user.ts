@@ -7,6 +7,7 @@ import { DbAccessTokensProvider } from '@adonisjs/auth/access_tokens'
 import Company from './company.js'
 import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations'
 import Workspace from './workspace.js'
+import Note from './note.js'
 
 const AuthFinder = withAuthFinder(() => hash.use('scrypt'), {
   uids: ['email'],
@@ -37,6 +38,9 @@ export default class User extends compose(BaseModel, AuthFinder) {
 
   @hasMany(() => Workspace)
   declare histories: HasMany<typeof Workspace>
+
+    @hasMany(() => Note)
+  declare notes: HasMany<typeof Note>
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

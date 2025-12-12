@@ -8,51 +8,15 @@ export default class NotesController {
   constructor(private noteService: NoteService) {}
 
   async create({ auth, request, response }: HttpContext) {
-    const user = auth.user
-
-    if (!user) {
-      return response.unauthorized({
-        success: false,
-        message: 'Not authenticated',
-      })
-    }
-
-    const companyId = await this.noteService.doesCompanyExist(user.companyId)
-    if (!companyId) {
-      return response.badRequest({
-        success: false,
-        message: 'Company does not exist',
-      })
-    }
-
     const payload = await request.validateUsing(createNoteValidator)
-    console.log(payload);
 
-    const workspaceIds = await this.noteService.getUserWorkspaceIds(user.companyId)
-
-    if (workspaceIds.length === 0 || workspaceIds.indexOf(payload.workspaceId) === -1) {
-      return response.unauthorized({
-        success: false,
-        message: 'Access denied to this workspace',
-      })
-    }
-
-    const result = await this.noteService.createNote(payload, user.id)
+    const result = await this.noteService.createNote(payload, auth.user!)
 
     return response.created(result)
   }
 
   async show({ params, auth, response }: HttpContext) {
-    const user = auth.user
-
-    if (!user) {
-      return response.unauthorized({
-        success: false,
-        message: 'Not authenticated',
-      })
-    }
-
-    const result = await this.noteService.getNote(params.id, user)
+    const result = await this.noteService.getNote(params.id, auth.user!)
 
     if (!result.success) {
       return response.status(404).send(result)
@@ -60,16 +24,15 @@ export default class NotesController {
     return response.ok(result)
   }
 
-  async list({ response, auth }: HttpContext) {
-    const user = auth.user
+  async getMyNoteList({ response, auth }: HttpContext) {
+    const result = await this.noteService.getMyNoteList(auth.user!.id)
+    if (!result.success) return response.notFound(result)
 
-    if (!user) {
-      return response.unauthorized({
-        success: false,
-        message: 'Not authenticated',
-      })
-    }
-    const result = await this.noteService.getNoteList(user.companyId)
+    return response.ok(result)
+  }
+
+  async list({ response, auth }: HttpContext) {
+    const result = await this.noteService.getNoteList(auth.user!.companyId)
 
     if (!result.success) return response.notFound(result)
 
@@ -77,17 +40,9 @@ export default class NotesController {
   }
 
   async update({ request, response, params, auth }: HttpContext) {
-    const user = auth.user
-
-    if (!user) {
-      return response.unauthorized({
-        success: false,
-        message: 'Not authenticated',
-      })
-    }
     const payload = await request.validateUsing(updateNoteValidator)
 
-    const result = await this.noteService.updateNote(payload, params.id, user.id)
+    const result = await this.noteService.updateNote(payload, params.id, auth.user!.id)
 
     if (!result.success) return response.notFound(result)
 
@@ -95,15 +50,7 @@ export default class NotesController {
   }
 
   async delete({ params, response, auth }: HttpContext) {
-    const user = auth.user
-
-    if (!user) {
-      return response.unauthorized({
-        success: false,
-        message: 'Not authenticated',
-      })
-    }
-    const result = await this.noteService.deleteNote(params.id, user.id)
+    const result = await this.noteService.deleteNote(params.id, auth.user!.id)
 
     if (!result.success) return response.notFound(result)
 

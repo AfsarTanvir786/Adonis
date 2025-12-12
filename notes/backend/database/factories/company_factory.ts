@@ -3,6 +3,8 @@ import Company from '#models/company'
 
 export const CompanyFactory = factory
   .define(Company, async ({ faker }) => {
-    return { name: faker.internet.domainName() }
+    return {
+      name: faker.company.name(),
+    }
   })
   .build()

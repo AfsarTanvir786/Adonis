@@ -5,6 +5,7 @@ export default class extends BaseSchema {
 
   async up() {
     this.schema.createTable(this.tableName, (table) => {
+      table.increments('id').primary()
       table
         .integer('note_id')
         .unsigned()
@@ -13,12 +14,13 @@ export default class extends BaseSchema {
         .onDelete('CASCADE')
         .onUpdate('CASCADE')
         .notNullable()
+        .unique()
       table.integer('up_vote_count').defaultTo(0)
       table.integer('down_vote_count').defaultTo(0)
 
       table.timestamp('created_at')
       table.timestamp('updated_at')
-      
+
       table.index(['note_id'])
     })
   }

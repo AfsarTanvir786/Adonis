@@ -17,6 +17,16 @@ export default class NoteRepository {
     }
   }
 
+  async getMyNoteList(userId: number) {
+    const note = await Note.query().where('user_id', userId)
+
+    return {
+      success: true,
+      message: 'Note retrieved.',
+      data: note,
+    }
+  }
+
   async getNote(id: number, workspaceIds: number[], userId: number) {
     const note = await Note.query().where('id', id).preload('user').preload('workspace').first()
 
@@ -78,14 +88,19 @@ export default class NoteRepository {
     }
   }
 
-  async getNoteList(workspaceId: number) {
-    const list = await Note.query().where('workspaceId', workspaceId).where('type', 'public')
+  async getNoteList(workspaceIds: number[]) {
+  const list = await Note
+    .query()
+    .whereIn('workspace_id', workspaceIds)
+    .where('type', 'public')
+    .where('is_draft', 0)
 
-    return {
-      success: true,
-      data: list,
-    }
+  return {
+    success: true,
+    data: list,
   }
+}
+
 
   async deleteNote(id: number, userId: number) {
     const note = await Note.find(id)

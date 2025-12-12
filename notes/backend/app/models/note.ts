@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon'
-import { BaseModel, column, belongsTo, hasMany, manyToMany } from '@adonisjs/lucid/orm'
+import { BaseModel, column, belongsTo, hasMany, manyToMany, beforeUpdate } from '@adonisjs/lucid/orm'
 import Workspace from './workspace.js'
 import User from './user.js'
 import NoteHistory from './note_history.js'
@@ -28,7 +28,7 @@ export default class Note extends BaseModel {
   declare title: string
 
   @column()
-  declare content: string
+  declare content: string | null
 
   @column()
   declare type: 'public' | 'private'
@@ -57,4 +57,17 @@ export default class Note extends BaseModel {
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
+
+  @beforeUpdate()
+  static async createHistory(note: Note) {
+    if (note.$dirty.title || note.$dirty.content) {
+      const original = note.$original
+      await NoteHistory.create({
+        noteId: note.id,
+        userId: note.userId,
+        oldTitle: original.title,
+        oldContent: original.content,
+      })
+    }
+  }
 }

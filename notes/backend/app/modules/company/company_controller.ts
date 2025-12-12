@@ -22,16 +22,7 @@ export default class CompanysController {
     return response.created(result)
   }
 
-  async show({ params, response, auth }: HttpContext) {
-    const user = auth.user
-
-    if (!user) {
-      return response.unauthorized({
-        success: false,
-        message: 'Not authenticated',
-      })
-    }
-
+  async show({ params, response }: HttpContext) {
     const result = await this.CompanyService.getCompany(params.id)
 
     if (!result.success) return response.notFound(result)
@@ -39,15 +30,7 @@ export default class CompanysController {
     return response.ok(result)
   }
 
-  async list({ response, auth }: HttpContext) {
-    const user = auth.user
-
-    if (!user) {
-      return response.unauthorized({
-        success: false,
-        message: 'Not authenticated',
-      })
-    }
+  async list({ response }: HttpContext) {
     const result = await this.CompanyService.getCompanyList()
 
     if (!result.success) return response.notFound(result)

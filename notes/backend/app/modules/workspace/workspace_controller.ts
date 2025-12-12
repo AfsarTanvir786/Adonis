@@ -25,20 +25,11 @@ export default class WorkspacesController {
   }
 
   async show({ params, response, auth }: HttpContext) {
-    const user = auth.user
-
-    if (!user) {
-      return response.unauthorized({
-        success: false,
-        message: 'Not authenticated',
-      })
-    }
-
     const result = await this.workspaceService.getWorkspace(params.id)
 
     if (!result.success) return response.notFound(result)
 
-    if (user.companyId !== result.data?.companyId) {
+    if (auth.user!.companyId !== result.data?.companyId) {
       return response.unauthorized({
         success: false,
         message: 'Access denied to this workspace',
@@ -49,15 +40,7 @@ export default class WorkspacesController {
   }
 
   async list({ response, auth }: HttpContext) {
-    const user = auth.user
-
-    if (!user) {
-      return response.unauthorized({
-        success: false,
-        message: 'Not authenticated',
-      })
-    }
-    const result = await this.workspaceService.getWorkspaceList(user.companyId)
+    const result = await this.workspaceService.getWorkspaceList(auth.user!.companyId)
 
     if (!result.success) return response.notFound(result)
 
@@ -65,17 +48,9 @@ export default class WorkspacesController {
   }
 
   async update({ request, response, params, auth }: HttpContext) {
-    const user = auth.user
-
-    if (!user) {
-      return response.unauthorized({
-        success: false,
-        message: 'Not authenticated',
-      })
-    }
     const payload = await request.validateUsing(updateWorkspaceValidator)
 
-    const result = await this.workspaceService.updateWorkspace(payload, params.id, user)
+    const result = await this.workspaceService.updateWorkspace(payload, params.id, auth.user!)
 
     if (!result.success) return response.notFound(result)
 
@@ -83,15 +58,7 @@ export default class WorkspacesController {
   }
 
   async delete({ params, response, auth }: HttpContext) {
-    const user = auth.user
-
-    if (!user) {
-      return response.unauthorized({
-        success: false,
-        message: 'Not authenticated',
-      })
-    }
-    const result = await this.workspaceService.deleteWorkspace(params.id, user)
+    const result = await this.workspaceService.deleteWorkspace(params.id, auth.user!)
 
     if (!result.success) return response.notFound(result)
 

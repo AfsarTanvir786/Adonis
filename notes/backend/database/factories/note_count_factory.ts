@@ -1,5 +1,5 @@
-import VoteCount from '#models/vote_count'
 import Factory from '@adonisjs/lucid/factories'
+import VoteCount from '#models/vote_count'
 
 export default Factory.define(VoteCount, () => {
   return {

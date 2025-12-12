@@ -23,15 +23,7 @@ export default class TagsController {
     return response.created(result)
   }
 
-  async show({ params, response, auth }: HttpContext) {
-    const user = auth.user
-
-    if (!user) {
-      return response.unauthorized({
-        success: false,
-        message: 'Not authenticated',
-      })
-    }
+  async show({ params, response }: HttpContext) {
 
     const result = await this.tagService.getTag(params.id)
 
@@ -39,15 +31,7 @@ export default class TagsController {
     return response.ok(result)
   }
 
-  async list({ response, auth }: HttpContext) {
-    const user = auth.user
-
-    if (!user) {
-      return response.unauthorized({
-        success: false,
-        message: 'Not authenticated',
-      })
-    }
+  async list({ response }: HttpContext) {
     const result = await this.tagService.getTagList()
 
     if (!result.success) return response.notFound(result)

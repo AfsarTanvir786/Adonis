@@ -28,8 +28,8 @@ export default class extends BaseSchema {
       table.boolean('is_draft').defaultTo(true)
       table.timestamp('published_at').nullable()
 
-      table.timestamp('created_at').notNullable()
-      table.timestamp('updated_at').nullable()
+      table.timestamp('created_at')
+      table.timestamp('updated_at')
 
       table.index(['workspace_id'])
       table.index(['user_id'])

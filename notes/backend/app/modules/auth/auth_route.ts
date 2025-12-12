@@ -15,7 +15,7 @@ router
     router
       .group(() => {
         router.get('/profile', [AuthController, 'profile'])
-        router.get('/users', [AuthController, 'getUserList'])
+        router.get('/users', [AuthController, 'getUserList']).use(middleware.role(['admin'])) /* only admin can */
         router.delete('/logout', [AuthController, 'logout'])
       })
       .use(middleware.auth())
