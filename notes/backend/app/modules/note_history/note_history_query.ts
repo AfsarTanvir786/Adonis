@@ -1,4 +1,4 @@
-import NoteHistory from "#models/note_history"
+import NoteHistory from '#models/note_history'
 
 export default class NoteHistoryRepository {
   async createNoteHistory(data: Partial<NoteHistory>) {
@@ -35,6 +35,7 @@ export default class NoteHistoryRepository {
 
     return {
       success: true,
+      message: 'Note History found.',
       data: list,
     }
   }

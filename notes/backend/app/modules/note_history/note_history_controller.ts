@@ -24,7 +24,7 @@ export default class NoteHistorysController {
     return response.ok(result)
   }
 
-  async list({ request, response, auth }: HttpContext) {
+  async list({ response, auth, params }: HttpContext) {
     // show if the note belongs to this user
     const user = auth.user
 
@@ -34,8 +34,7 @@ export default class NoteHistorysController {
         message: 'Not authenticated',
       })
     }
-    const payload = request.only(['noteId'])
-    const result = await this.noteHistoryService.getNoteHistoryList(user.id, payload.noteId)
+    const result = await this.noteHistoryService.getNoteHistoryList(user.id, params.id)
 
     if (!result.success) return response.notFound(result)
 

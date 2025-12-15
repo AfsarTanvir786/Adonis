@@ -3,9 +3,9 @@ import { middleware } from '#start/kernel';
 import NoteHistoryController from './note_history_controller.js';
 router
   .group(() => {
-    router.get('/', [NoteHistoryController, 'list'])
-    router.get('/:id', [NoteHistoryController, 'show'])
+    router.get('/:id', [NoteHistoryController, 'list'])
+    // router.get('/:id', [NoteHistoryController, 'show'])
     router.delete('/:id', [NoteHistoryController, 'delete'])
   })
-  .prefix('/api/noteHistory')
+  .prefix('/api/noteHistories')
   .use(middleware.auth())
