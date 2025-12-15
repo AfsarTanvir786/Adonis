@@ -1,7 +1,5 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { authService } from '@/services/api/authService';
+import { Link } from 'react-router-dom';
 import {
     Eye,
     EyeOff,
@@ -12,10 +10,11 @@ import {
     FileText,
     Loader2,
 } from 'lucide-react';
+import { useRegister } from '@/hooks/query/auth/useRegister';
 
 export default function Register() {
     const [formData, setFormData] = useState({
-        fullName: '',
+        name: '',
         email: '',
         password: '',
         confirmPassword: '',
@@ -26,22 +25,7 @@ export default function Register() {
     const [acceptTerms, setAcceptTerms] = useState(false);
     const [passwordError, setPasswordError] = useState('');
 
-    const queryClient = useQueryClient();
-    const navigate = useNavigate();
-
-    const { mutate, isPending, error } = useMutation({
-        mutationFn: (payload: any) => authService.register(payload),
-        onSuccess: (data) => {
-            queryClient.setQueryData(['user'], data.user);
-            navigate('/dashboard', { replace: true });
-        },
-        onError: (error: any) => {
-            console.error(
-                'Registration failed:',
-                error.response?.data || error.message
-            );
-        },
-    });
+    const { mutate, isPending, error } = useRegister();
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -77,7 +61,7 @@ export default function Register() {
         }
 
         mutate({
-            fullName: formData.fullName,
+            name: formData.name,
             email: formData.email,
             password: formData.password,
             companyName: formData.companyName,
@@ -85,7 +69,7 @@ export default function Register() {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-blue-50 flex items-center justify-center p-4">
+        <div className="min-h-screen bg-linear-to-br from-purple-50 via-white to-blue-50 flex items-center justify-center p-4">
             <div className="w-full max-w-md">
                 {/* Logo & Title */}
                 <div className="text-center mb-8">
@@ -116,7 +100,7 @@ export default function Register() {
                         {/* Full Name Input */}
                         <div>
                             <label
-                                htmlFor="fullName"
+                                htmlFor="name"
                                 className="block text-sm font-medium text-gray-700 mb-2"
                             >
                                 Full name
@@ -126,10 +110,10 @@ export default function Register() {
                                     <User className="h-5 w-5 text-gray-400" />
                                 </div>
                                 <input
-                                    id="fullName"
-                                    name="fullName"
+                                    id="name"
+                                    name="name"
                                     type="text"
-                                    value={formData.fullName}
+                                    value={formData.name}
                                     onChange={handleChange}
                                     required
                                     className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition"

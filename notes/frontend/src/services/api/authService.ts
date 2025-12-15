@@ -2,21 +2,26 @@ import type { User } from '@/types/type';
 import { api } from './api';
 
 interface LoginResponse {
+    success: boolean;
     message: string;
-    user: User;
+    user?: User;
 }
 
 interface RegisterResponse {
+    success: boolean;
     message: string;
-    user: User;
+    user?: User;
 }
 
 interface LogoutResponse {
+    success: boolean;
     message: string;
 }
 
 interface ProfileResponse {
-    data: User;
+    success: boolean;
+    message: string;
+    data?: User;
 }
 
 export const authService = {
@@ -78,7 +83,9 @@ export const authService = {
             // If it's a 401 error, consider it a successful logout
             // (token is already invalid/expired)
             if (error.response?.status === 401) {
-                return { message: 'Successfully logged out' };
+                return { 
+                    success: false,
+                    message: 'Successfully logged out' };
             }
 
             // For other errors, still throw but after cleanup

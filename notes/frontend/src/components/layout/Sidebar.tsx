@@ -14,7 +14,7 @@ function Sidebar({
     const user = useSelector((state: RootState) => state.authentication.user);
 
     const menuItems = [
-        { path: '/home', icon: Home, label: 'Dashboard' },
+        { path: '/dashboard', icon: Home, label: 'Dashboard' },
         { path: '/company', icon: Building, label: 'Company Details' },
         { path: '/workspaces', icon: LayoutDashboard, label: 'Workspaces' },
         { path: '/notes', icon: NotebookText, label: 'Notes' },

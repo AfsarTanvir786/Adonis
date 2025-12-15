@@ -17,7 +17,7 @@ import Home from '@/pages/home/Home';
 export const router = createBrowserRouter(
     createRoutesFromElements(
         <Route path="/" element={<Layout />}>
-            <Route path="/home" element={<Home />} />
+            <Route path="/dashboard" element={<Home />} />
             {authRoutes}
             {companyRoutes}
             {WorkspaceRoutes}
