@@ -3,6 +3,7 @@ import { inject } from '@adonisjs/core'
 import { AuthService } from './auth_service.js'
 import { loginValidator, registerValidator } from './auth_validator.js'
 import { CompanyService } from '../company/company_service.js'
+import type { ApiResponse } from '../../utils/types.js'
 
 @inject()
 export default class AuthController {
@@ -16,19 +17,27 @@ export default class AuthController {
     const host = request.header('host')?.split(':')[0]
 
     if (!host) {
-      return response.badRequest({ message: 'Missing host header' })
-    }
-    const company = await this.companyService.getByName(host)
-
-    if (!company) {
       return response.badRequest({
-        message: 'Invalid company host. Company does not exist.',
+        success: false,
+        message: 'Missing required host header.'
       })
     }
 
+    const company = await this.companyService.getByName(host)
+
+    if (!company) {
+      return response.notFound({
+        success: false,
+        message: 'Invalid company host. Company does not exist.',
+      })
+    }
+    
+
     const result = await this.authService.createUserWithCompany(payload, host)
-    if (result.success == false) {
-      return result
+    if (result.success === false) {
+      return response.badRequest({
+        message: result.message,
+      })
     }
 
     response.cookie('access_token', result.accessToken!.value!.release(), {
@@ -42,7 +51,7 @@ export default class AuthController {
     return response.created({
       message: 'User registered successfully',
       user: result.user,
-      access_token: result.accessToken,
+      access_token: result.accessToken?.value,
     })
   }
 
