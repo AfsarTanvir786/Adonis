@@ -1,16 +1,18 @@
 import type { RootState } from '@/store';
 import { useSelector } from 'react-redux';
 import { Button } from '@/components/ui/button';
-import { Link } from 'react-router-dom';
-import SingleNote from './Note';
-import { useMyNoteList } from '@/hooks/query/note/useMyNoteList';
+import { Link, useParams } from 'react-router-dom';
+import { useHistoryList } from '@/hooks/query/useHistories';
+import History from './History';
+import SingleHistory from './History';
 
-function NoteList() {
+function HistoryList() {
+    const { id } = useParams<{ id: string }>();
     const user = useSelector((state: RootState) => state.authentication.user);
     if (!user) {
         return <>Please enter first</>;
     }
-    const { data: noteList, isLoading, isError } = useMyNoteList();
+    const { data: historyList, isLoading, isError } = useHistoryList(Number(id));
     // const user = useSelector((state: RootState) => state.authentication.user);
     const canManage = user.role === 'admin';
 
@@ -36,12 +38,16 @@ function NoteList() {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {noteList?.data?.map((p) => (
-                    <SingleNote key={p.id} note={p} canManage={canManage} />
+                {historyList?.data?.map((p) => (
+                    <SingleHistory
+                        key={p.id}
+                        history={p}
+                        canManage={canManage}
+                    />
                 ))}
             </div>
         </div>
     );
 }
 
-export default NoteList;
+export default HistoryList;

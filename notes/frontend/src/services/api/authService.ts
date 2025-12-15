@@ -26,7 +26,6 @@ export const authService = {
     }): Promise<LoginResponse> {
         try {
             const response = await api.post('/auth/login', payload);
-            console.log('✅ Login response:', response);
 
             // Token is stored in HTTP-only cookie automatically
             // Optionally store user info in localStorage for UI purposes
@@ -46,7 +45,6 @@ export const authService = {
     async register(payload: Partial<User>): Promise<RegisterResponse> {
         try {
             const response = await api.post('/auth/register', payload);
-            console.log('✅ Register response:', response);
 
             // Token is stored in HTTP-only cookie automatically
             // Optionally store user info in localStorage for UI purposes
@@ -92,7 +90,6 @@ export const authService = {
         try {
             // Fixed: Should be GET request, not DELETE
             const response = await api.get('/auth/profile');
-            console.log('✅ Get current user:', response);
 
             // Update localStorage with fresh user data
             if (response.data.data) {

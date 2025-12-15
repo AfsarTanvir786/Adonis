@@ -1,20 +1,20 @@
-import type { Workspace } from "@/types/type";
-import { api } from "./api";
+import type { Workspace } from '@/types/type';
+import { api } from './api';
 
-type WorkspaceList = {
+type WorkspaceListResponseResponse = {
     success: boolean;
     message: any;
     data?: Workspace[];
-}
+};
 
-type WorkspaceDetails = {
+type WorkspaceResponse = {
     success: boolean;
     message: any;
     data?: Workspace;
-}
+};
 
 export const WorkspaceService = {
-    async list(): Promise<WorkspaceList> {
+    async list(): Promise<WorkspaceListResponseResponse> {
         try {
             const response = await api.get(`/workspaces`);
             return response.data;
@@ -24,12 +24,22 @@ export const WorkspaceService = {
         }
     },
 
-    async get(workspaceId: number): Promise<WorkspaceDetails> {
+    async get(workspaceId: number): Promise<WorkspaceResponse> {
         try {
             const response = await api.get(`/workspaces/${workspaceId}`);
             return response.data;
         } catch (error: any) {
             console.error('Get Workspace error:', error.response?.data);
+            throw error;
+        }
+    },
+
+    async create(data: Partial<Workspace>): Promise<WorkspaceResponse> {
+        try {
+            const response = await api.post('/workspaces', data);
+            return response.data;
+        } catch (error: any) {
+            console.error('Create Workspace error:', error.response?.data);
             throw error;
         }
     },

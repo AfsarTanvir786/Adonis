@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import SingleNote from './Note';
-import { useNoteList } from '@/hooks/query/useNoteList';
+import { useNoteList } from '@/hooks/query/note/useNoteList';
 
 function NoteList({ workspaceId }: { workspaceId: number | undefined }) {
     const user = useSelector((state: RootState) => state.authentication.user);

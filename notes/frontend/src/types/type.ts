@@ -53,3 +53,22 @@ export interface Tag {
     createdAt: string;
     updatedAt: string | null;
 }
+
+export type VoteCount = {
+    id: number;
+    noteId: number;
+    upVoteCount: number;
+    downVoteCount: number;
+    createdAt: string;
+    updatedAt: string | null;
+};
+
+export interface History {
+    id: number;
+    noteId: number;
+    userId: number;
+    oldTitle: string;
+    oldContent: string;
+    createdAt: string;
+    updatedAt: string | null;
+}

@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 
 export function useMyNoteList() {
     return useQuery({
-        queryKey: ['MyNote'],
-        queryFn: () => NoteService.myNoteList(),
+        queryKey: ['myNotes'],
+        queryFn: () => NoteService.myNoteListResponse(),
     });
 }

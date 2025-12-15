@@ -1,9 +1,9 @@
 import { NoteService } from "@/services/api/noteService";
 import { useQuery } from "@tanstack/react-query";
 
-export function useNoteList(workspaceId: number) {
+export function useHistoryList(noteId: number) {
     return useQuery({
-        queryKey: ['Notes'],
-        queryFn: () => NoteService.list(workspaceId),
+        queryKey: ['historys'],
+        queryFn: () => NoteService.getHistory(noteId),
     });
 }

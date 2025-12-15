@@ -12,10 +12,12 @@ import Unauthorized from '@/components/errors/Unauthorized';
 import { companyRoutes } from './CompanyRoute';
 import { WorkspaceRoutes } from './workspaceRoute';
 import { MyNoteRoute } from './MyNoteRoute';
+import Home from '@/pages/home/Home';
 
 export const router = createBrowserRouter(
     createRoutesFromElements(
         <Route path="/" element={<Layout />}>
+            <Route path="/home" element={<Home />} />
             {authRoutes}
             {companyRoutes}
             {WorkspaceRoutes}
