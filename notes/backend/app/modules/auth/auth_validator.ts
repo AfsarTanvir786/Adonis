@@ -23,3 +23,9 @@ export const loginValidator = vine.compile(
     password,
   })
 )
+
+// const password = vine
+//   .string()
+//   .minLength(8)
+//   .maxLength(64)
+//   .regex(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d).+$/)

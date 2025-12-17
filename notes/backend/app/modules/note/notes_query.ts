@@ -1,40 +1,45 @@
-import Note from '#models/note'
-import VoteCount from '#models/vote_count'
+import Note from '#models/note';
+import VoteCount from '#models/vote_count';
+import { DateTime } from 'luxon';
 
 export default class NoteRepository {
   async createNote(data: Partial<Note>) {
-    const note = await Note.create(data)
+    const note = await Note.create(data);
     await VoteCount.create({
       noteId: note.id,
       upVoteCount: 0,
       downVoteCount: 0,
-    })
+    });
 
     return {
       success: true,
       message: 'Note created successfully',
       data: note,
-    }
+    };
   }
 
   async getMyNoteList(userId: number) {
-    const note = await Note.query().where('user_id', userId)
+    const note = await Note.query().where('user_id', userId);
 
     return {
       success: true,
       message: 'Note retrieved.',
       data: note,
-    }
+    };
   }
 
   async getNote(id: number, workspaceIds: number[], userId: number) {
-    const note = await Note.query().where('id', id).preload('user').preload('workspace').first()
+    const note = await Note.query()
+      .where('id', id)
+      .preload('user')
+      .preload('workspace')
+      .first();
 
     if (!note) {
       return {
         success: false,
         message: 'Note not found.',
-      }
+      };
     }
 
     if (
@@ -44,33 +49,33 @@ export default class NoteRepository {
       return {
         success: false,
         message: 'Access denied to this note.',
-      }
+      };
     }
 
-    const voteCount = await VoteCount.findBy('note_id', note.id)
+    const voteCount = await VoteCount.findBy('note_id', note.id);
 
     return {
       success: true,
       message: 'Note retrieved.',
       data: { note, voteCount },
-    }
+    };
   }
 
   async updateNote(data: Partial<Note>, id: number, userId: number) {
-    const note = await Note.find(id)
+    const note = await Note.find(id);
 
     if (!note) {
       return {
         success: false,
         message: 'Note not found.',
-      }
+      };
     }
 
     if (note.userId !== userId) {
       return {
         success: false,
         message: 'Access denied to this note.',
-      }
+      };
     }
 
     note.merge({
@@ -78,53 +83,52 @@ export default class NoteRepository {
       content: data.content ?? note.content,
       type: data.type ?? note.type,
       isDraft: data.isDraft ?? note.isDraft,
-      publishedAt: Boolean(data.isDirty) === true ? data.publishedAt : null,
-    })
+      publishedAt: (data.isDraft ?? note.isDraft) ? null : DateTime.now(),
+    });
 
-    await note.save()
+    await note.save();
 
     return {
       success: true,
       message: 'Note updated successfully.',
       data: note,
-    }
+    };
   }
 
   async getNoteList(workspaceIds: number[]) {
-  const list = await Note.query()
-    .whereIn('workspace_id', workspaceIds)
-    .where('type', 'public')
-    .where('is_draft', 0)
+    const list = await Note.query()
+      .whereIn('workspace_id', workspaceIds)
+      .where('type', 'public')
+      .where('is_draft', 0);
 
-  return {
-    success: true,
-    data: list,
+    return {
+      success: true,
+      data: list,
+    };
   }
-}
-
 
   async deleteNote(id: number, userId: number) {
-    const note = await Note.find(id)
+    const note = await Note.find(id);
 
     if (!note) {
       return {
         success: false,
         message: 'Note not found.',
-      }
+      };
     }
 
     if (note.userId !== userId) {
       return {
         success: false,
         message: 'Access denied to this note.',
-      }
+      };
     }
 
-    await note.delete()
+    await note.delete();
 
     return {
       success: true,
       message: 'Note deleted successfully.',
-    }
+    };
   }
 }

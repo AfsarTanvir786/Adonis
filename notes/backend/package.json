@@ -72,5 +72,9 @@
       "./app/middleware/*.ts"
     ]
   },
-  "prettier": "@adonisjs/prettier-config"
+  "prettier": {
+    "semi": true,
+    "extends": "@adonisjs/prettier-config",
+    "singleQuote": true
+  }
 }
