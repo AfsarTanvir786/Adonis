@@ -6,5 +6,6 @@ export function useWorkspace(workspaceId: number) {
         queryKey: ['workspace', workspaceId],
         queryFn: () => WorkspaceService.get(workspaceId),
         enabled: !!workspaceId,
+        staleTime: 60 * 60 * 1000 * 60,
     });
 }

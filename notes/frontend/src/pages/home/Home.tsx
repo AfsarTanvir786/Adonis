@@ -21,7 +21,6 @@ function Home() {
     if (isLoading) return <p className="text-center mt-10">Loading...</p>;
     if (isError || !dashboardData || !dashboardData.success)
         return <p className="text-center mt-10">Error fetching Notes</p>;
-    // console.log('dashboardData ', dashboardData);
     return (
         <>
             {/* 1. Quick stat total notes, public notes, company members, workspaces, total upvotes */}

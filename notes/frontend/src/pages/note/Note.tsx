@@ -1,6 +1,10 @@
+import { useNoteVote } from '@/hooks/query/note/useNoteVote';
+import { useVote } from '@/hooks/query/note/useVote';
+import { useVoteCount } from '@/hooks/query/note/useVoteCount';
 import type { RootState } from '@/store';
 import type { Note } from '@/types/type';
 import RequireLogin from '@/utils/requireLogin';
+import { ThumbsDown, ThumbsUp } from 'lucide-react';
 import { useSelector } from 'react-redux';
 
 function SingleNote({ note, canManage }: { note: Note; canManage: boolean }) {
@@ -8,24 +12,21 @@ function SingleNote({ note, canManage }: { note: Note; canManage: boolean }) {
     if (!user || user.name === 'no user') {
         return <RequireLogin message="You have no access to this note." />;
     }
-    // const queryClient = useQueryClient();
-    // const dispatch = useDispatch<AppDispatch>();
-    // const { mutate, isPending } = useMutation({
-    //     mutationFn: (data: Partial<CartItem>) => CartItemService.create(data),
-    //     onSuccess: () => {
-    //         queryClient.invalidateQueries({ queryKey: ['cartItems'] });
-    //         dispatch(cartSlice.actions.addItem({ Note }));
-    //     },
-    // });
-    // const cartId = useSelector((state: RootState) => state.cart.cartId);
-    // const handleAddToCart = () => {
-    //     console.log('click on add to cart.', cartId, Note.id);
-    //     mutate({
-    //         cartId: cartId,
-    //         NoteId: Note.id,
-    //         quantity: 1,
-    //     });
-    // };
+
+  const { data: voteCount, isLoading: voteCountLoading } = useVoteCount(note.id)
+  const { data: noteVote } = useVote(note.id)
+  const voteMutation = useNoteVote(note.id)
+
+  const isLiked = noteVote?.data?.vote === 'up'
+  const isDisliked = noteVote?.data?.vote === 'down'
+
+  const handleLike = () => {
+    voteMutation.mutate(isLiked ? 'down' : 'up')
+  }
+
+  const handleDislike = () => {
+      voteMutation.mutate(isDisliked ? 'up' : 'down');
+  }
     return (
         <div className="bg-white rounded-xl shadow-md p-4 border border-gray-200">
             <h3 className="text-xl font-semibold mb-3">{note.title}</h3>
@@ -44,40 +45,48 @@ function SingleNote({ note, canManage }: { note: Note; canManage: boolean }) {
                 <span className="font-medium">Published: </span>
                 {note.isDraft ? 'No' : 'Yes'}
             </p>
-            <p>creator id: {note.userId}</p>
+            <p>id: {note.id}</p>
             <p>Workspace id: {note.workspaceId}</p>
             <p>User Id: {note.userId}</p>
-
-            {/* {!canManage && (
-                <button
-                    onClick={handleAddToCart}
-                    disabled={isPending}
-                    className="mt-4 bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded-md shadow disabled:opacity-60"
-                >
-                    {isPending ? 'Adding...' : 'Add to Cart'}
-                </button>
-            )}
-            {canManage && (
-                <div className="mt-4 flex gap-3">
-                    <button className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-md shadow">
-                        <Link
-                            to={`/Notes/edit/${Note.id}`}
-                            state={canManage}
-                        >
-                            Edit
-                        </Link>
+            {voteCountLoading ? (
+                <p>Loading votes...</p>
+            ) : (
+                <div className="flex gap-3 mt-3">
+                    <button
+                        disabled={voteMutation.isPending}
+                        onClick={handleLike}
+                        className="flex items-center gap-1"
+                    >
+                        <ThumbsUp
+                            className={`w-6 h-6 ${
+                                isLiked
+                                    ? 'text-blue-600 fill-current'
+                                    : 'text-gray-400'
+                            }`}
+                        />
+                        {voteCount?.data.upVoteCount}
                     </button>
 
-                    <button className="bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded-md shadow">
-                        <Link
-                            to={`/Notes/delete/${Note.id}`}
-                            state={canManage}
-                        >
-                            Delete
-                        </Link>
+                    <button
+                        disabled={voteMutation.isPending}
+                        onClick={handleDislike}
+                        className="flex items-center gap-1"
+                    >
+                        <ThumbsDown
+                            className={`w-6 h-6 ${
+                                isDisliked
+                                    ? 'text-red-500 fill-current'
+                                    : 'text-gray-400'
+                            }`}
+                        />
+                        {voteCount?.data.downVoteCount}
                     </button>
                 </div>
-            )} */}
+            )}
+
+            {voteMutation.isPending && (
+                <p className="text-sm text-gray-500 mt-2">Updating vote...</p>
+            )}
         </div>
     );
 }

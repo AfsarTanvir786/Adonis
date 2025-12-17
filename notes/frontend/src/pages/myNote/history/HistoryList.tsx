@@ -5,6 +5,7 @@ import { Link, useParams } from 'react-router-dom';
 import { useHistoryList } from '@/hooks/query/useHistories';
 import SingleHistory from './History';
 import RequireLogin from '@/utils/requireLogin';
+import { ArrowLeft } from 'lucide-react';
 
 function HistoryList() {
     const { id } = useParams<{ id: string }>();
@@ -29,19 +30,18 @@ function HistoryList() {
 
     return (
         <div className="p-4">
-            <div className="flex justify-between items-center mb-6">
-                <h2 className="text-2xl font-semibold">Notes</h2>
-
-                {canManage && (
-                    <Button
-                        variant="outline"
-                        className="bg-indigo-500 text-white hover:bg-indigo-600 shadow-md"
-                    >
-                        <Link to={'/Notes/create'} state={canManage}>
-                            Add New Note
-                        </Link>
-                    </Button>
-                )}
+            <div className="mb-6 flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                    <Link to={`/notes/details/${id}`}>
+                        <Button variant="outline" size="sm">
+                            <ArrowLeft className="w-4 h-4 mr-2" />
+                            Back
+                        </Button>
+                    </Link>
+                    <h1 className="text-3xl font-bold text-gray-900">
+                        Note History
+                    </h1>
+                </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">

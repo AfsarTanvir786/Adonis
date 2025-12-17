@@ -47,10 +47,12 @@ export default class NoteRepository {
       }
     }
 
+    const voteCount = await VoteCount.findBy('note_id', note.id)
+
     return {
       success: true,
       message: 'Note retrieved.',
-      data: note,
+      data: { note, voteCount },
     }
   }
 
@@ -89,8 +91,7 @@ export default class NoteRepository {
   }
 
   async getNoteList(workspaceIds: number[]) {
-  const list = await Note
-    .query()
+  const list = await Note.query()
     .whereIn('workspace_id', workspaceIds)
     .where('type', 'public')
     .where('is_draft', 0)

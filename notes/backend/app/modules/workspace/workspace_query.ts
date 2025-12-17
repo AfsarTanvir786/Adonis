@@ -44,7 +44,10 @@ export default class WorkspaceRepository {
       }
     }
 
-    const noteList = await Note.query().where('workspace_id', workspaceId).where('type', 'public')
+    const noteList = await Note.query()
+      .where('workspace_id', workspaceId)
+      .where('type', 'public')
+      .where('is_draft', 0)
     return {
       success: true,
       message: 'Workspace retrieved.',

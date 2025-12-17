@@ -3,6 +3,8 @@ import { useSelector } from 'react-redux';
 import { useWorkspaceList } from '@/hooks/query/useWorkspaces';
 import SingleWorkspace from './Workspace';
 import RequireLogin from '@/utils/requireLogin';
+import { Button } from '@/components/ui/button';
+import { Link } from 'react-router-dom';
 
 function WorkspaceList() {
     const user = useSelector((state: RootState) => state.authentication.user);
@@ -28,7 +30,7 @@ function WorkspaceList() {
             <div className="flex justify-between items-center mb-6">
                 <h2 className="text-2xl font-semibold">Workspaces</h2>
 
-                {/* {canManage && (
+                {canManage && (
                     <Button
                         variant="outline"
                         className="bg-indigo-500 text-white hover:bg-indigo-600 shadow-md"
@@ -37,7 +39,7 @@ function WorkspaceList() {
                             Add New Workspace
                         </Link>
                     </Button>
-                )} */}
+                )}
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">

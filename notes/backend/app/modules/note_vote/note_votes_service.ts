@@ -16,4 +16,12 @@ export default class NoteVoteService {
 
     return await this.noteVoteRepository.createNoteVote(vote, noteId, userId)
   }
+
+  async getVoteCount(noteId: number) {
+    return await this.noteVoteRepository.getVoteCount(noteId);
+  }
+
+  async getVote(noteId: number, userId: number) {
+    return await this.noteVoteRepository.getVote(noteId, userId)
+  }
 }

@@ -13,7 +13,7 @@ function NoteList() {
         return <RequireLogin message="Please login to view your note list" />;
     }
     const { data: noteList, isLoading, isError } = useMyNoteList(user.id);
-    const canManage = user.role === 'admin';
+    const canManage = true;
 
     if (isLoading) return <p className="text-center mt-10">Loading...</p>;
     if (isError)

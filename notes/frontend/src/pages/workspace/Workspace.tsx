@@ -1,9 +1,8 @@
 import { Button } from '@/components/ui/button';
-import type { AppDispatch, RootState } from '@/store';
+import type { RootState } from '@/store';
 import type { Workspace } from '@/types/type';
 import RequireLogin from '@/utils/requireLogin';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router';
 
 function SingleWorkspace({
@@ -21,24 +20,6 @@ function SingleWorkspace({
             <RequireLogin message="Please login to view this workspace details" />
         );
     }
-    // const queryClient = useQueryClient();
-    // const dispatch = useDispatch<AppDispatch>();
-    // const { mutate, isPending } = useMutation({
-    //     mutationFn: (data: Partial<CartItem>) => CartItemService.create(data),
-    //     onSuccess: () => {
-    //         queryClient.invalidateQueries({ queryKey: ['cartItems'] });
-    //         dispatch(cartSlice.actions.addItem({ Workspace }));
-    //     },
-    // });
-    // const cartId = useSelector((state: RootState) => state.cart.cartId);
-    const handleAddToCart = () => {
-        console.log('click on add to cart.', workspace.id);
-        // mutate({
-        //     cartId: cartId,
-        //     WorkspaceId: Workspace.id,
-        //     quantity: 1,
-        // });
-    };
     return (
         <div className="bg-white rounded-xl shadow-md p-4 border border-gray-200">
             <h3 className="text-xl font-semibold mb-3">{workspace.name}</h3>
@@ -59,15 +40,6 @@ function SingleWorkspace({
             >
                 Explore
             </Button>
-            {/* {!canManage && (
-                <button
-                    onClick={handleAddToCart}
-                    disabled={isPending}
-                    className="mt-4 bg-green-600 hover:bg-green-700 text-white px-3 py-1.5 rounded-md shadow disabled:opacity-60"
-                >
-                    {isPending ? 'Adding...' : 'Add to Cart'}
-                </button>
-            )}
             {canManage && (
                 <div className="mt-4 flex gap-3">
                     <button className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-md shadow">
@@ -88,7 +60,7 @@ function SingleWorkspace({
                         </Link>
                     </button>
                 </div>
-            )} */}
+            )}
         </div>
     );
 }

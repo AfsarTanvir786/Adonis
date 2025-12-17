@@ -72,3 +72,12 @@ export interface History {
     createdAt: string;
     updatedAt: string | null;
 }
+
+export type NoteVote = {
+    id: number;
+    noteId: number;
+    userId: number;
+    vote: 'up' | 'down';
+    createdAt: string;
+    updatedAt: string | null;
+};

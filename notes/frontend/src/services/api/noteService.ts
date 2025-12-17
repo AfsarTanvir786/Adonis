@@ -1,4 +1,4 @@
-import type { History, Note } from '@/types/type';
+import type { History, Note, NoteVote, VoteCount } from '@/types/type';
 import { api } from './api';
 
 type NoteListResponse = {
@@ -16,7 +16,13 @@ type HistoryListResponse = {
 type NoteResponse = {
     success: boolean;
     message: any;
-    data?: Note;
+    data?: { note: Note; voteCount?: VoteCount };
+};
+
+type NoteVoteResponse = {
+    success: boolean;
+    message: any;
+    data?: NoteVote;
 };
 
 export const NoteService = {
@@ -99,4 +105,34 @@ export const NoteService = {
             throw error;
         }
     },
+
+    async getVoteCount(noteId: number): Promise<any> {
+        try {
+            const response = await api.get(`/voteCounts/${noteId}`);
+            return response.data;
+        } catch (error: any) {
+            console.error('Note vote count error:', error.response?.data);
+            throw error;
+        }
+    },
+
+    async getVote(noteId: number): Promise<NoteVoteResponse> {
+        try {
+            const response = await api.get(`/noteVotes/${noteId}`);
+            return response.data;
+        } catch (error: any) {
+            console.error('Note vote count error:', error.response?.data);
+            throw error;
+        }
+    },
+
+    async createNoteVote(noteId: number, vote: 'up' | 'down') {
+        try {
+            const response = await api.post(`/noteVotes/${noteId}`, { vote });
+            return response.data;
+        } catch (error: any) {
+            console.error('Note vote count error:', error.response?.data);
+            throw error;
+        }
+    }
 };

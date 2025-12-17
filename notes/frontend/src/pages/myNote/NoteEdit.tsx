@@ -3,7 +3,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query';
 import { useSelector } from 'react-redux';
 import type { RootState } from '@/store';
-import { ArrowLeft, Save, Loader2, Lock, Globe, X, Plus } from 'lucide-react';
+import { ArrowLeft, Save, Loader2, Lock, X, Plus, Globe } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { NoteService } from '@/services/api/noteService';
 import { WorkspaceService } from '@/services/api/workspaceService';
@@ -53,8 +53,8 @@ export default function NoteEdit() {
 
     // Populate form when note is loaded
     useEffect(() => {
-        if (noteData?.data) {
-            const note = noteData.data;
+        if (noteData?.data?.note) {
+            const note = noteData.data.note;
             setFormData({
                 title: note.title,
                 content: note.content || '',
@@ -120,7 +120,7 @@ export default function NoteEdit() {
         );
     }
 
-    const note = noteData?.data;
+    const note = noteData?.data?.note;
     const canEdit =
         user?.id === note?.userId ||
         user?.role === 'admin' ||
@@ -150,7 +150,7 @@ export default function NoteEdit() {
                 {/* Header */}
                 <div className="mb-6 flex items-center justify-between">
                     <div className="flex items-center gap-4">
-                        <Link to={`/notes/${id}`}>
+                        <Link to={`/notes`}>
                             <Button variant="outline" size="sm">
                                 <ArrowLeft className="w-4 h-4 mr-2" />
                                 Back
@@ -268,8 +268,23 @@ export default function NoteEdit() {
                                     <Lock className="w-5 h-5" />
                                     <span className="font-medium">Private</span>
                                 </button>
-                                {/* <button
-                  type */}
+                                <button
+                                    type="button"
+                                    onClick={() =>
+                                        setFormData({
+                                            ...formData,
+                                            type: 'public',
+                                        })
+                                    }
+                                    className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 border-2 rounded-lg transition ${
+                                        formData.type === 'public'
+                                            ? 'border-blue-500 bg-blue-50 text-blue-700'
+                                            : 'border-gray-300 hover:border-gray-400'
+                                    }`}
+                                >
+                                    <Globe className="w-5 h-5" />
+                                    <span className="font-medium">Public</span>
+                                </button>
                             </div>
                         </div>
 
@@ -291,8 +306,7 @@ export default function NoteEdit() {
                                 </button>
                             </div>
 
-                            {/* Create Ne<button
-                  typew Tag */}
+                            {/* Create New Tag */}
                             {showTagInput && (
                                 <div className="mb-4 flex gap-2">
                                     <input
