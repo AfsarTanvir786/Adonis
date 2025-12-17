@@ -1,11 +1,11 @@
-import type { Company } from "@/types/type";
+import type { Company, User } from "@/types/type";
 import { api } from "./api";
 
 type CompanyDetails = {
     success: boolean;
     message: any;
-    data?: Company;
-}
+    data?: Company & { users: User[] };
+};
 
 export const companyService = {
     async getCompanyDetails(companyId: number): Promise<CompanyDetails> {

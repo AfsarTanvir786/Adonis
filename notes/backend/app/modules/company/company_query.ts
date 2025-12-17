@@ -28,7 +28,7 @@ export default class CompanyRepository {
   }
 
   async getCompany(id: number) {
-    const company = await Company.find(id)
+    const company = await Company.query().where('id', id).preload('users').first()
 
     if (!company) {
       return {

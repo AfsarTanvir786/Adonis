@@ -2,18 +2,26 @@ import { useDashboardList } from '@/hooks/query/useDashboard';
 import type { RootState } from '@/store';
 import { useSelector } from 'react-redux';
 import { format } from 'date-fns';
+import RequireLogin from '@/utils/requireLogin';
 
 function Home() {
     const user = useSelector((state: RootState) => state.authentication.user);
-    if (!user) {
-        return <>Please enter first</>;
+
+    if (!user || user.name === 'no user') {
+        return (
+            <RequireLogin message="Please login to view your dashboard details" />
+        );
     }
-    const { data: dashboardData, isLoading, isError } = useDashboardList();
+    const {
+        data: dashboardData,
+        isLoading,
+        isError,
+    } = useDashboardList(user.id);
 
     if (isLoading) return <p className="text-center mt-10">Loading...</p>;
     if (isError || !dashboardData || !dashboardData.success)
         return <p className="text-center mt-10">Error fetching Notes</p>;
-    console.log('dashboardData ', dashboardData);
+    // console.log('dashboardData ', dashboardData);
     return (
         <>
             {/* 1. Quick stat total notes, public notes, company members, workspaces, total upvotes */}

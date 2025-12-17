@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button';
 import type { AppDispatch, RootState } from '@/store';
 import type { Workspace } from '@/types/type';
+import RequireLogin from '@/utils/requireLogin';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router';
@@ -13,6 +14,13 @@ function SingleWorkspace({
     canManage: boolean;
 }) {
     const navigate = useNavigate();
+    const user = useSelector((state: RootState) => state.authentication.user);
+
+    if (!user || user.name === 'no user') {
+        return (
+            <RequireLogin message="Please login to view this workspace details" />
+        );
+    }
     // const queryClient = useQueryClient();
     // const dispatch = useDispatch<AppDispatch>();
     // const { mutate, isPending } = useMutation({

@@ -5,5 +5,6 @@ export function useHistoryList(noteId: number) {
     return useQuery({
         queryKey: ['historys'],
         queryFn: () => NoteService.getHistory(noteId),
+        enabled: !!noteId,
     });
 }

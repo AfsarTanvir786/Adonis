@@ -2,6 +2,7 @@ import { NavLink, useLocation } from 'react-router-dom';
 import { X, Home, Settings, Building, NotebookText, LayoutDashboard, } from 'lucide-react';
 import { useSelector } from 'react-redux';
 import type { RootState } from '@/store';
+import { useState } from 'react';
 
 function Sidebar({
     isOpen,
@@ -11,7 +12,9 @@ function Sidebar({
     onClose: () => void;
 }) {
     const location = useLocation();
-    const user = useSelector((state: RootState) => state.authentication.user);
+    const [user] = useState(
+        useSelector((state: RootState) => state.authentication.user)
+    );
 
     const menuItems = [
         { path: '/dashboard', icon: Home, label: 'Dashboard' },

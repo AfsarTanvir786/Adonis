@@ -19,12 +19,19 @@ import {
 import { Button } from '@/components/ui/button';
 import { NoteService } from '@/services/api/noteService';
 import { format } from 'date-fns';
+import RequireLogin from '@/utils/requireLogin';
 
 export default function NoteDetails() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const queryClient = useQueryClient();
+  const queryClient = useQueryClient();    
   const user = useSelector((state: RootState) => state.authentication.user);
+  
+      if (!user || user.name === 'no user') {
+          return (
+              <RequireLogin message="Please login to view your note details" />
+          );
+      }
 
   // Fetch note details
   const { data: noteData, isLoading, isError } = useQuery({

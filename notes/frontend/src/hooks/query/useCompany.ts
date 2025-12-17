@@ -3,7 +3,8 @@ import { useQuery } from "@tanstack/react-query";
 
 export function useCompany(companyId: number) {
     return useQuery({
-        queryKey: ['customerList'],
+        queryKey: ['companyDetails'],
         queryFn: () => companyService.getCompanyDetails(companyId),
+        enabled: !!companyId,
     });
 }

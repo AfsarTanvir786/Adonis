@@ -5,5 +5,6 @@ export function useWorkspace(workspaceId: number) {
     return useQuery({
         queryKey: ['workspace', workspaceId],
         queryFn: () => WorkspaceService.get(workspaceId),
+        enabled: !!workspaceId,
     });
 }

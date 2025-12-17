@@ -3,16 +3,23 @@ import { useSelector } from 'react-redux';
 import { Button } from '@/components/ui/button';
 import { Link, useParams } from 'react-router-dom';
 import { useHistoryList } from '@/hooks/query/useHistories';
-import History from './History';
 import SingleHistory from './History';
+import RequireLogin from '@/utils/requireLogin';
 
 function HistoryList() {
     const { id } = useParams<{ id: string }>();
     const user = useSelector((state: RootState) => state.authentication.user);
-    if (!user) {
-        return <>Please enter first</>;
+
+    if (!user || user.name === 'no user') {
+        return (
+            <RequireLogin message="Please login to view your note history list" />
+        );
     }
-    const { data: historyList, isLoading, isError } = useHistoryList(Number(id));
+    const {
+        data: historyList,
+        isLoading,
+        isError,
+    } = useHistoryList(Number(id));
     // const user = useSelector((state: RootState) => state.authentication.user);
     const canManage = user.role === 'admin';
 

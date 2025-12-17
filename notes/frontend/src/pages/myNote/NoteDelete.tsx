@@ -2,20 +2,30 @@ import { Button } from '@/components/ui/button';
 import { NoteService } from '@/services/api/noteService';
 import type { RootState } from '@/store';
 import type { Note } from '@/types/type';
+import RequireLogin from '@/utils/requireLogin';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { ArrowLeft, Trash2 } from 'lucide-react';
 import { useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 
-export default function NoteDelete({ note, canManage }: { note: Note; canManage: boolean }) {
+export default function NoteDelete({
+    note,
+    canManage,
+}: {
+    note: Note;
+    canManage: boolean;
+}) {
     const navigate = useNavigate();
     const queryClient = useQueryClient();
     const user = useSelector((state: RootState) => state.authentication.user);
-    if(!user){
-        return <p>login please</p>;
+
+    if (!user || user.name === 'no user') {
+        return (
+            <RequireLogin message="You don't have permission to delete this note." />
+        );
     }
-    if(!(canManage || note.userId === user.id)){
-        return <p>Unauthorised</p>
+    if (!(canManage || note.userId === user.id)) {
+        return <p>Unauthorised</p>;
     }
     // Fetch note details
     const {

@@ -1,12 +1,13 @@
+import type { RootState } from '@/store';
 import type { Note } from '@/types/type';
+import RequireLogin from '@/utils/requireLogin';
+import { useSelector } from 'react-redux';
 
-function SingleNote({
-    note,
-    canManage,
-}: {
-    note: Note;
-    canManage: boolean;
-}) {
+function SingleNote({ note, canManage }: { note: Note; canManage: boolean }) {
+    const user = useSelector((state: RootState) => state.authentication.user);
+    if (!user || user.name === 'no user') {
+        return <RequireLogin message="You have no access to this note." />;
+    }
     // const queryClient = useQueryClient();
     // const dispatch = useDispatch<AppDispatch>();
     // const { mutate, isPending } = useMutation({

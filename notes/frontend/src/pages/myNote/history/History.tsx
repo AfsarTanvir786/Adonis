@@ -1,7 +1,7 @@
 import type { RootState } from '@/store';
 import type { History } from '@/types/type';
+import RequireLogin from '@/utils/requireLogin';
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
 
 function SingleHistory({
     history,
@@ -11,8 +11,11 @@ function SingleHistory({
     canManage: boolean;
 }) {
     const user = useSelector((state: RootState) => state.authentication.user);
-    if (!user) {
-        <p>login please</p>;
+
+    if (!user || user.name === 'no user') {
+        return (
+            <RequireLogin message="Please login to view your note history details" />
+        );
     }
     return (
         <div className="bg-white rounded-xl shadow-md p-4 border border-gray-200">

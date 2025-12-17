@@ -5,5 +5,6 @@ export function useNoteList(workspaceId: number) {
     return useQuery({
         queryKey: ['notes'],
         queryFn: () => NoteService.list(workspaceId),
+        enabled: !!workspaceId,
     });
 }

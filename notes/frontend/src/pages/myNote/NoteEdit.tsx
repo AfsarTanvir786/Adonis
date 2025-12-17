@@ -8,14 +8,18 @@ import { Button } from '@/components/ui/button';
 import { NoteService } from '@/services/api/noteService';
 import { WorkspaceService } from '@/services/api/workspaceService';
 import { tagService } from '@/services/api/tagService';
+import RequireLogin from '@/utils/requireLogin';
 
 export default function NoteEdit() {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const queryClient = useQueryClient();
     const user = useSelector((state: RootState) => state.authentication.user);
-    if (!user) {
-        <p>please login first</p>;
+
+    if (!user || user.name === 'no user') {
+        return (
+            <RequireLogin message="You don't have permission to edit this note." />
+        );
     }
     const [formData, setFormData] = useState({
         title: '',

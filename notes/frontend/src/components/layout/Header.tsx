@@ -13,7 +13,9 @@ function Header({ onMenuClick }: { onMenuClick: () => void }) {
     const [searchQuery, setSearchQuery] = useState('');
     const [showNotifications, setShowNotifications] = useState(false);
     const [showUserMenu, setShowUserMenu] = useState(false);
-    const user = useSelector((state: RootState) => state.authentication.user);
+    const [user] = useState(
+        useSelector((state: RootState) => state.authentication.user)
+    );
     const loginOrOut = user && user.name !== 'no user' ? true : false;
 
     return (

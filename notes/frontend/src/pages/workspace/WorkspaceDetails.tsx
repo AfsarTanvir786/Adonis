@@ -1,11 +1,20 @@
-import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import { useWorkspace } from '@/hooks/query/useWorkspace';
 import { useParams } from 'react-router-dom';
 import NoteList from '../note/NoteList';
+import type { RootState } from '@/store';
+import { useSelector } from 'react-redux';
+import RequireLogin from '@/utils/requireLogin';
 
 function WorkspaceDetails() {
     const { id } = useParams<{ id: string }>();
+        const user = useSelector((state: RootState) => state.authentication.user);
+
+    if (!user || user.name === 'no user') {
+        return (
+            <RequireLogin message="You have to login to view this workspace details" />
+        );
+    }
     const {
         data: workspace,
         isLoading,

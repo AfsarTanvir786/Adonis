@@ -2,14 +2,21 @@ import type { RootState } from '@/store';
 import { useSelector } from 'react-redux';
 import { useWorkspaceList } from '@/hooks/query/useWorkspaces';
 import SingleWorkspace from './Workspace';
+import RequireLogin from '@/utils/requireLogin';
 
 function WorkspaceList() {
     const user = useSelector((state: RootState) => state.authentication.user);
-    if (!user) {
-        return <>Please enter first</>;
+
+    if (!user || user.name === 'no user') {
+        return (
+            <RequireLogin message="Please login to view this workspace list details" />
+        );
     }
-    const { data: workspaceList, isLoading, isError } = useWorkspaceList();
-    // const user = useSelector((state: RootState) => state.authentication.user);
+    const {
+        data: workspaceList,
+        isLoading,
+        isError,
+    } = useWorkspaceList(user.companyId);
     const canManage = user.role === 'admin';
 
     if (isLoading) return <p className="text-center mt-10">Loading...</p>;

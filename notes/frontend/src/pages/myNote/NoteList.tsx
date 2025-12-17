@@ -4,14 +4,15 @@ import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import SingleNote from './Note';
 import { useMyNoteList } from '@/hooks/query/note/useMyNoteList';
+import RequireLogin from '@/utils/requireLogin';
 
 function NoteList() {
     const user = useSelector((state: RootState) => state.authentication.user);
-    if (!user) {
-        return <>Please enter first</>;
+
+    if (!user || user.name === 'no user') {
+        return <RequireLogin message="Please login to view your note list" />;
     }
-    const { data: noteList, isLoading, isError } = useMyNoteList();
-    // const user = useSelector((state: RootState) => state.authentication.user);
+    const { data: noteList, isLoading, isError } = useMyNoteList(user.id);
     const canManage = user.role === 'admin';
 
     if (isLoading) return <p className="text-center mt-10">Loading...</p>;
