@@ -1,6 +1,7 @@
 import Note from '#models/note';
 import VoteCount from '#models/vote_count';
 import { DateTime } from 'luxon';
+import { Pagination } from '../../utils/types.js';
 
 export default class NoteRepository {
   async createNote(data: Partial<Note>) {
@@ -18,13 +19,26 @@ export default class NoteRepository {
     };
   }
 
-  async getMyNoteList(userId: number) {
-    const note = await Note.query().where('user_id', userId);
+  async getMyNoteList(
+    userId: number,
+    type: 'public' | 'private' | 'all' = 'all',
+    pagination?: Pagination,
+  ) {
+    const query = Note.query().where('user_id', userId);
 
+    if(type !== 'all'){
+      query.where('type', type)
+    }
+
+    const noteList = pagination
+      ? await query
+          .orderBy('created_at', 'desc')
+          .paginate(pagination.page, pagination.limit)
+      : await query;
     return {
       success: true,
       message: 'Note retrieved.',
-      data: note,
+      data: noteList,
     };
   }
 

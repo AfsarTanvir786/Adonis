@@ -136,14 +136,26 @@ export const NoteService = {
     }
   },
 
-  async sortList(workspaceId: number, params: {
-    page: number;
-    pageSize: number;
-    sortBy: string;
-    order: string;
-  }) {
+  async sortList(
+    workspaceId: number,
+    params: {
+      page: number;
+      pageSize: number;
+      sortBy: string;
+      order: string;
+    }
+  ) {
     return api
       .get(`/workspaces/${workspaceId}/sortNotes`, { params })
       .then((res) => res.data);
+  },
+
+  async myNotes(params: {
+    userId: number;
+    page: number;
+    pageSize: number;
+    type: 'all' | 'public' | 'private';
+  }) {
+    return api.get('notes/notes/my', { params }).then((res) => res.data);
   },
 };

@@ -1,7 +1,6 @@
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
 import { useWorkspace } from '@/hooks/query/useWorkspace';
 import { Link, useParams } from 'react-router-dom';
-import NoteList from '../note/NoteList';
 import type { RootState } from '@/store';
 import { useSelector } from 'react-redux';
 import RequireLogin from '@/utils/requireLogin';

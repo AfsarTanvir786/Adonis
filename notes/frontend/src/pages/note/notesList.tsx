@@ -28,7 +28,7 @@ export default function NoteListPagination({
     order,
   });
 
-  console.log('new data', page, pageSize, sortBy, order);
+  // console.log('new data', page, pageSize, sortBy, order);
 
 
 
@@ -78,9 +78,9 @@ export default function NoteListPagination({
       </div>
 
       {/* Notes */}
-      <div className="grid gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {data.data?.data?.map((note: Note, index: number) => (
-          <SingleNote key={note.id} index={index} note={note} canManage />
+          <SingleNote key={note.id} index={index} note={note} />
         ))}
       </div>
 

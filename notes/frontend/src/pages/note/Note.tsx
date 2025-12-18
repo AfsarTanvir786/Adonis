@@ -9,11 +9,9 @@ import { useSelector } from 'react-redux';
 
 function SingleNote({
   note,
-  canManage,
   index,
 }: {
   note: Note;
-  canManage: boolean;
   index?: number;
 }) {
   const user = useSelector((state: RootState) => state.authentication.user);
@@ -39,7 +37,7 @@ function SingleNote({
   };
   return (
     <div className="bg-white rounded-xl shadow-md p-4 border border-gray-200">
-      <p>index: {index}</p>
+      <p>index: {(index ?? 0) + 1}</p>
       <h3 className="text-xl font-semibold mb-3">{note.title}</h3>
 
       <p className="mb-2 text-sm">

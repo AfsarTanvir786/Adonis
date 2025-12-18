@@ -5,6 +5,7 @@ router
   .group(() => {
     router.get('/', [NotesController, 'list'])
     router.get('/my', [NotesController, 'getMyNoteList'])
+    router.get('/notes/my', [NotesController, 'myNotes'])
     router.post('/', [NotesController, 'create'])
     router.get('/:id', [NotesController, 'show'])
     router.put('/:id', [NotesController, 'update'])
