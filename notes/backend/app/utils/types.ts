@@ -3,3 +3,10 @@ export type ApiResponse<T = undefined> = {
   message: string
   data?: T
 }
+
+export type Pagination = {
+  page: number;
+  limit: number;
+  sortBy: string;
+  order: 'desc' | 'asc';
+};
