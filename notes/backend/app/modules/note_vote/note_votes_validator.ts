@@ -1,13 +1,12 @@
-import vine from '@vinejs/vine'
+import vine, { SimpleMessagesProvider } from '@vinejs/vine';
 
-export const createNoteVoteValidator = vine.compile(
-  vine.object({
-    vote: vine.enum(['up', 'down'])
-  })
-)
-
-export const updateNoteVoteValidator = vine.compile(
+export const noteVoteValidator = vine.compile(
   vine.object({
     vote: vine.enum(['up', 'down']),
-  })
-)
+  }),
+);
+
+noteVoteValidator.messagesProvider = new SimpleMessagesProvider({
+  'vote.required': 'Vote is required',
+  'vote.enum': 'Vote must be either up or down',
+});

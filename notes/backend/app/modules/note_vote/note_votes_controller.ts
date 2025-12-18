@@ -1,14 +1,14 @@
 import { inject } from '@adonisjs/core'
 import type { HttpContext } from '@adonisjs/core/http'
 import NoteVoteService from './note_votes_service.js'
-import { createNoteVoteValidator } from './note_votes_validator.js'
+import { noteVoteValidator } from './note_votes_validator.js'
 
 @inject()
 export default class NoteVoteController {
   constructor(private noteVoteService: NoteVoteService) {}
 
   async create({ auth, request, response, params }: HttpContext) {
-    const payload = await request.validateUsing(createNoteVoteValidator)
+    const payload = await request.validateUsing(noteVoteValidator)
 
     const result = await this.noteVoteService.addVote(payload.vote, params.id, auth.user!.id)
 
