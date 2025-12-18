@@ -43,4 +43,14 @@ export const WorkspaceService = {
             throw error;
         }
     },
+
+    async update(data: Partial<Workspace>, workspaceId: number): Promise<WorkspaceResponse> {
+        try {
+            const response = await api.put(`/workspaces/${workspaceId}`, data);
+            return response.data;
+        } catch (error: any) {
+            console.error('update Workspace error:', error.response?.data);
+            throw error;
+        }
+    },
 };
