@@ -28,10 +28,6 @@ export default function NoteListPagination({
     order,
   });
 
-  // console.log('new data', page, pageSize, sortBy, order);
-
-
-
   if (isLoading) return <p>Loading notes...</p>;
 
   return (

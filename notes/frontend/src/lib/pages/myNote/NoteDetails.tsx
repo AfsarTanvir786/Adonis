@@ -20,12 +20,14 @@ import { Button } from '@/components/ui/button';
 import { NoteService } from '@/services/api/noteService';
 import { format } from 'date-fns';
 import RequireLogin from '@/utils/requireLogin';
+import { useDeleteNote } from '@/hooks/query/note/useDeleteNote';
 
 export default function NoteDetails() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const user = useSelector((state: RootState) => state.authentication.user);
+  const deleteMutation = useDeleteNote();
 
   if (!user || user.name === 'no user') {
     return <RequireLogin message="Please login to view your note details" />;
@@ -39,15 +41,6 @@ export default function NoteDetails() {
   } = useQuery({
     queryKey: ['note', id],
     queryFn: () => NoteService.get(Number(id)),
-  });
-
-  // Delete mutation
-  const { mutate: deleteNote, isPending: isDeleting } = useMutation({
-    mutationFn: () => NoteService.delete(Number(id)),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['notes'] });
-      navigate('/notes');
-    },
   });
 
   // Vote mutation
@@ -83,7 +76,6 @@ export default function NoteDetails() {
       </div>
     );
   }
-
   const { note, voteCount } = noteData.data;
   if (!note) {
     return <p>This is invalid Note.</p>;
@@ -94,9 +86,10 @@ export default function NoteDetails() {
     user?.role === 'owner';
 
   const handleDelete = () => {
-    if (window.confirm('Are you sure you want to delete this note?')) {
-      deleteNote();
-    }
+    if (!confirm('Are you sure you want to delete this note?')) return;
+
+    deleteMutation.mutate(note.id);
+    navigate('/notes');
   };
 
   return (
@@ -119,16 +112,16 @@ export default function NoteDetails() {
                   Edit
                 </Button>
               </Link>
-              <Button
-                variant="outline"
-                size="sm"
+              <button
                 onClick={handleDelete}
-                disabled={isDeleting}
-                className="text-red-600 border-red-300 hover:bg-red-50"
+                disabled={deleteMutation.isPending}
+                className="flex items-center gap-2 px-3 py-1.5 rounded-md
+                       bg-red-600 text-white hover:bg-red-700
+                       disabled:opacity-50"
               >
-                <Trash2 className="w-4 h-4 mr-2" />
-                {isDeleting ? 'Deleting...' : 'Delete'}
-              </Button>
+                <Trash2 className="w-4 h-4" />
+                {deleteMutation.isPending ? 'Deleting...' : 'Delete'}
+              </button>
             </div>
           )}
         </div>
@@ -182,7 +175,7 @@ export default function NoteDetails() {
                 <Calendar className="w-4 h-4" />
                 <span>
                   {note.publishedAt
-                    ? format(note.publishedAt, 'MMM dd, yyyy')
+                    ? format(new Date(note.publishedAt), 'MMM dd, yyyy')
                     : 'Not published'}
                 </span>
               </div>

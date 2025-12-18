@@ -9,7 +9,7 @@ router
     router.get('/:id', [WorkspacesController, 'show'])
     router.post('/', [WorkspacesController, 'create'])
     router.put('/:id', [WorkspacesController, 'update'])
-    router.delete('/:id', [WorkspacesController, 'delete'])
+    router.delete('/:id', [WorkspacesController, 'destroy']);
   })
   .prefix('/api/workspaces')
   .use(middleware.auth())

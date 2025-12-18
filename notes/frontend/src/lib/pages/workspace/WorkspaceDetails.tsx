@@ -73,7 +73,6 @@ function WorkspaceDetails({ canManage }: { canManage: boolean }) {
         </CardContent>
         <CardFooter className="pt-0"></CardFooter>
       </Card>
-      {/* <NoteList workspaceId={workspace.data?.id} /> */}
       <NoteListPagination workspaceId={workspace.data?.id} />
     </div>
   );

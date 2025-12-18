@@ -7,12 +7,12 @@ import {
 import Layout from '@/components/layout/Layout';
 import Error404 from '@/components/errors/Error404';
 import { authRoutes } from './AuthRoute';
-import Profile from '@/pages/profile/Profile';
+import Profile from '@/lib/pages/profile/Profile';
 import Unauthorized from '@/components/errors/Unauthorized';
 import { companyRoutes } from './CompanyRoute';
 import { WorkspaceRoutes } from './workspaceRoute';
 import { MyNoteRoute } from './MyNoteRoute';
-import Home from '@/pages/home/Home';
+import Home from '@/lib/pages/home/Home';
 
 export const router = createBrowserRouter(
     createRoutesFromElements(

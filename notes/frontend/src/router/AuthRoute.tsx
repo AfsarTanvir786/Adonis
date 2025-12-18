@@ -1,9 +1,9 @@
 import { Route } from 'react-router';
-import AuthIndex from '@/pages/auth/Index';
-import Login from '@/pages/auth/Login';
-import Logout from '@/pages/auth/Logout';
-import Register from '@/pages/auth/Register';
-import ABC from '@/pages/auth/ABC';
+import AuthIndex from '@/lib/pages/auth/Index';
+import Login from '@/lib/pages/auth/Login';
+import Logout from '@/lib/pages/auth/Logout';
+import Register from '@/lib/pages/auth/Register';
+import ABC from '@/lib/pages/auth/ABC';
 
 export const authRoutes = (
     <Route path="auth" element={<AuthIndex />}>

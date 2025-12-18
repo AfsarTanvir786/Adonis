@@ -21,7 +21,6 @@ function HistoryList() {
         isLoading,
         isError,
     } = useHistoryList(Number(id));
-    // const user = useSelector((state: RootState) => state.authentication.user);
     const canManage = user.role === 'admin';
 
     if (isLoading) return <p className="text-center mt-10">Loading...</p>;

@@ -93,7 +93,7 @@ export default class WorkspacesController {
     return response.ok(result);
   }
 
-  async delete({ params, response, auth }: HttpContext) {
+  async destroy({ params, response, auth }: HttpContext) {
     const result = await this.workspaceService.deleteWorkspace(
       params.id,
       auth.user!,

@@ -12,8 +12,6 @@ export function useRegister() {
             if (data.success) {
                 queryClient.setQueryData(['user'], data.user);
                 navigate('/dashboard', { replace: true });
-            }else{
-                console.log('use Register: ', data);
             }
         },
         onError: (error: any) => {

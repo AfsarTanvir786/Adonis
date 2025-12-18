@@ -26,7 +26,6 @@ function NoteList() {
     type,
   })
 
-  console.log('object', data);
 
   const canManage = true
 
