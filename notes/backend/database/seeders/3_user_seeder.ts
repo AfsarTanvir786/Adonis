@@ -32,7 +32,7 @@ export default class UserSeeder extends BaseSeeder {
       await UserFactory.merge({
         companyId: company.id,
         role: 'member',
-      }).createMany(5)
+      }).createMany(10)
     }
   }
 }

@@ -1,23 +1,23 @@
-import { middleware } from '#start/kernel'
-import router from '@adonisjs/core/services/router'
-import AuthController from './auth_controller.js'
+import { middleware } from '#start/kernel';
+import router from '@adonisjs/core/services/router';
+import AuthController from './auth_controller.js';
 
 router
   .group(() => {
     router.get('/', async () => {
       return {
         message: 'Auth Module is working',
-      }
-    })
-    router.post('/register', [AuthController, 'register'])
-    router.post('/login', [AuthController, 'login'])
+      };
+    });
+    router.post('/register', [AuthController, 'register']);
+    router.post('/login', [AuthController, 'login']);
 
     router
       .group(() => {
-        router.get('/profile', [AuthController, 'profile'])
+        router.get('/profile', [AuthController, 'profile']);
         // router.get('/users', [AuthController, 'getUserList']).use(middleware.role(['admin'])) /* only admin can */
-        router.delete('/logout', [AuthController, 'logout'])
+        router.delete('/logout', [AuthController, 'logout']);
       })
-      .use(middleware.auth())
+      .use(middleware.auth());
   })
-  .prefix('/api/auth')
+  .prefix('/api/auth');

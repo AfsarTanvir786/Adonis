@@ -14,15 +14,6 @@ export const updateWorkspaceValidator = vine.compile(
   }),
 );
 
-export const paginationWorkspaceNoteList = vine.compile(
-  vine.object({
-    page: vine.number().optional(),
-    pageSize: vine.number().optional(),
-    sortBy: vine.string().optional(),
-    order: vine.enum(['asc', 'desc'] as const).optional(),
-  }),
-);
-
 const workspaceMessages = new SimpleMessagesProvider({
   'name.required': 'Workspace name is required',
   'name.minLength': 'Workspace name must be at least 3 characters',
@@ -33,9 +24,3 @@ const workspaceMessages = new SimpleMessagesProvider({
 
 createWorkspaceValidator.messagesProvider = workspaceMessages;
 updateWorkspaceValidator.messagesProvider = workspaceMessages;
-
-paginationWorkspaceNoteList.messagesProvider = new SimpleMessagesProvider({
-  'page.min': 'Page must be greater than 0',
-  'pageSize.max': 'Page size cannot exceed 100',
-  'sortBy.enum': 'Invalid sort field',
-});

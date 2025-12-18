@@ -5,5 +5,5 @@ export function cookieConfig() {
     sameSite: 'lax' as const,
     path: '/',
     maxAge: 60 * 60 * 24 * 7,
-  }
+  };
 }

@@ -1,11 +1,11 @@
-import { inject } from '@adonisjs/core'
-import User from '#models/user'
-import Note from '#models/note'
-import NoteRepository from './notes_query.js'
-import { DateTime } from 'luxon'
-import WorkspaceRepository from '../workspace/workspace_query.js'
-import CompanyRepository from '../company/company_query.js'
-import { Pagination } from '../../utils/types.js'
+import { inject } from '@adonisjs/core';
+import User from '#models/user';
+import Note from '#models/note';
+import NoteRepository from './notes_query.js';
+import { DateTime } from 'luxon';
+import WorkspaceRepository from '../workspace/workspace_query.js';
+import CompanyRepository from '../company/company_query.js';
+import { Pagination } from '../../utils/types.js';
 
 @inject()
 export class NoteService {
@@ -53,7 +53,7 @@ export class NoteService {
   async getMyNoteList(
     userId: number,
     type: 'public' | 'private' | 'all' = 'all',
-    pagination?: Pagination,
+    pagination: Pagination,
   ) {
     return await this.noteRepository.getMyNoteList(userId, type, pagination);
   }

@@ -1,8 +1,12 @@
-import { inject } from '@adonisjs/core'
-import type { HttpContext } from '@adonisjs/core/http'
-import { createWorkspaceValidator, paginationWorkspaceNoteList, updateWorkspaceValidator } from './workspace_validator.js'
-import { WorkspaceService } from './workspace_service.js'
+import { inject } from '@adonisjs/core';
+import type { HttpContext } from '@adonisjs/core/http';
+import {
+  createWorkspaceValidator,
+  updateWorkspaceValidator,
+} from './workspace_validator.js';
+import { WorkspaceService } from './workspace_service.js';
 import { Pagination } from '../../utils/types.js';
+import { paginationValidator } from '../../validator/pagination_validator.js';
 
 @inject()
 export default class WorkspacesController {
@@ -61,7 +65,7 @@ export default class WorkspacesController {
     return response.ok(result);
   }
   async sortList({ request, response, auth, params }: HttpContext) {
-    const payload = await request.validateUsing(paginationWorkspaceNoteList);
+    const payload = await request.validateUsing(paginationValidator);
     const pagination: Pagination = {
       page: Number(payload.page) ?? 1,
       limit: Number(payload.pageSize) ?? 10,

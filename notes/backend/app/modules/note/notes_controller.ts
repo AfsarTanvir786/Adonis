@@ -3,6 +3,7 @@ import { NoteService } from './notes_service.js';
 import type { HttpContext } from '@adonisjs/core/http';
 import { createNoteValidator, updateNoteValidator } from './notes_validator.js';
 import { Pagination } from '../../utils/types.js';
+import { paginationValidator } from '../../validator/pagination_validator.js';
 
 @inject()
 export default class NotesController {
@@ -25,19 +26,33 @@ export default class NotesController {
     return response.ok(result);
   }
 
-  async getMyNoteList({ response, auth }: HttpContext) {
-    const result = await this.noteService.getMyNoteList(auth.user!.id);
+  async getMyNoteList({ request, response, auth }: HttpContext) {
+    const payload = await request.validateUsing(paginationValidator);
+    const pagination: Pagination = {
+      page: Number(payload.page) ?? 1,
+      limit: Number(payload.pageSize) ?? 10,
+      sortBy: payload.sortBy ?? 'created_at',
+      order: payload.order ?? 'desc',
+    };
+    const type = request.input('type', 'all');
+
+    const result = await this.noteService.getMyNoteList(
+      auth.user!.id,
+      type,
+      pagination,
+    );
     if (!result.success) return response.notFound(result);
 
     return response.ok(result);
   }
 
   async myNotes({ request, response, auth }: HttpContext) {
+    const payload = await request.validateUsing(paginationValidator);
     const pagination: Pagination = {
-      page: request.input('page', 1),
-      limit: request.input('pageSize', 10),
-      sortBy: request.input('sortBy', 'created_at'),
-      order: request.input('order', 'desc'),
+      page: Number(payload.page) ?? 1,
+      limit: Number(payload.pageSize) ?? 10,
+      sortBy: payload.sortBy ?? 'created_at',
+      order: payload.order ?? 'desc',
     };
     const type = request.input('type', 'all');
 

@@ -1,67 +1,64 @@
-import Note from "#models/note";
-import User from "#models/user";
-import VoteCount from "#models/vote_count";
-import Workspace from "#models/workspace";
+import Note from '#models/note';
+import User from '#models/user';
+import Workspace from '#models/workspace';
 
 export class DashboardService {
   async getDashboard(companyId: number, userId: number) {
     const totalNotes = await Note.query()
       .whereHas('workspace', (w) => {
-        w.where('companyId', companyId)
+        w.where('companyId', companyId);
       })
-      .count('* as total')
+      .count('* as total');
 
     const totalPublicNotes = await Note.query()
       .where('type', 'public')
       .where('isDraft', false)
       .whereHas('workspace', (w) => {
-        w.where('companyId', companyId)
+        w.where('companyId', companyId);
       })
-      .count('* as total')
+      .count('* as total');
 
-    const totalMembers = await User.query().where('companyId', companyId).count('* as total')
+    const totalMembers = await User.query()
+      .where('companyId', companyId)
+      .count('* as total');
 
     const totalWorkspaces = await Workspace.query()
       .where('companyId', companyId)
-      .count('* as total')
+      .count('* as total');
 
     const latestPublicNoteList = await Note.query()
       .where('type', 'public')
       .where('isDraft', false)
       .whereHas('workspace', (q) => {
-        q.where('companyId', companyId)
+        q.where('companyId', companyId);
       })
       .preload('user')
       .orderBy('publishedAt', 'desc')
-      .limit(5)
+      .limit(5);
 
     const myRecentNoteList = await Note.query()
       .where('userId', userId)
       .orderBy('updatedAt', 'desc')
-      .limit(5)
+      .limit(5);
 
-    const myTopNote = await VoteCount.query()
-      .whereHas('note', (q) => {
-        q.where('userId', userId)
-      })
-      .preload('note')
-      .orderBy('upVoteCount', 'desc')
-      .first()
+    // const myTopNote = await Note.query()
+    //   .where('user_id', userId)
+    //   .orderBy('count', 'desc')
+    //   .first();
 
-    const topPublicNote = await VoteCount.query().whereHas('note', (q) => {
-      q.where('type', 'public')
-        .where('isDraft', false)
-        .whereHas('workspace', (w) => {
-          w.where('companyId', companyId)
-        })
-    }).preload('note')
-    .orderBy('upVoteCount', 'desc')
-    .first()
+    // const topPublicNote = await Note.query()
+    //   .where('type', 'public')
+    //   .where('isDraft', false)
+    //   .whereHas('workspace', (w) => {
+    //     w.where('companyId', companyId);
+    //   })
+    //   .orderBy('count', 'desc')
+    //   .first();
 
     const latestWorkspace = await Workspace.query()
       .where('companyId', companyId)
       .orderBy('createdAt', 'desc')
-      .first()
+      .first();
 
     return {
       success: true,
@@ -73,9 +70,9 @@ export class DashboardService {
       },
       latestPublicNoteList,
       myRecentNoteList,
-      myTopNote,
-      topPublicNote,
+      //   myTopNote,
+      //   topPublicNote,
       latestWorkspace,
-    }
+    };
   }
 }

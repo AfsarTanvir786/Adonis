@@ -3,7 +3,7 @@ export function apiSuccess(message: string, data?: any) {
     success: true,
     message,
     data,
-  }
+  };
 }
 
 export function apiError(message: string, data?: any) {
@@ -11,5 +11,5 @@ export function apiError(message: string, data?: any) {
     success: false,
     message,
     data,
-  }
+  };
 }

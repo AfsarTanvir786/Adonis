@@ -1,7 +1,7 @@
-import { inject } from '@adonisjs/core'
-import User from '#models/user'
-import Workspace from '#models/workspace'
-import WorkspaceRepository from './workspace_query.js'
+import { inject } from '@adonisjs/core';
+import User from '#models/user';
+import Workspace from '#models/workspace';
+import WorkspaceRepository from './workspace_query.js';
 import { Pagination } from '../../utils/types.js';
 
 @inject()
@@ -22,7 +22,11 @@ export class WorkspaceService {
     return this.workspaceRepository.getWorkspace(id);
   }
 
-  async getWorkspaceNoteList(workspaceId: number, companyId: number, pagination?: Pagination) {
+  async getWorkspaceNoteList(
+    workspaceId: number,
+    companyId: number,
+    pagination?: Pagination,
+  ) {
     return this.workspaceRepository.getWorkspaceNoteList(
       workspaceId,
       companyId,

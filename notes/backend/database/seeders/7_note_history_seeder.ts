@@ -10,7 +10,7 @@ export default class NoteHistorySeeder extends BaseSeeder {
     
     for (const note of notes) {
       // Create 1-3 history entries per note
-      const historyCount = Math.floor(Math.random() * 3) + 1
+      const historyCount = Math.floor(Math.random() * 5) + 1
       
       for (let i = 0; i < historyCount; i++) {
         await NoteHistory.create({

@@ -1,15 +1,13 @@
 import Note from '#models/note';
-import VoteCount from '#models/vote_count';
 import { DateTime } from 'luxon';
 import { Pagination } from '../../utils/types.js';
 
 export default class NoteRepository {
   async createNote(data: Partial<Note>) {
-    const note = await Note.create(data);
-    await VoteCount.create({
-      noteId: note.id,
-      upVoteCount: 0,
-      downVoteCount: 0,
+    const note = await Note.create({
+      ...data,
+      publishedAt: data.isDraft ? null : DateTime.now(),
+      count: 0,
     });
 
     return {
@@ -22,19 +20,18 @@ export default class NoteRepository {
   async getMyNoteList(
     userId: number,
     type: 'public' | 'private' | 'all' = 'all',
-    pagination?: Pagination,
+    pagination: Pagination,
   ) {
     const query = Note.query().where('user_id', userId);
 
-    if(type !== 'all'){
-      query.where('type', type)
+    if (type !== 'all') {
+      query.where('type', type);
     }
 
-    const noteList = pagination
-      ? await query
-          .orderBy('created_at', 'desc')
-          .paginate(pagination.page, pagination.limit)
-      : await query;
+    const noteList = await query
+      .orderBy('created_at', 'desc')
+      .paginate(pagination.page, pagination.limit);
+
     return {
       success: true,
       message: 'Note retrieved.',
@@ -66,12 +63,10 @@ export default class NoteRepository {
       };
     }
 
-    const voteCount = await VoteCount.findBy('note_id', note.id);
-
     return {
       success: true,
       message: 'Note retrieved.',
-      data: { note, voteCount },
+      data: note,
     };
   }
 
