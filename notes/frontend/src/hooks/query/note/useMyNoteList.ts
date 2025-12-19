@@ -1,18 +1,16 @@
-import { useQuery } from '@tanstack/react-query'
-import { NoteService } from '@/services/api/noteService'
+import { useQuery } from '@tanstack/react-query';
+import { NoteService } from '@/services/api/noteService';
+import type { Pagination } from '@/types/type';
 
-type Params = {
-  userId: number
-  page: number
-  pageSize: number
-  type: 'all' | 'public' | 'private'
-}
-
-export function useMyNoteList(params: Params) {
+export function useMyNoteList(
+  userId: number,
+  params: Partial<Pagination>,
+  type: 'all' | 'private' | 'public' = 'all'
+) {
   return useQuery({
-    queryKey: ['my-notes', params],
-    queryFn: () => NoteService.myNotes(params),
+    queryKey: ['my-notes', userId, params, type],
+    queryFn: () => NoteService.myNotes(params, type),
     placeholderData: (previousData) => previousData,
-    enabled: !!params.userId,
+    enabled: !!userId,
   });
 }

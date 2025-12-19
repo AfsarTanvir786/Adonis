@@ -4,17 +4,23 @@ import { Pagination } from '../../utils/types.js';
 
 export default class NoteRepository {
   async createNote(data: Partial<Note>) {
-    const note = await Note.create({
+    return await Note.create({
       ...data,
       publishedAt: data.isDraft ? null : DateTime.now(),
       count: 0,
     });
+  }
 
-    return {
-      success: true,
-      message: 'Note created successfully',
-      data: note,
-    };
+  async paginatePublicNotes(workspaceId: number, pagination: Pagination) {
+    const sortColumn =
+      pagination.sortBy === 'name' ? 'title' : pagination.sortBy;
+
+    return Note.query()
+      .where('workspace_id', workspaceId)
+      .where('type', 'public')
+      .where('is_draft', false)
+      .orderBy(sortColumn, pagination.orderBy)
+      .paginate(pagination.page, pagination.limit);
   }
 
   async getMyNoteList(
@@ -22,6 +28,8 @@ export default class NoteRepository {
     type: 'public' | 'private' | 'all' = 'all',
     pagination: Pagination,
   ) {
+    const sortColumn =
+      pagination.sortBy === 'name' ? 'title' : pagination.sortBy;
     const query = Note.query().where('user_id', userId);
 
     if (type !== 'all') {
@@ -29,14 +37,10 @@ export default class NoteRepository {
     }
 
     const noteList = await query
-      .orderBy('created_at', 'desc')
+      .orderBy(sortColumn, pagination.orderBy)
       .paginate(pagination.page, pagination.limit);
 
-    return {
-      success: true,
-      message: 'Note retrieved.',
-      data: noteList,
-    };
+    return noteList;
   }
 
   async getNote(id: number, workspaceIds: number[], userId: number) {
@@ -46,16 +50,10 @@ export default class NoteRepository {
       .preload('workspace')
       .first();
 
-    if (!note) {
-      return {
-        success: false,
-        message: 'Note not found.',
-      };
-    }
-
     if (
-      !workspaceIds.includes(note.workspaceId) ||
-      (note.type === 'private' && note.userId !== userId)
+      note &&
+      (!workspaceIds.includes(note.workspaceId) ||
+        (note.type === 'private' && note.userId !== userId))
     ) {
       return {
         success: false,

@@ -1,4 +1,10 @@
-import type { History, Note, NoteVote, PaginatedResponse, Pagination } from '@/types/type';
+import type {
+  History,
+  Note,
+  NoteVote,
+  PaginatedResponse,
+  Pagination,
+} from '@/types/type';
 import { api } from './api';
 
 type NoteListResponse = {
@@ -178,12 +184,21 @@ export const NoteService = {
     }
   },
 
-  async myNotes(params: {
-    userId: number;
-    page: number;
-    pageSize: number;
-    type: 'all' | 'public' | 'private';
-  }) {
-    return api.get('notes/notes/my', { params }).then((res) => res.data);
+  async myNotes(
+    params: Partial<Pagination>,
+    type: 'all' | 'public' | 'private' = 'all'
+  ) {
+    try {
+      const response = await api.get<PaginatedResponse<Note>>(
+        'notes/notes/my',
+        {
+          params: { ...params, type },
+        }
+      );
+      console.log("object", params, type)
+      return response.data;
+    } catch (error: any) {
+      throw new Error('my note fetch error', error.response?.data);
+    }
   },
 };

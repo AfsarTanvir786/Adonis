@@ -11,7 +11,7 @@ export default function NoteListPagination({
 }) {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState(10);
-  const [sortBy, setSortBy] = useState<'name' | 'title' | 'createdAt'>('createdAt');
+  const [sortBy, setSortBy] = useState<'title' | 'createdAt'>('createdAt');
   const [orderBy, setOrderBy] = useState<'asc' | 'desc'>('desc');
 
   const { data, isLoading, isError } = useNotePagination(workspaceId!, {
@@ -23,14 +23,14 @@ export default function NoteListPagination({
 
   const publicNotes = data?.data ?? [];
   const meta = data?.meta;
-  
-  if (isLoading) return <p>Loading notes...</p>;  
+
+  if (isLoading) return <p>Loading notes...</p>;
   if (isError)
     return <p className="text-center mt-10">Error fetching public notes</p>;
 
-
   return (
     <div className="space-y-6">
+      <p>note/noteslist.tsx</p>
       {/* Controls */}
       <div className="flex flex-wrap gap-4 mb-6">
         {/* Limit */}
@@ -47,11 +47,11 @@ export default function NoteListPagination({
         {/* Sort By */}
         <select
           value={sortBy}
-          onChange={(e) => setSortBy(e.target.value as 'createdAt' | 'name')}
+          onChange={(e) => setSortBy(e.target.value as 'createdAt' | 'title')}
           className="border rounded px-2 py-1"
         >
           <option value="createdAt">Created At</option>
-          <option value="name">Name</option>
+          <option value="title">Title</option>
         </select>
 
         {/* Order */}
@@ -67,7 +67,7 @@ export default function NoteListPagination({
 
       {/* Notes */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {publicNotes?.map((note: Note, index: number) => (
+        {publicNotes.map((note: Note, index: number) => (
           <SingleNote key={note.id} index={index} note={note} />
         ))}
       </div>
@@ -77,7 +77,7 @@ export default function NoteListPagination({
         <div className="flex justify-center items-center gap-4 mt-8">
           <Button
             variant="outline"
-            disabled={meta.currentPage === 1}
+            disabled={meta.currentPage <= 1}
             onClick={() => setPage((p) => p - 1)}
           >
             Previous
@@ -89,7 +89,7 @@ export default function NoteListPagination({
 
           <Button
             variant="outline"
-            disabled={meta.currentPage === meta.lastPage}
+            disabled={meta.currentPage >= meta.lastPage}
             onClick={() => setPage((p) => p + 1)}
           >
             Next

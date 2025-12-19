@@ -1,11 +1,11 @@
 import { Route } from 'react-router';
 import Error404 from '@/components/errors/Error404';
-import NoteList from '@/lib/pages/myNote/NoteList';
-import NoteCreate from '@/lib/pages/myNote/NoteCreate';
-import NoteEdit from '@/lib/pages/myNote/NoteEdit';
-import NoteDetails from '@/lib/pages/myNote/NoteDetails';
-import Index from '@/lib/pages/myNote/Index';
-import HistoryList from '@/lib/pages/myNote/history/HistoryList';
+import NoteList from '@/pages/myNote/NoteList';
+import NoteCreate from '@/pages/myNote/NoteCreate';
+import NoteEdit from '@/pages/myNote/NoteEdit';
+import NoteDetails from '@/pages/myNote/NoteDetails';
+import Index from '@/pages/myNote/Index';
+import HistoryList from '@/pages/myNote/history/HistoryList';
 
 export const MyNoteRoute = (
   <Route path="notes" element={<Index />}>

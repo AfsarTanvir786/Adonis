@@ -15,7 +15,7 @@ function WorkspaceList() {
     );
   }
 
-  // 🔥 controlled pagination options
+  // controlled pagination options
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState<5 | 10 | 20>(10);
   const [sortBy, setSortBy] = useState<'createdAt' | 'name'>('createdAt');
@@ -85,7 +85,7 @@ function WorkspaceList() {
         <div className="flex justify-center items-center gap-4 mt-8">
           <Button
             variant="outline"
-            disabled={meta.currentPage === 1}
+            disabled={meta.currentPage <= 1}
             onClick={() => setPage((p) => p - 1)}
           >
             Previous
@@ -97,7 +97,7 @@ function WorkspaceList() {
 
           <Button
             variant="outline"
-            disabled={meta.currentPage === meta.lastPage}
+            disabled={meta.currentPage >= meta.lastPage}
             onClick={() => setPage((p) => p + 1)}
           >
             Next

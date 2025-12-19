@@ -12,53 +12,53 @@ export default class WorkspacesController {
   constructor(private workspaceService: WorkspaceService) {}
 
   async create({ auth, request, response }: HttpContext) {
-    const payload = await request.validateUsing(createWorkspaceValidator)
-    const result = await this.workspaceService.createWorkspace(payload, auth.user!)
-    return response.created(result)
+    const payload = await request.validateUsing(createWorkspaceValidator);
+    const result = await this.workspaceService.createWorkspace(
+      payload,
+      auth.user!,
+    );
+    return response.created(result);
   }
 
   async list({ request, auth, response }: HttpContext) {
-    const filter = await request.validateUsing(paginationValidator)
+    const filter = await request.validateUsing(paginationValidator);
     const result = await this.workspaceService.listWorkspaces(
       auth.user!.companyId,
       filter,
-    )
-    return response.ok(result)
+    );
+    return response.ok(result);
   }
 
   async show({ params, auth, response }: HttpContext) {
     const result = await this.workspaceService.getWorkspaceOrFail(
       Number(params.id),
       auth.user!.companyId,
-    )
-    return response.ok(result)
+    );
+    return response.ok(result);
   }
 
   async listPublicNotes({ params, request, auth, response }: HttpContext) {
-    const filter = await request.validateUsing(paginationValidator)
+    const filter = await request.validateUsing(paginationValidator);
     const result = await this.workspaceService.listPublicNotes(
       Number(params.id),
       auth.user!.companyId,
       filter,
-    )
-    return response.ok(result)
+    );
+    return response.ok(result);
   }
 
   async update({ params, request, auth, response }: HttpContext) {
-    const payload = await request.validateUsing(updateWorkspaceValidator)
+    const payload = await request.validateUsing(updateWorkspaceValidator);
     const result = await this.workspaceService.updateWorkspace(
       Number(params.id),
       payload,
       auth.user!,
-    )
-    return response.ok(result)
+    );
+    return response.ok(result);
   }
 
   async destroy({ params, auth, response }: HttpContext) {
-    await this.workspaceService.deleteWorkspace(
-      Number(params.id),
-      auth.user!,
-    )
-    return response.noContent()
+    await this.workspaceService.deleteWorkspace(Number(params.id), auth.user!);
+    return response.noContent();
   }
 }

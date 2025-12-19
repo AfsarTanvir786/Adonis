@@ -5,10 +5,14 @@ import WorkspaceRepository from './workspace_query.js';
 import { Pagination } from '../../utils/types.js';
 import { Exception } from '@adonisjs/core/exceptions';
 import { normalizePagination } from '#services/normalize_pagination';
+import NoteRepository from '../note/notes_query.js';
 
 @inject()
 export class WorkspaceService {
-  constructor(private workspaceRepo: WorkspaceRepository) {}
+  constructor(
+    private workspaceRepo: WorkspaceRepository,
+    private noteRepo: NoteRepository,
+  ) {}
 
   async createWorkspace(data: Partial<Workspace>, user: User) {
     return this.workspaceRepo.create({
@@ -42,7 +46,7 @@ export class WorkspaceService {
   ) {
     const workspace = await this.getWorkspaceOrFail(workspaceId, companyId);
 
-    return this.workspaceRepo.paginatePublicNotes(
+    return this.noteRepo.paginatePublicNotes(
       workspace.id,
       normalizePagination(filter),
     );

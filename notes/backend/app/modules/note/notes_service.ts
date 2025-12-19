@@ -24,7 +24,7 @@ export class NoteService {
     const workspaceList = await this.workspaceRepository.getWorkspaceList(
       user.companyId,
     );
-    const allowedWorkspaces = workspaceList.data.map((w) => w.id);
+    const allowedWorkspaces = workspaceList.map((w) => w.id);
 
     if (allowedWorkspaces.length === 0) {
       return {
@@ -67,13 +67,13 @@ export class NoteService {
     const workspaceList = await this.workspaceRepository.getWorkspaceList(
       user.companyId,
     );
-    if (workspaceList.data.length === 0) {
+    if (workspaceList.length === 0) {
       return {
         success: false,
         message: 'No workspaces found for this company',
       };
     }
-    const workspaceIds = workspaceList.data.map((w) => w.id);
+    const workspaceIds = workspaceList.map((w) => w.id);
 
     return this.noteRepository.getNote(id, workspaceIds, user.id);
   }
@@ -85,13 +85,13 @@ export class NoteService {
   async getNoteList(companyId: number) {
     const workspaceList =
       await this.workspaceRepository.getWorkspaceList(companyId);
-    if (workspaceList.data.length === 0) {
+    if (workspaceList.length === 0) {
       return {
         success: false,
         message: 'No workspaces found for this company',
       };
     }
-    const workspaceIds = workspaceList.data.map((w) => w.id);
+    const workspaceIds = workspaceList.map((w) => w.id);
     return this.noteRepository.getNoteList(workspaceIds);
   }
 

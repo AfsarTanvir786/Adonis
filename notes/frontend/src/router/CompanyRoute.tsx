@@ -1,6 +1,6 @@
 import { Route } from 'react-router';
-import Company from '@/lib/pages/company/Company';
+import Company from '@/pages/company/Company';
 
 export const companyRoutes = (
-    <Route path="company" element={<Company />}></Route>
+  <Route path="company" element={<Company />}></Route>
 );

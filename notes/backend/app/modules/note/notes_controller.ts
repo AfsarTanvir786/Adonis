@@ -30,9 +30,9 @@ export default class NotesController {
     const payload = await request.validateUsing(paginationValidator);
     const pagination: Pagination = {
       page: Number(payload.page) ?? 1,
-      limit: Number(payload.pageSize) ?? 10,
-      sortBy: payload.sortBy ?? 'created_at',
-      orderBy: payload.order ?? 'desc',
+      limit: Number(payload.limit) ?? 10,
+      sortBy: payload.sortBy ?? 'createdAt',
+      orderBy: payload.orderBy ?? 'desc',
     };
     const type = request.input('type', 'all');
 
@@ -41,7 +41,6 @@ export default class NotesController {
       type,
       pagination,
     );
-    if (!result.success) return response.notFound(result);
 
     return response.ok(result);
   }
@@ -50,9 +49,9 @@ export default class NotesController {
     const payload = await request.validateUsing(paginationValidator);
     const pagination: Pagination = {
       page: Number(payload.page) ?? 1,
-      limit: Number(payload.pageSize) ?? 10,
-      sortBy: payload.sortBy ?? 'created_at',
-      orderBy: payload.order ?? 'desc',
+      limit: Number(payload.limit) ?? 10,
+      sortBy: payload.sortBy ?? 'createdAt',
+      orderBy: payload.orderBy ?? 'desc',
     };
     const type = request.input('type', 'all');
 
@@ -61,7 +60,6 @@ export default class NotesController {
       type,
       pagination,
     );
-    if (!result.success) return response.notFound(result);
 
     return response.ok(result);
   }

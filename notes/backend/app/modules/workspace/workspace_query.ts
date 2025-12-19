@@ -1,11 +1,10 @@
-import Note from '#models/note';
 import Workspace from '#models/workspace';
 import { Exception } from '@adonisjs/core/exceptions';
 import { Pagination } from '../../utils/types.js';
 
 export default class WorkspaceRepository {
   async create(data: Partial<Workspace>) {
-    return Workspace.create(data)
+    return Workspace.create(data);
   }
 
   async findById(id: number) {
@@ -13,41 +12,34 @@ export default class WorkspaceRepository {
       .where('id', id)
       .preload('user')
       .preload('company')
-      .first()
+      .first();
 
     if (!workspace) {
-      throw new Exception('Workspace not found', { status: 404 })
+      throw new Exception('Workspace not found', { status: 404 });
     }
 
-    return workspace
+    return workspace;
   }
 
   async paginateByCompany(companyId: number, pagination: Pagination) {
-    return Workspace.query()
+    return await Workspace.query()
       .where('companyId', companyId)
       .orderBy(pagination.sortBy, pagination.orderBy)
-      .paginate(pagination.page, pagination.limit)
+      .paginate(pagination.page, pagination.limit);
   }
 
-  async paginatePublicNotes(workspaceId: number, pagination: Pagination) {
-    const sortColumn =
-      pagination.sortBy === 'name' ? 'title' : pagination.sortBy
-
-    return Note.query()
-      .where('workspace_id', workspaceId)
-      .where('type', 'public')
-      .where('is_draft', false)
-      .orderBy(sortColumn, pagination.orderBy)
-      .paginate(pagination.page, pagination.limit)
+  async getWorkspaceList(companyId: number) {
+    // improve by passing just ids
+    return await Workspace.query().where('companyId', companyId);
   }
 
   async update(workspace: Workspace, data: Partial<Workspace>) {
-    workspace.merge(data)
-    await workspace.save()
-    return workspace
+    workspace.merge(data);
+    await workspace.save();
+    return workspace;
   }
 
   async delete(workspace: Workspace) {
-    await workspace.delete()
+    await workspace.delete();
   }
 }
