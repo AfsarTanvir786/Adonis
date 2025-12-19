@@ -38,8 +38,15 @@ export class WorkspaceService {
     return this.workspaceRepository.updateWorkspace(workspace, id, user);
   }
 
-  async getWorkspaceList(id: number) {
-    return this.workspaceRepository.getWorkspaceList(id);
+  async getWorkspaceList(companyId: number, filter: Partial<Pagination>) {
+    const pagination: Pagination = {
+      page: filter.page ?? 1,
+      limit: filter.limit ?? 20,
+      sortBy: filter.sortBy ?? 'createdAt',
+      orderBy: filter.orderBy ?? 'desc',
+    };
+
+    return this.workspaceRepository.getWorkspaceList(companyId, pagination);
   }
 
   async deleteWorkspace(id: number, user: User) {

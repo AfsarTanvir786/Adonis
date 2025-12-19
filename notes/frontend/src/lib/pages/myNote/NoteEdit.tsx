@@ -9,6 +9,7 @@ import { NoteService } from '@/services/api/noteService';
 import { WorkspaceService } from '@/services/api/workspaceService';
 import { tagService } from '@/services/api/tagService';
 import RequireLogin from '@/utils/requireLogin';
+import { useWorkspaceList } from '@/hooks/query/workspace/useWorkspaceList';
 
 export default function NoteEdit() {
   const { id } = useParams<{ id: string }>();
@@ -40,9 +41,11 @@ export default function NoteEdit() {
   });
 
   // Fetch workspaces
-  const { data: workspacesData } = useQuery({
-    queryKey: ['workspaces'],
-    queryFn: () => WorkspaceService.list(),
+  const { data: workspaceList } = useWorkspaceList(user.companyId, {
+    page: 1,
+    limit: 20,
+    sortBy: 'createdAt',
+    orderBy: 'desc',
   });
 
   // Fetch tags
@@ -53,8 +56,8 @@ export default function NoteEdit() {
 
   // Populate form when note is loaded
   useEffect(() => {
-    if (noteData?.data?.note) {
-      const note = noteData.data.note;
+    if (noteData?.data) {
+      const note = noteData.data;
       setFormData({
         title: note.title,
         content: note.content || '',
@@ -68,7 +71,7 @@ export default function NoteEdit() {
 
   // Update note mutation
   const { mutate: updateNote, isPending } = useMutation({
-    mutationFn: (data: any) => NoteService.update(Number(id), data),
+    // mutationFn: (data: any) => NoteService.update(Number(id), data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['notes'] });
       queryClient.invalidateQueries({ queryKey: ['note', id] });
@@ -90,12 +93,12 @@ export default function NoteEdit() {
   const handleSubmit = (e: React.FormEvent, publish: boolean = false) => {
     e.preventDefault();
 
-    updateNote({
-      ...formData,
-      isDraft: !publish,
-      tagIds: selectedTags,
-      publishedAt: publish ? new Date().toISOString() : null,
-    });
+    // updateNote({
+    //   ...formData,
+    //   isDraft: !publish,
+    //   tagIds: selectedTags,
+    //   publishedAt: publish ? new Date().toISOString() : null,
+    // });
   };
 
   const handleTagToggle = (tagId: number) => {
@@ -120,7 +123,7 @@ export default function NoteEdit() {
     );
   }
 
-  const note = noteData?.data?.note;
+  const note = noteData?.data;
   const canEdit =
     user?.id === note?.userId ||
     user?.role === 'admin' ||
@@ -139,7 +142,7 @@ export default function NoteEdit() {
     );
   }
 
-  const workspaces = workspacesData?.data || [];
+  const workspaces = workspaceList?.data.data || [];
   const tags = tagsData?.data || [];
 
   return (

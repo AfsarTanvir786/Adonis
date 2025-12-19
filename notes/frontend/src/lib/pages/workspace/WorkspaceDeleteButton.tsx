@@ -1,5 +1,5 @@
 import { Button } from '@/components/ui/button'
-import { useDeleteWorkspace } from '@/hooks/query/useDeleteWorkspace'
+import { useDeleteWorkspace } from '@/hooks/query/workspace/useDeleteWorkspace'
 import { useParams } from 'react-router-dom';
 
 export default function WorkspaceDeleteButton() {

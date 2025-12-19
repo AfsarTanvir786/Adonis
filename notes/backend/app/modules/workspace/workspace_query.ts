@@ -54,7 +54,7 @@ export default class WorkspaceRepository {
           .where('workspace_id', workspaceId)
           .where('type', 'public')
           .where('is_draft', 0)
-          .orderBy(pagination.sortBy, pagination.order)
+          .orderBy(pagination.sortBy, pagination.orderBy)
           .paginate(pagination.page, pagination.limit)
       : await Note.query()
           .where('workspace_id', workspaceId)
@@ -105,13 +105,20 @@ export default class WorkspaceRepository {
     };
   }
 
-  async getWorkspaceList(id: number) {
-    const list = await Workspace.query().where('companyId', id);
+  async getWorkspaceList(companyId: number, pagination: Pagination) {
+    try {
+      const list = await Workspace.query()
+        .where('companyId', companyId)
+        .orderBy(pagination.sortBy, pagination.orderBy)
+        .paginate(pagination.page, pagination.limit);
 
-    return {
-      success: true,
-      data: list,
-    };
+      return {
+        success: true,
+        data: list,
+      };
+    } catch (error) {
+      throw new Error('Database error while fetching workspaces');
+    }
   }
 
   async deleteWorkspace(id: number, user: User) {

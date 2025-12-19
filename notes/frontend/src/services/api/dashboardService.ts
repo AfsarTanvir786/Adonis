@@ -1,4 +1,4 @@
-import type { Note, VoteCount, Workspace } from "@/types/type";
+import type { Note, Workspace } from "@/types/type";
 import { api } from "./api";
 
 type DashboardResponse = {
@@ -11,9 +11,7 @@ type DashboardResponse = {
     };
     latestPublicNoteList: Note[];
     myRecentNoteList: Note[];
-    myTopNote: VoteCount & { note: Note };
     latestWorkspace: Workspace;
-    topPublicNote: VoteCount & { note: Note };
 };
 export const dashboardService = {
     async dashboard(): Promise<DashboardResponse> {

@@ -1,4 +1,4 @@
-import type { History, Note, NoteVote, VoteCount } from '@/types/type';
+import type { History, Note, NoteVote } from '@/types/type';
 import { api } from './api';
 
 type NoteListResponse = {
@@ -16,7 +16,7 @@ type HistoryListResponse = {
 type NoteResponse = {
   success: boolean;
   message: any;
-  data?: { note: Note; voteCount?: VoteCount };
+  data?: Note;
 };
 
 type NoteVoteResponse = {
@@ -38,6 +38,10 @@ export const NoteService = {
 
   async get(noteId: number): Promise<NoteResponse> {
     try {
+      return {
+        success: false,
+        message: 'Implementation error.',
+      };
       const response = await api.get(`/notes/${noteId}`);
       return response.data;
     } catch (error: any) {
@@ -57,6 +61,10 @@ export const NoteService = {
   },
 
   async create(data: Partial<Note>): Promise<NoteResponse> {
+    return {
+      success: false,
+      message: 'Implementation error.',
+    };
     try {
       const response = await api.post('/notes', data);
       return response.data;
@@ -67,6 +75,10 @@ export const NoteService = {
   },
 
   async update(id: number, data: Partial<Note>): Promise<NoteResponse> {
+    return {
+      success: false,
+      message: 'Implementation error.',
+    };
     try {
       const response = await api.put(`/notes/${id}`, data);
       return response.data;
@@ -77,6 +89,10 @@ export const NoteService = {
   },
 
   async delete(id: number): Promise<NoteResponse> {
+    return {
+      success: false,
+      message: 'Implementation error.',
+    };
     try {
       const response = await api.delete(`/notes/${id}`);
       return response.data;
@@ -87,6 +103,10 @@ export const NoteService = {
   },
 
   async vote(id: number, voteType: 'up' | 'down'): Promise<NoteResponse> {
+    return {
+      success: false,
+      message: 'Implementation error.',
+    };
     try {
       const response = await api.post(`/notes/${id}`, { vote: voteType });
       return response.data;
@@ -97,6 +117,10 @@ export const NoteService = {
   },
 
   async getHistory(id: number): Promise<HistoryListResponse> {
+    return {
+      success: false,
+      message: 'Implementation error.',
+    };
     try {
       const response = await api.get(`/noteHistories/${id}`);
       return response.data;
@@ -107,6 +131,10 @@ export const NoteService = {
   },
 
   async getVoteCount(noteId: number): Promise<any> {
+    return {
+      success: false,
+      message: 'Implementation error.',
+    };
     try {
       const response = await api.get(`/voteCounts/${noteId}`);
       return response.data;
@@ -117,6 +145,10 @@ export const NoteService = {
   },
 
   async getVote(noteId: number): Promise<NoteVoteResponse> {
+    return {
+      success: false,
+      message: 'Implementation error.',
+    };
     try {
       const response = await api.get(`/noteVotes/${noteId}`);
       return response.data;
@@ -127,6 +159,10 @@ export const NoteService = {
   },
 
   async createNoteVote(noteId: number, vote: 'up' | 'down') {
+    return {
+      success: false,
+      message: 'Implementation error.',
+    };
     try {
       const response = await api.post(`/noteVotes/${noteId}`, { vote });
       return response.data;

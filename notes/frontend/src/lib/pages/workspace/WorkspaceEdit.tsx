@@ -15,9 +15,9 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
-import { useWorkspace } from '@/hooks/query/useWorkspace';
+import { useWorkspace } from '@/hooks/query/workspace/useWorkspace';
 import { useEffect } from 'react';
-import { useWorkspaceUpdate } from '@/hooks/query/useWorkspaceUpdate';
+import { useWorkspaceUpdate } from '@/hooks/query/workspace/useWorkspaceUpdate';
 
 /* ---------------- Schema ---------------- */
 

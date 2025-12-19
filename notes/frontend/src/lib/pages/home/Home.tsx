@@ -86,7 +86,7 @@ function Home() {
         ) : (
           <p className="text-gray-600">No personal work to display</p>
         )}
-        {dashboardData.myTopNote ? (
+        {/* {dashboardData.myTopNote ? (
           <div className="mt-4">
             <h4 className="font-extrabold mt-4 mb-2">Your Most Upvoted Note</h4>
             <p className="font-medium">{dashboardData.myTopNote.note.title}</p>
@@ -99,7 +99,7 @@ function Home() {
           </div>
         ) : (
           <p className="text-2xl">Most upvoted note</p>
-        )}
+        )} */}
       </div>
 
       {/*     4. Popular Notes (Company)
@@ -110,7 +110,7 @@ function Home() {
             */}
       <div className="bg-white p-4 rounded shadow mt-4">
         <h3 className="text-lg font-semibold">Popular Notes</h3>
-        {dashboardData.topPublicNote ? (
+        {/* {dashboardData.topPublicNote ? (
           <div className="mt-2">
             <p className="font-medium">
               {dashboardData.topPublicNote.note.title}
@@ -124,7 +124,7 @@ function Home() {
           </div>
         ) : (
           <p className="text-gray-600">No popular notes to display</p>
-        )}
+        )} */}
       </div>
 
       {/*     5. Workspace Overview

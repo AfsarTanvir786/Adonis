@@ -7,6 +7,6 @@ export type ApiResponse<T = undefined> = {
 export type Pagination = {
   page: number;
   limit: number;
-  sortBy: string;
-  order: 'desc' | 'asc';
+  sortBy: 'createdAt' | 'name';
+  orderBy: 'asc' | 'desc';
 };

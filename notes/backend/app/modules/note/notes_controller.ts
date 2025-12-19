@@ -32,7 +32,7 @@ export default class NotesController {
       page: Number(payload.page) ?? 1,
       limit: Number(payload.pageSize) ?? 10,
       sortBy: payload.sortBy ?? 'created_at',
-      order: payload.order ?? 'desc',
+      orderBy: payload.order ?? 'desc',
     };
     const type = request.input('type', 'all');
 
@@ -52,7 +52,7 @@ export default class NotesController {
       page: Number(payload.page) ?? 1,
       limit: Number(payload.pageSize) ?? 10,
       sortBy: payload.sortBy ?? 'created_at',
-      order: payload.order ?? 'desc',
+      orderBy: payload.order ?? 'desc',
     };
     const type = request.input('type', 'all');
 

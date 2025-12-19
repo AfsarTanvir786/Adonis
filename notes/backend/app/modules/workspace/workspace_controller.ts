@@ -55,22 +55,32 @@ export default class WorkspacesController {
     return response.ok(result);
   }
 
-  async list({ response, auth }: HttpContext) {
-    const result = await this.workspaceService.getWorkspaceList(
-      auth.user!.companyId,
-    );
+  async list({ request, response, auth }: HttpContext) {
+    try {
+      const user = auth.user!;
+      const filter = await request.validateUsing(paginationValidator);
 
-    if (!result.success) return response.notFound(result);
+      const result = await this.workspaceService.getWorkspaceList(
+        user.companyId,
+        filter,
+      );
 
-    return response.ok(result);
+      return response.ok(result);
+    } catch (error) {
+      return response.badRequest({
+        success: false,
+        message: error.message ?? 'Failed to fetch workspaces',
+      });
+    }
   }
+  
   async sortList({ request, response, auth, params }: HttpContext) {
     const payload = await request.validateUsing(paginationValidator);
     const pagination: Pagination = {
       page: Number(payload.page) ?? 1,
-      limit: Number(payload.pageSize) ?? 10,
-      sortBy: payload.sortBy ?? 'created_at',
-      order: payload.order ?? 'desc',
+      limit: Number(payload.limit) ?? 10,
+      sortBy: payload.sortBy ?? 'createdAt',
+      orderBy: payload.orderBy ?? 'desc',
     };
     const result = await this.workspaceService.getWorkspaceNoteList(
       params.id,

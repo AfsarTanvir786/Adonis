@@ -32,19 +32,20 @@ export interface Workspace {
 }
 
 export interface Note {
-    id: number;
-    workspaceId: number;
-    userId: number;
-    title: string;
-    content: string | null;
-    type: 'public' | 'private';
-    isDraft: boolean;
-    publishedAt: string | null;
-    createdAt: string;
-    updatedAt: string | null;
-    user?: User;
-    workspace?: Workspace;
-    tags?: Tag[];
+  id: number;
+  workspaceId: number;
+  userId: number;
+  title: string;
+  content: string | null;
+  type: 'public' | 'private';
+  count: number;
+  isDraft: boolean;
+  publishedAt: string | null;
+  createdAt: string;
+  updatedAt: string | null;
+  user?: User;
+  workspace?: Workspace;
+  tags?: Tag[];
 }
 
 export interface Tag {
@@ -54,23 +55,14 @@ export interface Tag {
     updatedAt: string | null;
 }
 
-export type VoteCount = {
-    id: number;
-    noteId: number;
-    upVoteCount: number;
-    downVoteCount: number;
-    createdAt: string;
-    updatedAt: string | null;
-};
-
 export interface History {
-    id: number;
-    noteId: number;
-    userId: number;
-    oldTitle: string;
-    oldContent: string;
-    createdAt: string;
-    updatedAt: string | null;
+  id: number;
+  noteId: number;
+  userId: number;
+  oldTitle: string;
+  oldContent: string;
+  createdAt: string;
+  updatedAt: string | null;
 }
 
 export type NoteVote = {
@@ -81,3 +73,27 @@ export type NoteVote = {
     createdAt: string;
     updatedAt: string | null;
 };
+
+export type Pagination = {
+  page: number;
+  limit: number;
+  sortBy: 'createdAt' | 'name';
+  orderBy: 'asc' | 'desc';
+};
+
+export interface PaginatedResponse<T> {
+  success: boolean;
+  data: {
+    data: T[];
+    meta: {
+      total: number;
+      perPage: number;
+      currentPage: number;
+      lastPage: number;
+      firstPageUrl: string;
+      lastPageUrl: string;
+      nextPageUrl: null | string;
+      previousPageUrl: null | string;
+    };
+  };
+}

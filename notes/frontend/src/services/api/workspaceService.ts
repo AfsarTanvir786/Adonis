@@ -1,28 +1,32 @@
-import type { Workspace } from '@/types/type';
+import type { PaginatedResponse, Pagination, Workspace } from '@/types/type';
 import { api } from './api';
 
 type WorkspaceListResponseResponse = {
-    success: boolean;
-    message: any;
-    data?: Workspace[];
+  success: boolean;
+  message: any;
+  data?: Workspace[];
 };
 
 type WorkspaceResponse = {
-    success: boolean;
-    message: any;
-    data?: Workspace;
+  success: boolean;
+  message: any;
+  data?: Workspace;
 };
 
 export type CreateWorkspacePayload = {
-  name: string
-  description?: string
-}
-
+  name: string;
+  description?: string;
+};
 
 export const WorkspaceService = {
-  async list(): Promise<WorkspaceListResponseResponse> {
+  async list(
+    params: Partial<Pagination>
+  ): Promise<PaginatedResponse<Workspace>> {
     try {
-      const response = await api.get(`/workspaces`);
+      const response = await api.get<PaginatedResponse<Workspace>>(
+        `/workspaces`,
+        { params }
+      );
       return response.data;
     } catch (error: any) {
       console.error('Get Workspace error:', error.response?.data);

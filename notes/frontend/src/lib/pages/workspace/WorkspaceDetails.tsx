@@ -1,5 +1,5 @@
 import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
-import { useWorkspace } from '@/hooks/query/useWorkspace';
+import { useWorkspace } from '@/hooks/query/workspace/useWorkspace';
 import { Link, useParams } from 'react-router-dom';
 import type { RootState } from '@/store';
 import { useSelector } from 'react-redux';
