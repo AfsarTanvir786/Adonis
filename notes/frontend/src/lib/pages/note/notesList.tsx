@@ -1,15 +1,8 @@
-import { useState } from 'react'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
-import { Button } from '@/components/ui/button'
-import SingleNote from './Note'
-import { useNotePagination } from '@/hooks/query/note/useNotePagination'
-import type { Note } from '@/types/type'
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import SingleNote from './Note';
+import { useNotePagination } from '@/hooks/query/note/useNotePagination';
+import type { Note } from '@/types/type';
 
 export default function NoteListPagination({
   workspaceId,
@@ -17,91 +10,92 @@ export default function NoteListPagination({
   workspaceId: number | undefined;
 }) {
   const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
-  const [sortBy, setSortBy] = useState<'title' | 'createdAt'>('createdAt');
-  const [order, setOrder] = useState<'asc' | 'desc'>('desc');
+  const [limit, setLimit] = useState(10);
+  const [sortBy, setSortBy] = useState<'name' | 'title' | 'createdAt'>('createdAt');
+  const [orderBy, setOrderBy] = useState<'asc' | 'desc'>('desc');
 
-  const { data, isLoading } = useNotePagination(workspaceId!, {
+  const { data, isLoading, isError } = useNotePagination(workspaceId!, {
     page,
-    pageSize,
+    limit,
     sortBy,
-    order,
+    orderBy,
   });
 
-  if (isLoading) return <p>Loading notes...</p>;
+  const publicNotes = data?.data ?? [];
+  const meta = data?.meta;
+  
+  if (isLoading) return <p>Loading notes...</p>;  
+  if (isError)
+    return <p className="text-center mt-10">Error fetching public notes</p>;
+
 
   return (
     <div className="space-y-6">
       {/* Controls */}
-      <div className="flex flex-wrap gap-4 items-center justify-between">
-        {/* Sort */}
-        <Select
-          value={`${sortBy}-${order}`}
-          onValueChange={(v) => {
-            const [s, o] = v.split('-');
-            setSortBy(s as any);
-            setOrder(o as any);
-          }}
+      <div className="flex flex-wrap gap-4 mb-6">
+        {/* Limit */}
+        <select
+          value={limit}
+          onChange={(e) => setLimit(Number(e.target.value) as 5 | 10 | 20)}
+          className="border rounded px-2 py-1"
         >
-          <SelectTrigger className="w-48">
-            <SelectValue placeholder="Sort by" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="createdAt-desc">Latest</SelectItem>
-            <SelectItem value="createdAt-asc">Oldest</SelectItem>
-            <SelectItem value="title-asc">Title A–Z</SelectItem>
-            <SelectItem value="title-desc">Title Z–A</SelectItem>
-          </SelectContent>
-        </Select>
+          <option value={5}>5</option>
+          <option value={10}>10</option>
+          <option value={20}>20</option>
+        </select>
 
-        {/* Page size */}
-        <Select
-          value={String(pageSize)}
-          onValueChange={(v) => {
-            setPageSize(Number(v));
-            setPage(1);
-          }}
+        {/* Sort By */}
+        <select
+          value={sortBy}
+          onChange={(e) => setSortBy(e.target.value as 'createdAt' | 'name')}
+          className="border rounded px-2 py-1"
         >
-          <SelectTrigger className="w-32">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="5">5</SelectItem>
-            <SelectItem value="10">10</SelectItem>
-            <SelectItem value="20">20</SelectItem>
-          </SelectContent>
-        </Select>
+          <option value="createdAt">Created At</option>
+          <option value="name">Name</option>
+        </select>
+
+        {/* Order */}
+        <select
+          value={orderBy}
+          onChange={(e) => setOrderBy(e.target.value as 'asc' | 'desc')}
+          className="border rounded px-2 py-1"
+        >
+          <option value="desc">Desc</option>
+          <option value="asc">Asc</option>
+        </select>
       </div>
 
       {/* Notes */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {data.data?.data?.map((note: Note, index: number) => (
+        {publicNotes?.map((note: Note, index: number) => (
           <SingleNote key={note.id} index={index} note={note} />
         ))}
       </div>
 
-      {/* Pagination */}
-      <div className="flex justify-between items-center">
-        <Button
-          variant="outline"
-          disabled={page === 1}
-          onClick={() => setPage((p) => p - 1)}
-        >
-          Previous
-        </Button>
+      {/* Pagination Controls */}
+      {meta && (
+        <div className="flex justify-center items-center gap-4 mt-8">
+          <Button
+            variant="outline"
+            disabled={meta.currentPage === 1}
+            onClick={() => setPage((p) => p - 1)}
+          >
+            Previous
+          </Button>
 
-        <span className="text-sm">
-          Page {page} of {data.data?.meta.lastPage}
-        </span>
+          <span>
+            Page {meta.currentPage} of {meta.lastPage}
+          </span>
 
-        <Button
-          variant="outline"
-          disabled={page >= data.data?.meta.lastPage}
-          onClick={() => setPage((p) => p + 1)}
-        >
-          Next
-        </Button>
-      </div>
+          <Button
+            variant="outline"
+            disabled={meta.currentPage === meta.lastPage}
+            onClick={() => setPage((p) => p + 1)}
+          >
+            Next
+          </Button>
+        </div>
+      )}
     </div>
   );
 }

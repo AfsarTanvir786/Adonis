@@ -1,4 +1,4 @@
-import { WorkspaceService } from '@/services/api/workspaceService';
+import { workspaceService } from '@/services/api/workspaceService';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 
@@ -8,7 +8,7 @@ export function useWorkspaceUpdate(workspaceId: number) {
 
   return useMutation({
     mutationFn: (data: { name: string; description?: string }) =>
-      WorkspaceService.update(data, workspaceId),
+      workspaceService.update(data, workspaceId),
 
     onMutate: async (newData) => {
       await queryClient.cancelQueries({ queryKey: ['workspace', workspaceId] });

@@ -1,4 +1,4 @@
-import type { History, Note, NoteVote } from '@/types/type';
+import type { History, Note, NoteVote, PaginatedResponse, Pagination } from '@/types/type';
 import { api } from './api';
 
 type NoteListResponse = {
@@ -26,9 +26,15 @@ type NoteVoteResponse = {
 };
 
 export const NoteService = {
-  async list(workspaceId: number): Promise<NoteListResponse> {
+  async list(
+    workspaceId: number,
+    params: Partial<Pagination>
+  ): Promise<PaginatedResponse<Note>> {
     try {
-      const response = await api.get(`/workspaces/${workspaceId}/notes`);
+      const response = await api.get<PaginatedResponse<Note>>(
+        `/workspaces/${workspaceId}/notes`,
+        { params }
+      );
       return response.data;
     } catch (error: any) {
       console.error('Get Note error:', error.response?.data);
@@ -170,20 +176,6 @@ export const NoteService = {
       console.error('Note vote count error:', error.response?.data);
       throw error;
     }
-  },
-
-  async sortList(
-    workspaceId: number,
-    params: {
-      page: number;
-      pageSize: number;
-      sortBy: string;
-      order: string;
-    }
-  ) {
-    return api
-      .get(`/workspaces/${workspaceId}/sortNotes`, { params })
-      .then((res) => res.data);
   },
 
   async myNotes(params: {

@@ -4,10 +4,9 @@ import WorkspacesController from './workspace_controller.js';
 router
   .group(() => {
     router.get('/', [WorkspacesController, 'list']);
-    router.get('/:id/sortNotes', [WorkspacesController, 'sortList']);
-    router.get('/:id/notes', [WorkspacesController, 'notes']);
-    router.get('/:id', [WorkspacesController, 'show']);
     router.post('/', [WorkspacesController, 'create']);
+    router.get('/:id/notes', [WorkspacesController, 'listPublicNotes']);
+    router.get('/:id', [WorkspacesController, 'show']);
     router.put('/:id', [WorkspacesController, 'update']);
     router.delete('/:id', [WorkspacesController, 'destroy']);
   })

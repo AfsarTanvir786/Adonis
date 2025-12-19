@@ -77,23 +77,20 @@ export type NoteVote = {
 export type Pagination = {
   page: number;
   limit: number;
-  sortBy: 'createdAt' | 'name';
+  sortBy: 'createdAt' | 'name' | 'title';
   orderBy: 'asc' | 'desc';
 };
 
 export interface PaginatedResponse<T> {
-  success: boolean;
-  data: {
-    data: T[];
-    meta: {
-      total: number;
-      perPage: number;
-      currentPage: number;
-      lastPage: number;
-      firstPageUrl: string;
-      lastPageUrl: string;
-      nextPageUrl: null | string;
-      previousPageUrl: null | string;
-    };
+  data: T[];
+  meta: {
+    total: number;
+    perPage: number;
+    currentPage: number;
+    lastPage: number;
+    firstPageUrl: string;
+    lastPageUrl: string;
+    nextPageUrl: null | string;
+    previousPageUrl: null | string;
   };
 }

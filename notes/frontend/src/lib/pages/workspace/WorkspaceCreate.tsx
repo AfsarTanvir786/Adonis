@@ -19,7 +19,7 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
-import { useCreateWorkspace } from '@/hooks/query/useCreateWorkspace'
+import { useWorkspaceCreate } from '@/hooks/query/workspace/useWorkspaceCreate'
 
 /* ---------------- Schema ---------------- */
 
@@ -33,7 +33,7 @@ type WorkspaceFormValues = z.infer<typeof workspaceSchema>
 /* ---------------- Component ---------------- */
 
 export default function WorkspaceCreate() {
-  const createWorkspace = useCreateWorkspace();
+  const createWorkspace = useWorkspaceCreate();
 
   const form = useForm<WorkspaceFormValues>({
     resolver: zodResolver(workspaceSchema),

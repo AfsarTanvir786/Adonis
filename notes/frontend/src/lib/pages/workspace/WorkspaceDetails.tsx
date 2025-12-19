@@ -19,12 +19,12 @@ function WorkspaceDetails({ canManage }: { canManage: boolean }) {
 
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <p>Error fetching Workspace details</p>;
-  if (!workspace || !workspace.data) return <p>No Workspace found</p>;
+  if (!workspace || !workspace) return <p>No Workspace found</p>;
   canManage =
     canManage ||
     user.role === 'admin' ||
     user.role === 'owner' ||
-    workspace.data.userId === user.id;
+    workspace.userId === user.id;
   return (
     <div>
       <Card className="mt-6 w-96 m-4">
@@ -35,25 +35,25 @@ function WorkspaceDetails({ canManage }: { canManage: boolean }) {
         <CardContent>
           <p className="mb-3">
             <b>Title: </b>
-            {workspace.data?.name}
+            {workspace.name}
           </p>
           <p className="mb-2">
             <b>Company Id: </b>
-            {workspace.data.companyId}
+            {workspace.companyId}
           </p>
           <p className="mb-2">
             <b>Description: </b>
-            {workspace.data.description}
+            {workspace.description}
           </p>
           <p>
             <b>Workspace Id: </b>
-            {workspace.data.id}
+            {workspace.id}
           </p>
           {canManage && (
             <div className="mt-4 flex justify-between">
               <button className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-md shadow">
                 <Link
-                  to={`/workspaces/edit/${workspace.data.id}`}
+                  to={`/workspaces/edit/${workspace.id}`}
                   state={canManage}
                 >
                   Edit
@@ -62,7 +62,7 @@ function WorkspaceDetails({ canManage }: { canManage: boolean }) {
 
               <button className="bg-red-600 hover:bg-red-700 text-white px-3 py-1.5 rounded-md shadow">
                 <Link
-                  to={`/workspaces/delete/${workspace.data.id}`}
+                  to={`/workspaces/delete/${workspace.id}`}
                   state={canManage}
                 >
                   Delete
@@ -73,7 +73,7 @@ function WorkspaceDetails({ canManage }: { canManage: boolean }) {
         </CardContent>
         <CardFooter className="pt-0"></CardFooter>
       </Card>
-      <NoteListPagination workspaceId={workspace.data?.id} />
+      <NoteListPagination workspaceId={workspace?.id} />
     </div>
   );
 }

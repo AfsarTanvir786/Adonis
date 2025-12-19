@@ -6,7 +6,7 @@ import type { RootState } from '@/store';
 import { ArrowLeft, Save, Loader2, Lock, X, Plus, Globe } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { NoteService } from '@/services/api/noteService';
-import { WorkspaceService } from '@/services/api/workspaceService';
+import { workspaceService } from '@/services/api/workspaceService';
 import { tagService } from '@/services/api/tagService';
 import RequireLogin from '@/utils/requireLogin';
 import { useWorkspaceList } from '@/hooks/query/workspace/useWorkspaceList';

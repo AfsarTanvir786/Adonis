@@ -3,53 +3,74 @@ import User from '#models/user';
 import Workspace from '#models/workspace';
 import WorkspaceRepository from './workspace_query.js';
 import { Pagination } from '../../utils/types.js';
+import { Exception } from '@adonisjs/core/exceptions';
+import { normalizePagination } from '#services/normalize_pagination';
 
 @inject()
 export class WorkspaceService {
-  constructor(private workspaceRepository: WorkspaceRepository) {}
+  constructor(private workspaceRepo: WorkspaceRepository) {}
 
   async createWorkspace(data: Partial<Workspace>, user: User) {
-    const WorkspacePayload = {
+    return this.workspaceRepo.create({
       ...data,
       userId: user.id,
       companyId: user.companyId,
-    };
-
-    return this.workspaceRepository.createWorkspace(WorkspacePayload);
+    });
   }
 
-  async getWorkspace(id: number) {
-    return this.workspaceRepository.getWorkspace(id);
+  async getWorkspaceOrFail(id: number, companyId: number) {
+    const workspace = await this.workspaceRepo.findById(id);
+
+    if (workspace.companyId !== companyId) {
+      throw new Exception('Access denied', { status: 403 });
+    }
+
+    return workspace;
   }
 
-  async getWorkspaceNoteList(
-    workspaceId: number,
-    companyId: number,
-    pagination?: Pagination,
-  ) {
-    return this.workspaceRepository.getWorkspaceNoteList(
-      workspaceId,
+  async listWorkspaces(companyId: number, filter: Partial<Pagination>) {
+    return this.workspaceRepo.paginateByCompany(
       companyId,
-      pagination,
+      normalizePagination(filter),
     );
   }
 
-  async updateWorkspace(workspace: Partial<Workspace>, id: number, user: User) {
-    return this.workspaceRepository.updateWorkspace(workspace, id, user);
+  async listPublicNotes(
+    workspaceId: number,
+    companyId: number,
+    filter: Partial<Pagination>,
+  ) {
+    const workspace = await this.getWorkspaceOrFail(workspaceId, companyId);
+
+    return this.workspaceRepo.paginatePublicNotes(
+      workspace.id,
+      normalizePagination(filter),
+    );
   }
 
-  async getWorkspaceList(companyId: number, filter: Partial<Pagination>) {
-    const pagination: Pagination = {
-      page: filter.page ?? 1,
-      limit: filter.limit ?? 20,
-      sortBy: filter.sortBy ?? 'createdAt',
-      orderBy: filter.orderBy ?? 'desc',
-    };
+  async updateWorkspace(id: number, data: Partial<Workspace>, user: User) {
+    const workspace = await this.getWorkspaceOrFail(id, user.companyId);
 
-    return this.workspaceRepository.getWorkspaceList(companyId, pagination);
+    if (
+      workspace.userId !== user.id &&
+      !['admin', 'owner'].includes(user.role)
+    ) {
+      throw new Exception('Access denied', { status: 403 });
+    }
+
+    return this.workspaceRepo.update(workspace, data);
   }
 
   async deleteWorkspace(id: number, user: User) {
-    return this.workspaceRepository.deleteWorkspace(id, user);
+    const workspace = await this.getWorkspaceOrFail(id, user.companyId);
+
+    if (
+      workspace.userId !== user.id &&
+      !['admin', 'owner'].includes(user.role)
+    ) {
+      throw new Exception('Access denied', { status: 403 });
+    }
+
+    await this.workspaceRepo.delete(workspace);
   }
 }

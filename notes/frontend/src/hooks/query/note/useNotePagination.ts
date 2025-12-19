@@ -1,17 +1,11 @@
 import { useQuery } from '@tanstack/react-query'
 import { NoteService } from '@/services/api/noteService'
+import type { Pagination } from '@/types/type'
 
-type Params = {
-  page: number
-  pageSize: number
-  sortBy: 'title' | 'createdAt'
-  order: 'asc' | 'desc'
-}
-
-export function useNotePagination(workspaceId: number, params: Params) {
+export function useNotePagination(workspaceId: number,  params: Partial<Pagination>) {
   return useQuery({
     queryKey: ['notes', params],
-    queryFn: () => NoteService.sortList(workspaceId, params),
+    queryFn: () => NoteService.list(workspaceId, params),
     placeholderData: (previousData) => previousData,
   });
 }

@@ -1,151 +1,53 @@
 import Note from '#models/note';
-import User from '#models/user';
 import Workspace from '#models/workspace';
+import { Exception } from '@adonisjs/core/exceptions';
 import { Pagination } from '../../utils/types.js';
 
 export default class WorkspaceRepository {
-  async createWorkspace(data: Partial<Workspace>) {
-    const workspace = await Workspace.create(data);
-
-    return {
-      success: true,
-      message: 'Workspace created successfully',
-      data: workspace,
-    };
+  async create(data: Partial<Workspace>) {
+    return Workspace.create(data)
   }
 
-  async getWorkspace(id: number) {
+  async findById(id: number) {
     const workspace = await Workspace.query()
       .where('id', id)
       .preload('user')
       .preload('company')
-      .first();
+      .first()
 
     if (!workspace) {
-      return {
-        success: false,
-        message: 'Workspace not found.',
-      };
+      throw new Exception('Workspace not found', { status: 404 })
     }
 
-    return {
-      success: true,
-      message: 'Workspace retrieved.',
-      data: workspace,
-    };
+    return workspace
   }
 
-  async getWorkspaceNoteList(
-    workspaceId: number,
-    companyId: number,
-    pagination?: Pagination,
-  ) {
-    const workspace = await Workspace.find(workspaceId);
-
-    if (!workspace || companyId !== workspace.companyId) {
-      return {
-        success: false,
-        message: 'Workspace not found.',
-      };
-    }
-
-    const noteList = pagination
-      ? await Note.query()
-          .where('workspace_id', workspaceId)
-          .where('type', 'public')
-          .where('is_draft', 0)
-          .orderBy(pagination.sortBy, pagination.orderBy)
-          .paginate(pagination.page, pagination.limit)
-      : await Note.query()
-          .where('workspace_id', workspaceId)
-          .where('type', 'public')
-          .where('is_draft', 0);
-    return {
-      success: true,
-      message: 'Workspace retrieved.',
-      data: noteList,
-    };
+  async paginateByCompany(companyId: number, pagination: Pagination) {
+    return Workspace.query()
+      .where('companyId', companyId)
+      .orderBy(pagination.sortBy, pagination.orderBy)
+      .paginate(pagination.page, pagination.limit)
   }
 
-  async updateWorkspace(data: Partial<Workspace>, id: number, user: User) {
-    const workspace = await Workspace.find(id);
+  async paginatePublicNotes(workspaceId: number, pagination: Pagination) {
+    const sortColumn =
+      pagination.sortBy === 'name' ? 'title' : pagination.sortBy
 
-    if (!workspace) {
-      return {
-        success: false,
-        message: 'Workspace not found.',
-      };
-    }
-
-    if (
-      workspace.companyId !== user.companyId ||
-      !(
-        workspace.userId !== user.id ||
-        user.role === 'admin' ||
-        user.role === 'owner'
-      )
-    ) {
-      return {
-        success: false,
-        message: 'Access denied to this workspace.',
-      };
-    }
-
-    workspace.merge({
-      name: data.name ?? workspace.name,
-      description: data.description ?? workspace.description,
-    });
-
-    await workspace.save();
-
-    return {
-      success: true,
-      message: 'Workspace updated successfully.',
-      data: workspace,
-    };
+    return Note.query()
+      .where('workspace_id', workspaceId)
+      .where('type', 'public')
+      .where('is_draft', false)
+      .orderBy(sortColumn, pagination.orderBy)
+      .paginate(pagination.page, pagination.limit)
   }
 
-  async getWorkspaceList(companyId: number, pagination: Pagination) {
-    try {
-      const list = await Workspace.query()
-        .where('companyId', companyId)
-        .orderBy(pagination.sortBy, pagination.orderBy)
-        .paginate(pagination.page, pagination.limit);
-
-      return {
-        success: true,
-        data: list,
-      };
-    } catch (error) {
-      throw new Error('Database error while fetching workspaces');
-    }
+  async update(workspace: Workspace, data: Partial<Workspace>) {
+    workspace.merge(data)
+    await workspace.save()
+    return workspace
   }
 
-  async deleteWorkspace(id: number, user: User) {
-    const workspace = await Workspace.find(id);
-
-    if (!workspace) {
-      return {
-        success: false,
-        message: 'Workspace not found.',
-      };
-    }
-
-    if (
-      workspace.companyId !== user.companyId ||
-      workspace.userId !== user.id
-    ) {
-      return {
-        success: false,
-        message: 'Access denied to this workspace.',
-      };
-    }
-
-    await workspace.delete();
-
-    return {
-      success: true,
-      message: 'Workspace deleted successfully.',
-    };
+  async delete(workspace: Workspace) {
+    await workspace.delete()
   }
 }

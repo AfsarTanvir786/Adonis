@@ -15,7 +15,7 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
-import { WorkspaceService } from '@/services/api/workspaceService';
+import { workspaceService } from '@/services/api/workspaceService';
 import { NoteService } from '@/services/api/noteService';
 import { tagService } from '@/services/api/tagService';
 import RequireLogin from '@/utils/requireLogin';

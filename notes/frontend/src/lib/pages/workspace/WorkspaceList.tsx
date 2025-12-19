@@ -28,9 +28,9 @@ function WorkspaceList() {
     orderBy,
   });
 
-  const workspaces = data?.data.data ?? [];
+  const workspaces = data?.data ?? [];
   const canManage = user.role === 'admin';
-  const meta = data?.data.meta;
+  const meta = data?.meta;
 
   if (isLoading) return <p className="text-center mt-10">Loading...</p>;
   if (isError)

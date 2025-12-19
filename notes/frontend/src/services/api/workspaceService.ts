@@ -1,16 +1,9 @@
-import type { PaginatedResponse, Pagination, Workspace } from '@/types/type';
+import type { Company, PaginatedResponse, Pagination, User, Workspace } from '@/types/type';
 import { api } from './api';
 
-type WorkspaceListResponseResponse = {
-  success: boolean;
-  message: any;
-  data?: Workspace[];
-};
-
-type WorkspaceResponse = {
-  success: boolean;
-  message: any;
-  data?: Workspace;
+type WorkspaceResponse = Workspace & {
+  user: User;
+  company: Company;
 };
 
 export type CreateWorkspacePayload = {
@@ -18,7 +11,7 @@ export type CreateWorkspacePayload = {
   description?: string;
 };
 
-export const WorkspaceService = {
+export const workspaceService = {
   async list(
     params: Partial<Pagination>
   ): Promise<PaginatedResponse<Workspace>> {
@@ -44,7 +37,7 @@ export const WorkspaceService = {
     }
   },
 
-  async create(data: CreateWorkspacePayload): Promise<WorkspaceResponse> {
+  async create(data: CreateWorkspacePayload): Promise<Workspace> {
     try {
       const response = await api.post('/workspaces', data);
       return response.data;
@@ -68,6 +61,12 @@ export const WorkspaceService = {
   },
 
   async delete(workspaceId: number) {
-    return api.delete(`/workspaces/${workspaceId}`).then((res) => res.data);
+    try {
+      const response = await api.delete(`/workspaces/${workspaceId}`);
+      return response.data;
+    } catch (error: any) {
+      console.error('delete Workspace error:', error.response?.data);
+      throw error;
+    }
   },
 };
