@@ -25,7 +25,7 @@ function NoteList({ workspaceId }: { workspaceId: number | undefined }) {
 
   return (
     <div className="p-4">
-      <p>note/noteslist.tsx</p>
+      <p>note/Notelist.tsx</p>
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-semibold">Notes</h2>
 

@@ -41,6 +41,7 @@ export const NoteService = {
         `/workspaces/${workspaceId}/notes`,
         { params }
       );
+      
       return response.data;
     } catch (error: any) {
       console.error('Get Note error:', error.response?.data);

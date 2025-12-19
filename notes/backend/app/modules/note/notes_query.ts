@@ -15,7 +15,7 @@ export default class NoteRepository {
     const sortColumn =
       pagination.sortBy === 'name' ? 'title' : pagination.sortBy;
 
-    return Note.query()
+    return await Note.query()
       .where('workspace_id', workspaceId)
       .where('type', 'public')
       .where('is_draft', false)

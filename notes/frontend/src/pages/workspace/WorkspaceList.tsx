@@ -38,6 +38,7 @@ function WorkspaceList() {
 
   return (
     <div className="p-4">
+        <p>workspace/WorkspaceList.tsx</p>
       {/* Controls */}
       <div className="flex flex-wrap gap-4 mb-6">
         

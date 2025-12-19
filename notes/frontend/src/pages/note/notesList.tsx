@@ -21,6 +21,8 @@ export default function NoteListPagination({
     orderBy,
   });
 
+  console.log(page, limit, sortBy, orderBy);
+
   const publicNotes = data?.data ?? [];
   const meta = data?.meta;
 
@@ -30,7 +32,7 @@ export default function NoteListPagination({
 
   return (
     <div className="space-y-6">
-      <p>note/noteslist.tsx</p>
+      <p>note/noteslist.tsx 222</p>
       {/* Controls */}
       <div className="flex flex-wrap gap-4 mb-6">
         {/* Limit */}
@@ -51,7 +53,7 @@ export default function NoteListPagination({
           className="border rounded px-2 py-1"
         >
           <option value="createdAt">Created At</option>
-          <option value="title">Title</option>
+          <option value="title">Name</option>
         </select>
 
         {/* Order */}

@@ -7,7 +7,7 @@ export function useWorkspaceList(
   params: Partial<Pagination>
 ) {
   return useQuery({
-    queryKey: ['workspaces', params],
+    queryKey: ['workspaces', companyId, params],
     queryFn: () => workspaceService.list(params),
     enabled: !!companyId,
     staleTime: 5 * 60 * 1000, // refresh after 5 minutes
