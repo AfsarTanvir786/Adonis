@@ -12,6 +12,10 @@ export const createNoteValidator = vine.compile(
 
 export const updateNoteValidator = vine.compile(
   vine.object({
+    workspaceId: vine
+      .number()
+      .exists({ table: 'workspaces', column: 'id' })
+      .optional(),
     title: vine.string().trim().minLength(3).maxLength(255).optional(),
     content: vine.string().trim().maxLength(511).optional(),
     type: vine.enum(['public', 'private']),

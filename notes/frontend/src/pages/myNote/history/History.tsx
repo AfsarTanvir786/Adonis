@@ -3,8 +3,11 @@ import type { History } from '@/types/type';
 import RequireLogin from '@/utils/requireLogin';
 import { useSelector } from 'react-redux';
 import { format } from 'date-fns';
+import { Button } from '@/components/ui/button';
+import { useNavigate } from 'react-router-dom';
 
 function SingleHistory({ history }: { history: History }) {
+  const navigate = useNavigate();
   const user = useSelector((state: RootState) => state.authentication.user);
 
   if (!user || user.name === 'no user') {
@@ -39,6 +42,13 @@ function SingleHistory({ history }: { history: History }) {
           ? format(history.createdAt, 'MMMM dd, yyyy hh:mm')
           : 'null'}
       </p>
+      <Button
+        className="hover:bg-orange-200"
+        variant="outline"
+        onClick={() => navigate(`${history.id}`)}
+      >
+        Restore
+      </Button>
     </div>
   );
 }

@@ -6,6 +6,7 @@ import NoteEdit from '@/pages/myNote/NoteEdit';
 import NoteDetails from '@/pages/myNote/NoteDetails';
 import Index from '@/pages/myNote/Index';
 import HistoryList from '@/pages/myNote/history/HistoryList';
+import HistoryEdit from '@/pages/myNote/history/HistoryEdit';
 
 export const MyNoteRoute = (
   <Route path="notes" element={<Index />}>
@@ -14,6 +15,7 @@ export const MyNoteRoute = (
     <Route path="edit/:id" element={<NoteEdit />} />
     <Route path="details/:id" element={<NoteDetails />} />
     <Route path=":id/history" element={<HistoryList />} />
+    <Route path=":id/history/:id2" element={<HistoryEdit />} />
     <Route path="*" element={<Error404 title="Could Not Find Note." />} />
   </Route>
 );
