@@ -4,9 +4,9 @@ import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import SingleNote from './Note';
 import RequireLogin from '@/utils/requireLogin';
-import { useMyNoteList } from '@/hooks/query/note/useMyNoteList';
 import { useState } from 'react';
 import type { Note } from '@/types/type';
+import { useMyNoteList } from '@/hooks/query/my_note/useMyNoteList';
 
 function NoteList() {
   const user = useSelector((state: RootState) => state.authentication.user);

@@ -8,7 +8,7 @@ export function useMyNoteList(
   type: 'all' | 'private' | 'public' = 'all'
 ) {
   return useQuery({
-    queryKey: ['my-notes', userId, params, type],
+    queryKey: ['myNoteList', userId, params, type],
     queryFn: () => NoteService.myNotes(params, type),
     placeholderData: (previousData) => previousData,
     enabled: !!userId,

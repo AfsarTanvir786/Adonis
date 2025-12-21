@@ -20,9 +20,6 @@ export default class NotesController {
   async show({ params, auth, response }: HttpContext) {
     const result = await this.noteService.getNote(params.id, auth.user!);
 
-    if (!result.success) {
-      return response.status(404).send(result);
-    }
     return response.ok(result);
   }
 

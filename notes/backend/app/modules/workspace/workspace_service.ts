@@ -41,14 +41,18 @@ export class WorkspaceService {
 
   async listPublicNotes(
     workspaceId: number,
-    companyId: number,
+    user: User,
     filter: Partial<Pagination>,
   ) {
-    const workspace = await this.getWorkspaceOrFail(workspaceId, companyId);
+    const workspace = await this.getWorkspaceOrFail(
+      workspaceId,
+      user.companyId,
+    );
 
     return this.noteRepo.paginatePublicNotes(
       workspace.id,
       normalizePagination(filter),
+      user.id,
     );
   }
 

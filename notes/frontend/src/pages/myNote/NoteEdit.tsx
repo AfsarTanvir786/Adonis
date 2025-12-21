@@ -5,11 +5,11 @@ import { useSelector } from 'react-redux';
 import type { RootState } from '@/store';
 import { ArrowLeft, Save, Loader2, Lock, X, Plus, Globe } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { NoteService } from '@/services/api/noteService';
-import { workspaceService } from '@/services/api/workspaceService';
 import { tagService } from '@/services/api/tagService';
 import RequireLogin from '@/utils/requireLogin';
 import { useWorkspaceList } from '@/hooks/query/workspace/useWorkspaceList';
+import { useNoteGet } from '@/hooks/query/my_note/useNoteGet';
+import { useNoteUpdate } from '@/hooks/query/my_note/useNoteUpdate';
 
 export default function NoteEdit() {
   const { id } = useParams<{ id: string }>();
@@ -27,7 +27,7 @@ export default function NoteEdit() {
     content: '',
     type: 'private' as 'public' | 'private',
     isDraft: true,
-    workspaceId: '',
+    workspaceId: 0,
   });
 
   const [selectedTags, setSelectedTags] = useState<number[]>([]);
@@ -35,10 +35,10 @@ export default function NoteEdit() {
   const [newTagName, setNewTagName] = useState('');
 
   // Fetch note
-  const { data: noteData, isLoading: isLoadingNote } = useQuery({
-    queryKey: ['note', id],
-    queryFn: () => NoteService.get(Number(id)),
-  });
+  const { data: noteData, isLoading: isLoadingNote } = useNoteGet(
+    Number(id),
+    user.id
+  );
 
   // Fetch workspaces
   const { data: workspaceList } = useWorkspaceList(user.companyId, {
@@ -56,28 +56,25 @@ export default function NoteEdit() {
 
   // Populate form when note is loaded
   useEffect(() => {
-    if (noteData?.data) {
-      const note = noteData.data;
+    if (noteData) {
+      const note = noteData;
       setFormData({
         title: note.title,
         content: note.content || '',
         type: note.type,
         isDraft: note.isDraft,
-        workspaceId: note.workspaceId.toString(),
+        workspaceId: note.workspaceId,
       });
       setSelectedTags(note.tags?.map((tag: any) => tag.id) || []);
     }
   }, [noteData]);
 
   // Update note mutation
-  const { mutate: updateNote, isPending } = useMutation({
-    // mutationFn: (data: any) => NoteService.update(Number(id), data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['notes'] });
-      queryClient.invalidateQueries({ queryKey: ['note', id] });
-      navigate(`/notes/details/${id}`);
-    },
-  });
+  const { mutate: updateNote, isPending } = useNoteUpdate(
+    Number(id),
+    user.id,
+    formData
+  );
 
   // Create tag mutation
   const { mutate: createTag } = useMutation({
@@ -92,6 +89,8 @@ export default function NoteEdit() {
 
   const handleSubmit = (e: React.FormEvent, publish: boolean = false) => {
     e.preventDefault();
+    formData.isDraft = !publish;
+    updateNote();
 
     // updateNote({
     //   ...formData,
@@ -123,7 +122,7 @@ export default function NoteEdit() {
     );
   }
 
-  const note = noteData?.data;
+  const note = noteData;
   const canEdit =
     user?.id === note?.userId ||
     user?.role === 'admin' ||
@@ -142,11 +141,13 @@ export default function NoteEdit() {
     );
   }
 
-  const workspaces = workspaceList?.data.data || [];
+  const workspaces = workspaceList?.data || [];
   const tags = tagsData?.data || [];
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
+      <p>pages/myNote/noteEdit.tsx</p>
+
       <div className="max-w-4xl mx-auto px-4">
         {/* Header */}
         <div className="mb-6 flex items-center justify-between">
@@ -224,7 +225,7 @@ export default function NoteEdit() {
                 onChange={(e) =>
                   setFormData({
                     ...formData,
-                    workspaceId: e.target.value,
+                    workspaceId: Number(e.target.value),
                   })
                 }
                 required

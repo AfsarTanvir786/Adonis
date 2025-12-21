@@ -21,8 +21,6 @@ export default function NoteListPagination({
     orderBy,
   });
 
-  console.log(page, limit, sortBy, orderBy);
-
   const publicNotes = data?.data ?? [];
   const meta = data?.meta;
 

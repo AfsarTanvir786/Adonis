@@ -15,7 +15,6 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
-import { workspaceService } from '@/services/api/workspaceService';
 import { NoteService } from '@/services/api/noteService';
 import { tagService } from '@/services/api/tagService';
 import RequireLogin from '@/utils/requireLogin';
@@ -82,13 +81,13 @@ export default function NoteCreate() {
   });
 
   // Create note mutation
-  // const { mutate: createNote, isPending } = useMutation({
-  //   mutationFn: (data: any) => NoteService.create(data),
-  //   onSuccess: () => {
-  //     queryClient.invalidateQueries({ queryKey: ['notes'] });
-  //     navigate('/notes');
-  //   },
-  // });
+  const { mutate: createNote, isPending } = useMutation({
+    mutationFn: (data: any) => NoteService.create(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['notes'] });
+      navigate('/notes');
+    },
+  });
 
   // Create tag mutation
   const { mutate: createTag } = useMutation({
@@ -125,10 +124,10 @@ export default function NoteCreate() {
 
     const validatedData: CreateNoteInput = result.data;
 
-    // createNote({
-    //   ...validatedData,
-    //   publishedAt: publish ? new Date().toISOString() : null,
-    // });
+    createNote({
+      ...validatedData,
+      publishedAt: publish ? new Date().toISOString() : null,
+    });
   };
 
   const handleTagToggle = (tagId: number) => {
@@ -145,7 +144,7 @@ export default function NoteCreate() {
     }
   };
 
-  const workspaces = workspaceList?.data.data || [];
+  const workspaces = workspaceList?.data || [];
   const tags = tagsData?.data || [];
 
   return (
@@ -375,17 +374,17 @@ export default function NoteCreate() {
               type="button"
               variant="outline"
               onClick={() => navigate('/notes')}
-              /* disabled={isPending} */
+              disabled={isPending}
             >
               Cancel
             </Button>
             <Button
               type="submit"
               variant="outline"
-              /* disabled={isPending} */
+              disabled={isPending}
               className="border-gray-300"
             >
-              {/* {isPending ? (
+              {isPending ? (
                 <>
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                   Saving...
@@ -395,15 +394,15 @@ export default function NoteCreate() {
                   <FileText className="w-4 h-4 mr-2" />
                   Save as Draft
                 </>
-              )} */}
+              )}
             </Button>
             <Button
               type="button"
               onClick={(e) => handleSubmit(e, true)}
-              /* disabled={isPending} */
+              disabled={isPending}
               className="bg-blue-600 hover:bg-blue-700"
             >
-              {/* {isPending ? (
+              {isPending ? (
                 <>
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                   Publishing...
@@ -413,7 +412,7 @@ export default function NoteCreate() {
                   <Save className="w-4 h-4 mr-2" />
                   Publish Note
                 </>
-              )} */}
+              )}
             </Button>
           </div>
         </form>

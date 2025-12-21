@@ -31,6 +31,7 @@ function SingleNote({ note, canManage }: { note: Note; canManage: boolean }) {
       <p>id: {note.id}</p>
       <p>Workspace id: {note.workspaceId}</p>
       <p>User Id: {note.userId}</p>
+      <p>total count: {note.count}</p>
 
       {canManage && (
         <div className="mt-4 flex gap-3">

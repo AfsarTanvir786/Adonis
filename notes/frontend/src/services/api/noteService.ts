@@ -41,7 +41,7 @@ export const NoteService = {
         `/workspaces/${workspaceId}/notes`,
         { params }
       );
-      
+
       return response.data;
     } catch (error: any) {
       console.error('Get Note error:', error.response?.data);
@@ -49,12 +49,8 @@ export const NoteService = {
     }
   },
 
-  async get(noteId: number): Promise<NoteResponse> {
+  async get(noteId: number): Promise<Note | null> {
     try {
-      return {
-        success: false,
-        message: 'Implementation error.',
-      };
       const response = await api.get(`/notes/${noteId}`);
       return response.data;
     } catch (error: any) {
@@ -74,10 +70,6 @@ export const NoteService = {
   },
 
   async create(data: Partial<Note>): Promise<NoteResponse> {
-    return {
-      success: false,
-      message: 'Implementation error.',
-    };
     try {
       const response = await api.post('/notes', data);
       return response.data;
@@ -88,10 +80,6 @@ export const NoteService = {
   },
 
   async update(id: number, data: Partial<Note>): Promise<NoteResponse> {
-    return {
-      success: false,
-      message: 'Implementation error.',
-    };
     try {
       const response = await api.put(`/notes/${id}`, data);
       return response.data;
@@ -102,38 +90,16 @@ export const NoteService = {
   },
 
   async delete(id: number): Promise<NoteResponse> {
-    return {
-      success: false,
-      message: 'Implementation error.',
-    };
     try {
       const response = await api.delete(`/notes/${id}`);
       return response.data;
     } catch (error: any) {
-      console.error('Create Note error:', error.response?.data);
-      throw error;
-    }
-  },
-
-  async vote(id: number, voteType: 'up' | 'down'): Promise<NoteResponse> {
-    return {
-      success: false,
-      message: 'Implementation error.',
-    };
-    try {
-      const response = await api.post(`/notes/${id}`, { vote: voteType });
-      return response.data;
-    } catch (error: any) {
-      console.error('Create Note error:', error.response?.data);
+      console.error('delete Note error:', error.response?.data);
       throw error;
     }
   },
 
   async getHistory(id: number): Promise<HistoryListResponse> {
-    return {
-      success: false,
-      message: 'Implementation error.',
-    };
     try {
       const response = await api.get(`/noteHistories/${id}`);
       return response.data;
@@ -143,25 +109,7 @@ export const NoteService = {
     }
   },
 
-  async getVoteCount(noteId: number): Promise<any> {
-    return {
-      success: false,
-      message: 'Implementation error.',
-    };
-    try {
-      const response = await api.get(`/voteCounts/${noteId}`);
-      return response.data;
-    } catch (error: any) {
-      console.error('Note vote count error:', error.response?.data);
-      throw error;
-    }
-  },
-
   async getVote(noteId: number): Promise<NoteVoteResponse> {
-    return {
-      success: false,
-      message: 'Implementation error.',
-    };
     try {
       const response = await api.get(`/noteVotes/${noteId}`);
       return response.data;
@@ -172,15 +120,21 @@ export const NoteService = {
   },
 
   async createNoteVote(noteId: number, vote: 'up' | 'down') {
-    return {
-      success: false,
-      message: 'Implementation error.',
-    };
     try {
       const response = await api.post(`/noteVotes/${noteId}`, { vote });
       return response.data;
     } catch (error: any) {
-      console.error('Note vote count error:', error.response?.data);
+      console.error('Note vote create error:', error.response?.data);
+      throw error;
+    }
+  },
+
+  async deleteNoteVote(noteId: number){
+    try {
+      const response = await api.delete(`/noteVotes/${noteId}`);
+      return response.data;
+    } catch (error: any) {
+      console.error('Note vote delete error:', error.response?.data);
       throw error;
     }
   },
@@ -196,7 +150,6 @@ export const NoteService = {
           params: { ...params, type },
         }
       );
-      console.log("object", params, type)
       return response.data;
     } catch (error: any) {
       throw new Error('my note fetch error', error.response?.data);

@@ -5,6 +5,7 @@ import SingleWorkspace from './Workspace';
 import RequireLogin from '@/utils/requireLogin';
 import { useWorkspaceList } from '@/hooks/query/workspace/useWorkspaceList';
 import { Button } from '@/components/ui/button';
+import { Link } from 'react-router-dom';
 
 function WorkspaceList() {
   const user = useSelector((state: RootState) => state.authentication.user);
@@ -38,10 +39,23 @@ function WorkspaceList() {
 
   return (
     <div className="p-4">
-        <p>workspace/WorkspaceList.tsx</p>
+      <p>workspace/WorkspaceList.tsx</p>
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-2xl font-semibold">Workspaces</h2>
+
+        {canManage && (
+          <Button
+            variant="outline"
+            className="bg-indigo-500 text-white hover:bg-indigo-600 shadow-md"
+          >
+            <Link to={'/workspaces/create'} state={canManage}>
+              Add New Workspace
+            </Link>
+          </Button>
+        )}
+      </div>
       {/* Controls */}
       <div className="flex flex-wrap gap-4 mb-6">
-        
         {/* Limit */}
         <select
           value={limit}

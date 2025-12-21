@@ -45,10 +45,10 @@ export default function WorkspaceEdit() {
   });
 
   useEffect(() => {
-    if (data?.data) {
+    if (data) {
       form.reset({
-        name: data.data.name,
-        description: data.data.description ?? '',
+        name: data.name,
+        description: data.description ?? '',
       });
     }
   }, [data, form]);

@@ -11,7 +11,11 @@ export default class NoteRepository {
     });
   }
 
-  async paginatePublicNotes(workspaceId: number, pagination: Pagination) {
+  async paginatePublicNotes(
+    workspaceId: number,
+    pagination: Pagination,
+    userId: number,
+  ) {
     const sortColumn =
       pagination.sortBy === 'name' ? 'title' : pagination.sortBy;
 
@@ -19,6 +23,7 @@ export default class NoteRepository {
       .where('workspace_id', workspaceId)
       .where('type', 'public')
       .where('is_draft', false)
+      .preload('votes', (v) => v.where('user_id', userId).first)
       .orderBy(sortColumn, pagination.orderBy)
       .paginate(pagination.page, pagination.limit);
   }
@@ -56,16 +61,20 @@ export default class NoteRepository {
         (note.type === 'private' && note.userId !== userId))
     ) {
       return {
-        success: false,
         message: 'Access denied to this note.',
       };
     }
 
-    return {
-      success: true,
-      message: 'Note retrieved.',
-      data: note,
-    };
+    return note;
+  }
+
+  async getNoteForVote(id: number) {
+    const note = await Note.query()
+      .where('id', id)
+      .where('type', 'public')
+      .first();
+
+    return note;
   }
 
   async updateNote(data: Partial<Note>, id: number, userId: number) {

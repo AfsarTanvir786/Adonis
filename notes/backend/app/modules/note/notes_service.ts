@@ -58,7 +58,7 @@ export class NoteService {
     return await this.noteRepository.getMyNoteList(userId, type, pagination);
   }
 
-  async getNote(id: number, user: User) {
+  async getNote(noteId: number, user: User) {
     const company = await this.companyRepository.getCompany(user.companyId);
     if (!company.success) {
       return company;
@@ -75,7 +75,7 @@ export class NoteService {
     }
     const workspaceIds = workspaceList.map((w) => w.id);
 
-    return this.noteRepository.getNote(id, workspaceIds, user.id);
+    return this.noteRepository.getNote(noteId, workspaceIds, user.id);
   }
 
   async updateNote(note: Partial<Note>, id: number, userId: number) {

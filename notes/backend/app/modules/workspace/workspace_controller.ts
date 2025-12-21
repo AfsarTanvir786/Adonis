@@ -41,7 +41,7 @@ export default class WorkspacesController {
     const filter = await request.validateUsing(paginationValidator);
     const result = await this.workspaceService.listPublicNotes(
       Number(params.id),
-      auth.user!.companyId,
+      auth.user!,
       filter,
     );
     return response.ok(result);

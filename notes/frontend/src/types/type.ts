@@ -43,6 +43,7 @@ export interface Note {
   publishedAt: string | null;
   createdAt: string;
   updatedAt: string | null;
+  votes?: NoteVote[];
   user?: User;
   workspace?: Workspace;
   tags?: Tag[];
