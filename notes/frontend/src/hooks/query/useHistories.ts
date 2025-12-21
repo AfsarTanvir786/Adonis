@@ -1,10 +1,10 @@
-import { NoteService } from "@/services/api/noteService";
-import { useQuery } from "@tanstack/react-query";
+import { historyService } from '@/services/api/historyService';
+import { useQuery } from '@tanstack/react-query';
 
 export function useHistoryList(noteId: number) {
-    return useQuery({
-        queryKey: ['historys'],
-        queryFn: () => NoteService.getHistory(noteId),
-        enabled: !!noteId,
-    });
+  return useQuery({
+    queryKey: ['historys'],
+    queryFn: () => historyService.getHistory(noteId),
+    enabled: !!noteId,
+  });
 }

@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
-import { NoteService } from '@/services/api/noteService';
 import type { Pagination } from '@/types/type';
+import { myNoteService } from '@/services/api/myNoteService';
 
 export function useMyNoteList(
   userId: number,
@@ -9,7 +9,7 @@ export function useMyNoteList(
 ) {
   return useQuery({
     queryKey: ['myNoteList', userId, params, type],
-    queryFn: () => NoteService.myNotes(params, type),
+    queryFn: () => myNoteService.myNotes(params, type),
     placeholderData: (previousData) => previousData,
     enabled: !!userId,
   });

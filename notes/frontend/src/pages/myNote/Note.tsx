@@ -11,7 +11,7 @@ function SingleNote({ note, canManage }: { note: Note; canManage: boolean }) {
     return <RequireLogin message="Please login to view your note details" />;
   }
   return (
-    <div className="bg-white rounded-xl shadow-md p-4 border border-gray-200">
+    <div className="flex flex-col h-full bg-white rounded-xl shadow-md p-4 border border-gray-200">
       <h3 className="text-xl font-semibold mb-3">{note.title}</h3>
 
       <p className="mb-2 text-sm">
@@ -34,7 +34,7 @@ function SingleNote({ note, canManage }: { note: Note; canManage: boolean }) {
       <p>total count: {note.count}</p>
 
       {canManage && (
-        <div className="mt-4 flex gap-3">
+        <div className="mt-auto flex gap-3 mb-1">
           <button className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-md shadow">
             <Link to={`/notes/edit/${note.id}`} state={canManage}>
               Edit

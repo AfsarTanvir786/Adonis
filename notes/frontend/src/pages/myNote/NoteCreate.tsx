@@ -15,15 +15,15 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
-import { NoteService } from '@/services/api/noteService';
 import { tagService } from '@/services/api/tagService';
 import RequireLogin from '@/utils/requireLogin';
 import { z } from 'zod';
 import { useWorkspaceList } from '@/hooks/query/workspace/useWorkspaceList';
+import { useMyNoteCreate } from '@/hooks/query/my_note/useMyNoteCreate';
 
 const createNoteSchema = z.object({
   workspaceId: z
-    .string()
+    .number()
     .min(1, 'Workspace is required')
     .transform((val) => Number(val)),
 
@@ -58,7 +58,7 @@ export default function NoteCreate() {
     content: '',
     type: 'private' as 'public' | 'private',
     isDraft: true,
-    workspaceId: '',
+    workspaceId: 0,
     tagIds: [] as number[],
   });
 
@@ -81,13 +81,7 @@ export default function NoteCreate() {
   });
 
   // Create note mutation
-  const { mutate: createNote, isPending } = useMutation({
-    mutationFn: (data: any) => NoteService.create(data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['notes'] });
-      navigate('/notes');
-    },
-  });
+  const { mutate: createNote, isPending } = useMyNoteCreate(user.id);
 
   // Create tag mutation
   const { mutate: createTag } = useMutation({
@@ -124,10 +118,7 @@ export default function NoteCreate() {
 
     const validatedData: CreateNoteInput = result.data;
 
-    createNote({
-      ...validatedData,
-      publishedAt: publish ? new Date().toISOString() : null,
-    });
+    createNote(validatedData);
   };
 
   const handleTagToggle = (tagId: number) => {
@@ -236,7 +227,7 @@ export default function NoteCreate() {
                 onChange={(e) =>
                   setFormData({
                     ...formData,
-                    workspaceId: e.target.value,
+                    workspaceId: Number(e.target.value),
                   })
                 }
                 required
