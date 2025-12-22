@@ -7,9 +7,9 @@ import { ArrowLeft, Save, Loader2, Lock, X, Plus, Globe } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { tagService } from '@/services/api/tagService';
 import RequireLogin from '@/utils/requireLogin';
-import { useWorkspaceList } from '@/hooks/query/workspace/useWorkspaceList';
 import { useNoteGet } from '@/hooks/query/my_note/useNoteGet';
 import { useNoteUpdate } from '@/hooks/query/my_note/useNoteUpdate';
+import { useWorkspaceList } from '@/hooks/query/workspace/useWorkspaceList';
 
 export default function NoteEdit() {
   const { id } = useParams<{ id: string }>();
@@ -41,12 +41,7 @@ export default function NoteEdit() {
   );
 
   // Fetch workspaces
-  const { data: workspaceList } = useWorkspaceList(user.companyId, {
-    page: 1,
-    limit: 20,
-    sortBy: 'createdAt',
-    orderBy: 'desc',
-  });
+  const { data: workspaceList } = useWorkspaceList(user.companyId);
 
   // Fetch tags
   const { data: tagsData } = useQuery({
@@ -91,13 +86,6 @@ export default function NoteEdit() {
     e.preventDefault();
     formData.isDraft = !publish;
     updateNote();
-
-    // updateNote({
-    //   ...formData,
-    //   isDraft: !publish,
-    //   tagIds: selectedTags,
-    //   publishedAt: publish ? new Date().toISOString() : null,
-    // });
   };
 
   const handleTagToggle = (tagId: number) => {
@@ -141,7 +129,7 @@ export default function NoteEdit() {
     );
   }
 
-  const workspaces = workspaceList?.data || [];
+  const workspaces = workspaceList || [];
   const tags = tagsData?.data || [];
 
   return (

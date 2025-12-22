@@ -5,9 +5,9 @@ import type { RootState } from '@/store';
 import { ArrowLeft, Save, Loader2, Globe, Lock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import RequireLogin from '@/utils/requireLogin';
-import { useWorkspaceList } from '@/hooks/query/workspace/useWorkspaceList';
 import { useNoteUpdate } from '@/hooks/query/my_note/useNoteUpdate';
 import { useHistoryGet } from '@/hooks/query/my_note_history/useHistoryGet';
+import { useWorkspaceList } from '@/hooks/query/workspace/useWorkspaceList';
 
 export default function HistoryEdit() {
   const { id, id2 } = useParams<{ id: string; id2: string }>();
@@ -33,12 +33,7 @@ export default function HistoryEdit() {
   const { data: noteData, isLoading: isLoadingNote } = useHistoryGet(Number(id2));
 
   // Fetch workspaces
-  const { data: workspaceList } = useWorkspaceList(user.companyId, {
-    page: 1,
-    limit: 20,
-    sortBy: 'createdAt',
-    orderBy: 'desc',
-  });
+  const { data: workspaceList } = useWorkspaceList(user.companyId)
 
   // Populate form when note is loaded
   useEffect(() => {
@@ -94,7 +89,7 @@ export default function HistoryEdit() {
     );
   }
 
-  const workspaces = workspaceList?.data || [];
+  const workspaces = workspaceList || [];
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">

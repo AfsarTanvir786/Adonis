@@ -39,6 +39,10 @@ export class WorkspaceService {
     );
   }
 
+  async getWorkspaceList(companyId: number) {
+    return this.workspaceRepo.getWorkspaceList(companyId, ['id', 'name']);
+  }
+
   async listPublicNotes(
     workspaceId: number,
     user: User,

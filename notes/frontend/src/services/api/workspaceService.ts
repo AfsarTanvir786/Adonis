@@ -12,13 +12,25 @@ export type CreateWorkspacePayload = {
 };
 
 export const workspaceService = {
-  async list(
+  async paginatedList(
     params: Partial<Pagination>
   ): Promise<PaginatedResponse<Workspace>> {
     try {
       const response = await api.get<PaginatedResponse<Workspace>>(
         `/workspaces`,
         { params }
+      );
+      return response.data;
+    } catch (error: any) {
+      console.error('Get Workspace error:', error.response?.data);
+      throw error;
+    }
+  },
+
+  async list() {
+    try {
+      const response = await api.get<{ id: number; name: string }[]>(
+        '/workspaces/all'
       );
       return response.data;
     } catch (error: any) {

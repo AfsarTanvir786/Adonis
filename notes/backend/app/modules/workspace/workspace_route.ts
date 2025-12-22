@@ -4,6 +4,7 @@ import WorkspacesController from './workspace_controller.js';
 router
   .group(() => {
     router.get('/', [WorkspacesController, 'list']);
+    router.get('/all', [WorkspacesController, 'all']);
     router.post('/', [WorkspacesController, 'create']);
     router.get('/:id/notes', [WorkspacesController, 'listPublicNotes']);
     router.get('/:id', [WorkspacesController, 'show']);

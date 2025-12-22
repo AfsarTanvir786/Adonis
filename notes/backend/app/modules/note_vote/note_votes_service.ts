@@ -15,7 +15,6 @@ export default class NoteVoteService {
   async createNoteVote(vote: 'up' | 'down', noteId: number, user: User) {
     const note = await this.noteRepository.getNoteForVote(noteId);
     if (!note) {
-      console.log('1111');
       throw new Error('note does not exists');
     }
 

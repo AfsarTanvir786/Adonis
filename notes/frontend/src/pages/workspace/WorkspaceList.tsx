@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import type { RootState } from '@/store';
 import SingleWorkspace from './Workspace';
 import RequireLogin from '@/utils/requireLogin';
-import { useWorkspaceList } from '@/hooks/query/workspace/useWorkspaceList';
+import { useWorkspacePaginatedList } from '@/hooks/query/workspace/useWorkspacePaginatedList';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 
@@ -22,7 +22,7 @@ function WorkspaceList() {
   const [sortBy, setSortBy] = useState<'createdAt' | 'name'>('createdAt');
   const [orderBy, setOrderBy] = useState<'asc' | 'desc'>('desc');
 
-  const { data, isLoading, isError } = useWorkspaceList(user.companyId, {
+  const { data, isLoading, isError } = useWorkspacePaginatedList(user.companyId, {
     page,
     limit,
     sortBy,

@@ -18,8 +18,8 @@ import { Link } from 'react-router-dom';
 import { tagService } from '@/services/api/tagService';
 import RequireLogin from '@/utils/requireLogin';
 import { z } from 'zod';
-import { useWorkspaceList } from '@/hooks/query/workspace/useWorkspaceList';
 import { useMyNoteCreate } from '@/hooks/query/my_note/useMyNoteCreate';
+import { useWorkspaceList } from '@/hooks/query/workspace/useWorkspaceList';
 
 const createNoteSchema = z.object({
   workspaceId: z
@@ -67,12 +67,7 @@ export default function NoteCreate() {
   const [newTagName, setNewTagName] = useState('');
 
   // Fetch workspaces
-  const { data: workspaceList } = useWorkspaceList(user.companyId, {
-    page: 1,
-    limit: 20,
-    sortBy: 'createdAt',
-    orderBy: 'desc',
-  });
+  const { data: workspaceList } = useWorkspaceList(user.companyId);
 
   // Fetch tags
   const { data: tagsData } = useQuery({
@@ -135,7 +130,7 @@ export default function NoteCreate() {
     }
   };
 
-  const workspaces = workspaceList?.data || [];
+  const workspaces = workspaceList || [];
   const tags = tagsData?.data || [];
 
   return (

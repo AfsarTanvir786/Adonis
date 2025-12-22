@@ -29,6 +29,13 @@ export default class WorkspacesController {
     return response.ok(result);
   }
 
+  async all({ auth, response }: HttpContext) {
+    const result = await this.workspaceService.getWorkspaceList(
+      auth.user!.companyId
+    );
+    return response.ok(result);
+  }
+
   async show({ params, auth, response }: HttpContext) {
     const result = await this.workspaceService.getWorkspaceOrFail(
       Number(params.id),
