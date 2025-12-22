@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import type { RootState } from '@/store';
-import { ArrowLeft, Save, Loader2, Globe, Lock } from 'lucide-react';
+import { ArrowLeft, Globe, Lock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import RequireLogin from '@/utils/requireLogin';
 import { useNoteUpdate } from '@/hooks/query/my_note/useNoteUpdate';
@@ -27,6 +27,7 @@ export default function HistoryEdit() {
     type: 'private' as 'public' | 'private',
     isDraft: true,
     workspaceId: 0,
+    publishedAt: '' as any,
   });
 
   // Fetch note
@@ -40,11 +41,14 @@ export default function HistoryEdit() {
     if (noteData) {
       const note = noteData;
       setFormData({
-        ...formData,
         id: note.id,
+        workspaceId: note.workspaceId,
         noteId: note.noteId,
         title: note.oldTitle,
         content: note.oldContent || '',
+        isDraft: note.oldIsDraft,
+        type: note.oldType,
+        publishedAt: note.oldPublishedAt
       });
     }
   }, [noteData]);
@@ -93,7 +97,7 @@ export default function HistoryEdit() {
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
-      <p>pages/myNote/noteEdit.tsx</p>
+      <p>pages/myNote/history/HistoryEdit.tsx</p>
 
       <div className="max-w-4xl mx-auto px-4">
         {/* Header */}
@@ -105,7 +109,9 @@ export default function HistoryEdit() {
                 Back
               </Button>
             </Link>
-            <h1 className="text-3xl font-bold text-gray-900">Edit Note</h1>
+            <h1 className="text-3xl font-bold text-gray-900">
+              Restore the note
+            </h1>
           </div>
         </div>
 
@@ -166,6 +172,7 @@ export default function HistoryEdit() {
                   })
                 }
                 required
+                disabled
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               >
                 {workspaces.map((workspace: any) => (
@@ -185,12 +192,7 @@ export default function HistoryEdit() {
             <div className="flex gap-4">
               <button
                 type="button"
-                onClick={() =>
-                  setFormData({
-                    ...formData,
-                    type: 'private',
-                  })
-                }
+                disabled
                 className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 border-2 rounded-lg transition ${
                   formData.type === 'private'
                     ? 'border-blue-500 bg-blue-50 text-blue-700'
@@ -202,12 +204,7 @@ export default function HistoryEdit() {
               </button>
               <button
                 type="button"
-                onClick={() =>
-                  setFormData({
-                    ...formData,
-                    type: 'public',
-                  })
-                }
+                disabled
                 className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 border-2 rounded-lg transition ${
                   formData.type === 'public'
                     ? 'border-blue-500 bg-blue-50 text-blue-700'
@@ -220,6 +217,16 @@ export default function HistoryEdit() {
             </div>
           </div>
 
+          {/* is draft buttons */}
+          <div className="mb-6">
+            <label className="block text-sm font-medium text-gray-700 mb-3">
+              Is Published
+            </label>
+            <p className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+              {formData.isDraft ? 'No' : 'Yes'}
+            </p>
+          </div>
+
           {/* Action Buttons */}
           <div className="flex gap-4 justify-end">
             <Button
@@ -230,26 +237,13 @@ export default function HistoryEdit() {
             >
               Cancel
             </Button>
-            <Button type="submit" variant="outline" disabled={isPending}>
-              {isPending ? (
-                <>
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                  Saving...
-                </>
-              ) : (
-                <>
-                  <Save className="w-4 h-4 mr-2" />
-                  Save Changes
-                </>
-              )}
-            </Button>
             <Button
               type="button"
               onClick={(e) => handleSubmit(e, true)}
               disabled={isPending}
               className="bg-blue-600 hover:bg-blue-700"
             >
-              {isPending ? 'Publishing...' : 'Publish Note'}
+              {isPending ? 'Restoring...' : 'Restore Note'}
             </Button>
           </div>
         </form>

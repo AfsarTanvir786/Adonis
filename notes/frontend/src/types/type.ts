@@ -60,8 +60,12 @@ export interface History {
   id: number;
   noteId: number;
   userId: number;
+  workspaceId: number;
   oldTitle: string;
   oldContent: string;
+  oldType: 'public' | 'private';
+  oldIsDraft: boolean;
+  oldPublishedAt: null | string;
   createdAt: string;
   updatedAt: string | null;
 }

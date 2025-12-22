@@ -13,8 +13,7 @@ export const companyService = {
       const response = await api.get(`/companies/${companyId}`);
       return response.data;
     } catch (error: any) {
-      console.error('Get company error:', error.response?.data);
-      throw error;
+      throw new error('Get company error:', error.response?.data);
     }
   },
 };

@@ -27,7 +27,7 @@ export default function Login() {
       navigate('/dashboard', { replace: true });
     },
     onError: (error: any) => {
-      console.error('Login failed:', error.response?.data || error.message);
+      throw new error('Login failed:', error.response?.data || error.message);
     },
   });
 

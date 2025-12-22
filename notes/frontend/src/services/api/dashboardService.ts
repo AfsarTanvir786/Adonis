@@ -19,8 +19,7 @@ export const dashboardService = {
       const response = await api.get(`/dashboard`);
       return response.data;
     } catch (error: any) {
-      console.error('Get Workspace error:', error.response?.data);
-      throw error;
+      throw new error('Get Workspace error:', error.response?.data);
     }
   },
 };

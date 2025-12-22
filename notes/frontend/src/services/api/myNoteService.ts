@@ -13,8 +13,7 @@ export const myNoteService = {
       const response = await api.get(`/notes/${noteId}`);
       return response.data;
     } catch (error: any) {
-      console.error('Get Note error:', error.response?.data);
-      throw error;
+      throw new error('Get Note error:', error.response?.data);
     }
   },
 
@@ -23,8 +22,7 @@ export const myNoteService = {
       const response = await api.post('/notes', data);
       return response.data;
     } catch (error: any) {
-      console.error('Create Note error:', error.response?.data);
-      throw error;
+      throw new error('Create Note error:', error.response?.data);
     }
   },
 
@@ -33,8 +31,7 @@ export const myNoteService = {
       const response = await api.put(`/notes/${id}`, data);
       return response.data;
     } catch (error: any) {
-      console.error('Create Note error:', error.response?.data);
-      throw error;
+      throw new error('Create Note error:', error.response?.data);
     }
   },
 
@@ -43,8 +40,7 @@ export const myNoteService = {
       const response = await api.delete(`/notes/${id}`);
       return response.data;
     } catch (error: any) {
-      console.error('delete Note error:', error.response?.data);
-      throw error;
+      throw new error('delete Note error:', error.response?.data);
     }
   },
 

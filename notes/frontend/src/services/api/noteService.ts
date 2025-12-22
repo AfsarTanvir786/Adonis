@@ -25,8 +25,7 @@ export const NoteService = {
 
       return response.data;
     } catch (error: any) {
-      console.error('Get Note error:', error.response?.data);
-      throw error;
+      throw new error('Get Note error:', error.response?.data);
     }
   },
 
@@ -35,8 +34,7 @@ export const NoteService = {
       const response = await api.get(`/noteVotes/${noteId}`);
       return response.data;
     } catch (error: any) {
-      console.error('Note vote count error:', error.response?.data);
-      throw error;
+      throw new error('Note vote count error:', error.response?.data);
     }
   },
 
@@ -45,8 +43,7 @@ export const NoteService = {
       const response = await api.post(`/noteVotes/${noteId}`, { vote });
       return response.data;
     } catch (error: any) {
-      console.error('Note vote create error:', error.response?.data);
-      throw error;
+      throw new error('Note vote create error:', error.response?.data);
     }
   },
 
@@ -55,8 +52,7 @@ export const NoteService = {
       const response = await api.delete(`/noteVotes/${noteId}`);
       return response.data;
     } catch (error: any) {
-      console.error('Note vote delete error:', error.response?.data);
-      throw error;
+      throw new error('Note vote delete error:', error.response?.data);
     }
   },
 };

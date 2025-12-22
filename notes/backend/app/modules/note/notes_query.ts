@@ -94,8 +94,6 @@ export default class NoteRepository {
       };
     }
 
-    console.log(data);
-
     note.merge({
       workspaceId: data.workspaceId ?? data.workspaceId,
       title: data.title ?? note.title,

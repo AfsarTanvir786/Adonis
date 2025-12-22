@@ -22,8 +22,7 @@ export const workspaceService = {
       );
       return response.data;
     } catch (error: any) {
-      console.error('Get Workspace error:', error.response?.data);
-      throw error;
+      throw new error('Get Workspace error:', error.response?.data);
     }
   },
 
@@ -34,8 +33,7 @@ export const workspaceService = {
       );
       return response.data;
     } catch (error: any) {
-      console.error('Get Workspace error:', error.response?.data);
-      throw error;
+      throw new error('Get Workspace error:', error.response?.data);
     }
   },
 
@@ -44,8 +42,7 @@ export const workspaceService = {
       const response = await api.get(`/workspaces/${workspaceId}`);
       return response.data;
     } catch (error: any) {
-      console.error('Get Workspace error:', error.response?.data);
-      throw error;
+      throw new error('Get Workspace error:', error.response?.data);
     }
   },
 
@@ -54,8 +51,7 @@ export const workspaceService = {
       const response = await api.post('/workspaces', data);
       return response.data;
     } catch (error: any) {
-      console.error('Create Workspace error:', error.response?.data);
-      throw error;
+      throw new error('Create Workspace error:', error.response?.data);
     }
   },
 
@@ -67,8 +63,7 @@ export const workspaceService = {
       const response = await api.put(`/workspaces/${workspaceId}`, data);
       return response.data;
     } catch (error: any) {
-      console.error('update Workspace error:', error.response?.data);
-      throw error;
+      throw new error('update Workspace error:', error.response?.data);
     }
   },
 
@@ -77,8 +72,7 @@ export const workspaceService = {
       const response = await api.delete(`/workspaces/${workspaceId}`);
       return response.data;
     } catch (error: any) {
-      console.error('delete Workspace error:', error.response?.data);
-      throw error;
+      throw new error('delete Workspace error:', error.response?.data);
     }
   },
 };

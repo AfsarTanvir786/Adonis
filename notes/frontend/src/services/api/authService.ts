@@ -39,8 +39,7 @@ export const authService = {
       }
       return response.data;
     } catch (error: any) {
-      console.error("❌ Login error:", error.response?.data);
-      throw error;
+      throw new error("❌ Login error:", error.response?.data);
     }
   },
 
@@ -55,8 +54,7 @@ export const authService = {
       }
       return response.data;
     } catch (error: any) {
-      console.error("❌ Register error:", error.response?.data);
-      throw error;
+      throw new error("❌ Register error:", error.response?.data);
     }
   },
 
@@ -99,8 +97,7 @@ export const authService = {
       }
       return response.data;
     } catch (error: any) {
-      console.error("❌ Get user error:", error.response?.data);
-      throw error;
+      throw new error("❌ Get user error:", error.response?.data);
     }
   },
 };

@@ -74,13 +74,17 @@ export default class Note extends BaseModel {
 
   @beforeUpdate()
   static async createHistory(note: Note) {
-    if (note.$dirty.title || note.$dirty.content) {
+    if (note.$dirty.title || note.$dirty.content || note.$dirty.workspaceId) {
       const original = note.$original;
       await NoteHistory.create({
         noteId: note.id,
         userId: note.userId,
+        workspaceId: original.workspaceId,
         oldTitle: original.title,
         oldContent: original.content,
+        oldIsDraft: original.isDraft,
+        oldType: original.type,
+        oldPublishedAt: original.publishedAt,
       });
     }
   }
