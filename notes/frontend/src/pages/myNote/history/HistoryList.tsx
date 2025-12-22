@@ -2,7 +2,7 @@ import type { RootState } from '@/store';
 import { useSelector } from 'react-redux';
 import { Button } from '@/components/ui/button';
 import { Link, useParams } from 'react-router-dom';
-import { useHistoryList } from '@/hooks/query/useHistories';
+import { useHistoryList } from '@/hooks/query/my_note_history/useHistories';
 import SingleHistory from './History';
 import RequireLogin from '@/utils/requireLogin';
 import { ArrowLeft } from 'lucide-react';

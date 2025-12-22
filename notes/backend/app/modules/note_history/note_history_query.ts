@@ -14,18 +14,7 @@ export default class NoteHistoryRepository {
   async getNoteHistory(id: number) {
     const noteHistory = await NoteHistory.query().where('id', id).first();
 
-    if (!noteHistory) {
-      return {
-        success: false,
-        message: 'NoteHistory not found.',
-      };
-    }
-
-    return {
-      success: true,
-      message: 'NoteHistory retrieved.',
-      data: noteHistory,
-    };
+    return noteHistory
   }
 
   async getNoteHistoryList(userId: number, noteId: number) {

@@ -8,12 +8,21 @@ type HistoryListResponse = {
 };
 
 export const historyService = {
-  async getHistory(id: number): Promise<HistoryListResponse> {
+  async getHistoryByNote(id: number): Promise<HistoryListResponse> {
     try {
-      const response = await api.get(`/noteHistories/${id}`);
+      const response = await api.get(`/noteHistories/notes/${id}`);
       return response.data;
     } catch (error: any) {
       throw new error('Create Note error:', error.response?.data);
     }
   },
+
+  async getHistory(id: number) {
+    try {
+      const response = await api.get<History | null>(`/noteHistories/${id}`);
+      return response.data;
+    } catch (error: any) {
+      throw new error('Create Note error:', error.response?.data);
+    }
+  }
 };

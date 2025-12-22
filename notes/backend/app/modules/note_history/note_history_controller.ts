@@ -19,8 +19,6 @@ export default class NoteHistorysController {
 
     const result = await this.noteHistoryService.getNoteHistory(params.id);
 
-    if (!result.success) return response.notFound(result);
-
     return response.ok(result);
   }
 
