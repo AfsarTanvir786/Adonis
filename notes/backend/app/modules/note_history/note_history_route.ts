@@ -4,7 +4,7 @@ import NoteHistoryController from './note_history_controller.js';
 router
   .group(() => {
     router.get('/notes/:id', [NoteHistoryController, 'list']);
-    router.get('/:id', [NoteHistoryController, 'show'])
+    router.get('/:id', [NoteHistoryController, 'show']);
     router.delete('/:id', [NoteHistoryController, 'delete']);
   })
   .prefix('/api/noteHistories')

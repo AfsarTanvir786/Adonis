@@ -1,9 +1,7 @@
 import { workspaceService } from '@/services/api/workspaceService';
 import { useQuery } from '@tanstack/react-query';
 
-export function useWorkspaceList(
-  companyId: number,
-) {
+export function useWorkspaceList(companyId: number) {
   return useQuery({
     queryKey: ['workspaces', companyId],
     queryFn: () => workspaceService.list(),

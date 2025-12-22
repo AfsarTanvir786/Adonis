@@ -6,13 +6,7 @@ import RequireLogin from '@/utils/requireLogin';
 import { ArrowDownFromLine, ArrowUpFromLine } from 'lucide-react';
 import { useSelector } from 'react-redux';
 
-function SingleNote({
-  note,
-  index,
-}: {
-  note: Note;
-  index?: number;
-}) {
+function SingleNote({ note, index }: { note: Note; index?: number }) {
   const user = useSelector((state: RootState) => state.authentication.user);
   if (!user || user.name === 'no user') {
     return <RequireLogin message="You have no access to this note." />;
@@ -25,14 +19,14 @@ function SingleNote({
   const isDisliked = votes?.vote === 'down';
 
   const handleLikes = (vote: 'up' | 'down') => {
-    if(vote === 'up' && isLiked || vote=== 'down' && isDisliked){
+    if ((vote === 'up' && isLiked) || (vote === 'down' && isDisliked)) {
       voteDelete.mutate(note.id);
-    }else if(vote === 'up'){
+    } else if (vote === 'up') {
       voteMutation.mutate('up');
-    }else{
+    } else {
       voteMutation.mutate('down');
     }
-  }
+  };
 
   return (
     <div className="bg-white rounded-xl shadow-md p-4 border border-gray-200">

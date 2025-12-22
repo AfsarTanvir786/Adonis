@@ -24,5 +24,5 @@ export const historyService = {
     } catch (error: any) {
       throw new error('Create Note error:', error.response?.data);
     }
-  }
+  },
 };

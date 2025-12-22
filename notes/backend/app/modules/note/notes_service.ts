@@ -22,16 +22,17 @@ export class NoteService {
     }
 
     const workspaceList = await this.workspaceRepository.getWorkspaceList(
-      user.companyId, ['id']
+      user.companyId,
+      ['id'],
     );
-    
+
     if (workspaceList.length === 0) {
       return {
         success: false,
         message: 'No workspaces found for this company',
       };
     }
-    
+
     const allowedWorkspaces = workspaceList.map((w) => w.id);
     if (data.workspaceId && !allowedWorkspaces.includes(data.workspaceId)) {
       return {
@@ -66,7 +67,7 @@ export class NoteService {
 
     const workspaceList = await this.workspaceRepository.getWorkspaceList(
       user.companyId,
-      ['id']
+      ['id'],
     );
     if (workspaceList.length === 0) {
       return {
@@ -84,8 +85,10 @@ export class NoteService {
   }
 
   async getNoteList(companyId: number) {
-    const workspaceList =
-      await this.workspaceRepository.getWorkspaceList(companyId, ['id']);
+    const workspaceList = await this.workspaceRepository.getWorkspaceList(
+      companyId,
+      ['id'],
+    );
     if (workspaceList.length === 0) {
       return {
         success: false,

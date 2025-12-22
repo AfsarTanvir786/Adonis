@@ -1,8 +1,5 @@
-
 function ABC() {
-  return (
-    <div>ABC</div>
-  )
+  return <div>ABC</div>;
 }
 
-export default ABC
+export default ABC;

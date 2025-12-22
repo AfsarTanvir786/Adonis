@@ -26,7 +26,7 @@ function WorkspaceDetails() {
   if (isError) return <p>Error fetching Workspace details</p>;
   if (!workspace || !workspace) return <p>No Workspace found</p>;
   const canManage = user.role === 'admin' || user.role === 'owner';
-  
+
   return (
     <div>
       <Card className="mt-6 w-96 m-4">

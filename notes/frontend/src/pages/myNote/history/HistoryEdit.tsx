@@ -31,10 +31,12 @@ export default function HistoryEdit() {
   });
 
   // Fetch note
-  const { data: noteData, isLoading: isLoadingNote } = useHistoryGet(Number(id2));
+  const { data: noteData, isLoading: isLoadingNote } = useHistoryGet(
+    Number(id2)
+  );
 
   // Fetch workspaces
-  const { data: workspaceList } = useWorkspaceList(user.companyId)
+  const { data: workspaceList } = useWorkspaceList(user.companyId);
 
   // Populate form when note is loaded
   useEffect(() => {
@@ -48,7 +50,7 @@ export default function HistoryEdit() {
         content: note.oldContent || '',
         isDraft: note.oldIsDraft,
         type: note.oldType,
-        publishedAt: note.oldPublishedAt
+        publishedAt: note.oldPublishedAt,
       });
     }
   }, [noteData]);

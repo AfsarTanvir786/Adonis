@@ -47,7 +47,7 @@ export const NoteService = {
     }
   },
 
-  async deleteNoteVote(noteId: number){
+  async deleteNoteVote(noteId: number) {
     try {
       const response = await api.delete(`/noteVotes/${noteId}`);
       return response.data;

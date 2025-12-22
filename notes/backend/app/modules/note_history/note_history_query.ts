@@ -14,7 +14,7 @@ export default class NoteHistoryRepository {
   async getNoteHistory(id: number) {
     const noteHistory = await NoteHistory.query().where('id', id).first();
 
-    return noteHistory
+    return noteHistory;
   }
 
   async getNoteHistoryList(userId: number, noteId: number) {

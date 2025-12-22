@@ -1,5 +1,5 @@
-import type { User } from "@/types/type";
-import { api } from "./api";
+import type { User } from '@/types/type';
+import { api } from './api';
 
 interface LoginResponse {
   success: boolean;
@@ -30,54 +30,54 @@ export const authService = {
     password: string;
   }): Promise<LoginResponse> {
     try {
-      const response = await api.post("/auth/login", payload);
+      const response = await api.post('/auth/login', payload);
 
       // Token is stored in HTTP-only cookie automatically
       // Optionally store user info in localStorage for UI purposes
       if (response.data.data) {
-        localStorage.setItem("user", JSON.stringify(response.data.data));
+        localStorage.setItem('user', JSON.stringify(response.data.data));
       }
       return response.data;
     } catch (error: any) {
-      throw new error("❌ Login error:", error.response?.data);
+      throw new error('❌ Login error:', error.response?.data);
     }
   },
 
   async register(payload: Partial<User>): Promise<RegisterResponse> {
     try {
-      const response = await api.post("/auth/register", payload);
+      const response = await api.post('/auth/register', payload);
 
       // Token is stored in HTTP-only cookie automatically
       // Optionally store user info in localStorage for UI purposes
       if (response.data.user) {
-        localStorage.setItem("user", JSON.stringify(response.data.user));
+        localStorage.setItem('user', JSON.stringify(response.data.user));
       }
       return response.data;
     } catch (error: any) {
-      throw new error("❌ Register error:", error.response?.data);
+      throw new error('❌ Register error:', error.response?.data);
     }
   },
 
   async logout(): Promise<LogoutResponse> {
     try {
-      const response = await api.delete("/auth/logout");
+      const response = await api.delete('/auth/logout');
       // HTTP-only cookie is cleared by the server
       // Clean up any client-side data
-      localStorage.removeItem("user");
-      localStorage.removeItem("token");
+      localStorage.removeItem('user');
+      localStorage.removeItem('token');
       return response.data;
     } catch (error: any) {
       // If logout fails (e.g., 401 because token is already invalid)
       // Still clean up client-side data
-      localStorage.removeItem("user");
-      localStorage.removeItem("token");
+      localStorage.removeItem('user');
+      localStorage.removeItem('token');
 
       // If it's a 401 error, consider it a successful logout
       // (token is already invalid/expired)
       if (error.response?.status === 401) {
         return {
           success: false,
-          message: "Successfully logged out",
+          message: 'Successfully logged out',
         };
       }
 
@@ -89,15 +89,15 @@ export const authService = {
   async getCurrentUser(): Promise<ProfileResponse> {
     try {
       // Fixed: Should be GET request, not DELETE
-      const response = await api.get("/auth/profile");
+      const response = await api.get('/auth/profile');
 
       // Update localStorage with fresh user data
       if (response.data.data) {
-        localStorage.setItem("user", JSON.stringify(response.data.data));
+        localStorage.setItem('user', JSON.stringify(response.data.data));
       }
       return response.data;
     } catch (error: any) {
-      throw new error("❌ Get user error:", error.response?.data);
+      throw new error('❌ Get user error:', error.response?.data);
     }
   },
 };

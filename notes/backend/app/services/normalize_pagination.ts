@@ -1,4 +1,4 @@
-import { Pagination } from "../utils/types.js";
+import { Pagination } from '../utils/types.js';
 
 export function normalizePagination(filter: Partial<Pagination>): Pagination {
   return {

@@ -1,5 +1,4 @@
 import { myNoteService } from '@/services/api/myNoteService';
-import type { Note } from '@/types/type';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 

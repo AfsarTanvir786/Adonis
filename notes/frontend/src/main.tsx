@@ -6,9 +6,9 @@ import React from 'react';
 const queryClient = new QueryClient();
 
 createRoot(document.getElementById('root')!).render(
-    <React.StrictMode>
-        <QueryClientProvider client={queryClient}>
-            <App />
-        </QueryClientProvider>
-    </React.StrictMode>
+  <React.StrictMode>
+    <QueryClientProvider client={queryClient}>
+      <App />
+    </QueryClientProvider>
+  </React.StrictMode>
 );

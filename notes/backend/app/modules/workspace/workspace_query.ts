@@ -7,7 +7,7 @@ type AvailableWorkspaceColumns = {
   id: number;
   name: string;
   [key: string]: any;
-}
+};
 
 export default class WorkspaceRepository {
   async create(data: Partial<Workspace>) {
@@ -42,7 +42,9 @@ export default class WorkspaceRepository {
     const selectColumns: string[] = columns as string[];
     return (await Workspace.query()
       .select(selectColumns)
-      .where('companyId', companyId)) as any as Promise<Pick<AvailableWorkspaceColumns, T>[]>;
+      .where('companyId', companyId)) as any as Promise<
+      Pick<AvailableWorkspaceColumns, T>[]
+    >;
   }
 
   async update(workspace: Workspace, data: Partial<Workspace>) {

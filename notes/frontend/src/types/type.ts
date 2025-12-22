@@ -1,34 +1,34 @@
 export interface User {
-    id: number;
-    companyId: number;
-    name: string | null;
-    email: string;
-    role: 'owner' | 'admin' | 'member';
-    createdAt: string;
-    updatedAt: string | null;
-    company?: Company;
+  id: number;
+  companyId: number;
+  name: string | null;
+  email: string;
+  role: 'owner' | 'admin' | 'member';
+  createdAt: string;
+  updatedAt: string | null;
+  company?: Company;
 }
 
 export interface LoginUser {
-    email: string;
-    password: string;
+  email: string;
+  password: string;
 }
 
 export interface Company {
-    id: number;
-    name: string;
-    createdAt: string;
-    updatedAt: string | null;
+  id: number;
+  name: string;
+  createdAt: string;
+  updatedAt: string | null;
 }
 
 export interface Workspace {
-    id: number;
-    companyId: number;
-    userId: number;
-    name: string;
-    description: string | null;
-    createdAt: string;
-    updatedAt: string | null;
+  id: number;
+  companyId: number;
+  userId: number;
+  name: string;
+  description: string | null;
+  createdAt: string;
+  updatedAt: string | null;
 }
 
 export interface Note {
@@ -50,10 +50,10 @@ export interface Note {
 }
 
 export interface Tag {
-    id: number;
-    name: string;
-    createdAt: string;
-    updatedAt: string | null;
+  id: number;
+  name: string;
+  createdAt: string;
+  updatedAt: string | null;
 }
 
 export interface History {
@@ -71,12 +71,12 @@ export interface History {
 }
 
 export type NoteVote = {
-    id: number;
-    noteId: number;
-    userId: number;
-    vote: 'up' | 'down';
-    createdAt: string;
-    updatedAt: string | null;
+  id: number;
+  noteId: number;
+  userId: number;
+  vote: 'up' | 'down';
+  createdAt: string;
+  updatedAt: string | null;
 };
 
 export type Pagination = {

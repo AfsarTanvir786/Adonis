@@ -58,7 +58,7 @@ export default function Login() {
               <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
                 <p className="text-sm text-red-600">
                   {(error as any)?.response?.data?.message ||
-                    'Login failed. Please check your credentials.'}
+                    'Login failed. Please enter correct email and password'}
                 </p>
               </div>
             )}

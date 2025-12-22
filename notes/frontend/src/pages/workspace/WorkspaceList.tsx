@@ -22,12 +22,15 @@ function WorkspaceList() {
   const [sortBy, setSortBy] = useState<'createdAt' | 'name'>('createdAt');
   const [orderBy, setOrderBy] = useState<'asc' | 'desc'>('desc');
 
-  const { data, isLoading, isError } = useWorkspacePaginatedList(user.companyId, {
-    page,
-    limit,
-    sortBy,
-    orderBy,
-  });
+  const { data, isLoading, isError } = useWorkspacePaginatedList(
+    user.companyId,
+    {
+      page,
+      limit,
+      sortBy,
+      orderBy,
+    }
+  );
 
   const workspaces = data?.data ?? [];
   const canManage = user.role === 'admin' || user.role === 'owner';

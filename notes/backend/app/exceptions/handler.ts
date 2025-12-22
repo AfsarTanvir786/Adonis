@@ -20,16 +20,16 @@ export default class HttpExceptionHandler extends ExceptionHandler {
   async handle(error: any, ctx: HttpContext) {
     const { response } = ctx
 
-    // ✨ Vine validation errors (your main problem)
-    if (error.code === 'E_VALIDATION_ERROR') {
-      return response.badRequest({
-        success: false,
-        message: 'Validation failed',
-        errors: error.messages || error.messages(),
-      })
+    // Vine validation errors (your main problem)
+    if (error.code === 'E_INVALID_CREDENTIALS') {
+      return ctx.response.status(401).send({
+        errors: [
+          { message: 'Authentication failed: Invalid email or password.' },
+        ],
+      });
     }
 
-    // ✨ Model not found (example)
+    // Model not found (example)
     if (error.code === 'E_ROW_NOT_FOUND') {
       return response.notFound({
         success: false,
