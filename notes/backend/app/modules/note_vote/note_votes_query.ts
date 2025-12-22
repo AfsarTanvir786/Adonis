@@ -1,61 +1,73 @@
-import NoteVote from '#models/note_vote'
-import VoteCount from '#models/vote_count'
+import Note from '#models/note';
+import NoteVote from '#models/note_vote';
 
 export default class NoteVoteRepository {
   async createNoteVote(vote: 'up' | 'down', noteId: number, userId: number) {
-    const createNoteVote = {
-      noteId: noteId,
+    const note = await Note.find(noteId);
+    if (!note) {
+      throw new Error('note does not exists');
+    }
+
+    const noteVote = await NoteVote.create({
       userId: userId,
+      noteId: noteId,
       vote: vote,
-    }
-    let voteCount = await VoteCount.find(noteId)
-    if (!voteCount) {
-      voteCount = await VoteCount.create({ noteId: noteId })
-    }
-    if (vote === 'up') {
-      voteCount.upVoteCount += 1
-    } else {
-      voteCount.downVoteCount += 1
-    }
-
-    await NoteVote.create(createNoteVote)
-    await voteCount.save()
-
-    return {
-      success: true,
-      message: 'Done voting.',
-    }
+    });
+    note.count += 'up' === vote ? 1 : -1;
+    await note.save();
+    return noteVote;
   }
 
-  async updateNoteVote(noteVote: NoteVote, vote: 'up' | 'down') {
-    let voteCount = await VoteCount.find(noteVote.noteId)
-    if (!voteCount) {
-      voteCount = await VoteCount.create({ noteId: noteVote.noteId })
-    }
+  async updateNoteVote(vote: 'up' | 'down', noteVote: NoteVote, note: Note) {
     if (vote !== noteVote.vote) {
-      if(vote === 'up'){
-        voteCount.upVoteCount += 1;
-        voteCount.downVoteCount -= 1;
-      }else{
-        voteCount.upVoteCount -= 1;
-        voteCount.downVoteCount += 1;
-      }
+      if (vote === 'up') note.count += 2;
+      else note.count -= 2;
     }
-    
+
     noteVote.merge({
       vote: vote,
-    })
-    await noteVote.save()
+    });
 
-    return {
-      success: true,
-      message: 'Sucessfully update the vote.',
+    await noteVote.save();
+    await note.save();
+    return noteVote;
+  }
+
+  async deleteNoteVote(noteId: number, userId: number) {
+    const note = await Note.find(noteId);
+    const noteVote = await NoteVote.query()
+      .where('note_id', noteId)
+      .where('user_id', userId)
+      .first();
+
+    if (!note) {
+      throw new Error('note does not exists');
     }
+    if (!noteVote) {
+      throw new Error('access denied');
+    }
+
+    note.count += 'up' === noteVote.vote ? -1 : 1;
+    await note.save();
+    await noteVote.delete();
   }
 
   async getNoteVote(noteId: number, userId: number) {
-    const noteVote = await NoteVote.query().where('noteId', noteId).where('userId', userId).first()
+    const noteVote = await NoteVote.query()
+      .where('noteId', noteId)
+      .where('userId', userId)
+      .first();
 
-    return noteVote
+    return noteVote;
+  }
+
+  async getVote(noteId: number, userId: number) {
+    const noteVote = await NoteVote.query()
+      .where('note_id', noteId)
+      .where('user_id', userId)
+      .preload('note')
+      .first();
+
+    return noteVote;
   }
 }

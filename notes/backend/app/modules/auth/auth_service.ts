@@ -1,32 +1,38 @@
-import User from '#models/user'
-import { AccessToken } from '@adonisjs/auth/access_tokens'
-import { inject } from '@adonisjs/core'
-import AuthRepository from './auth_query.js'
+import User from '#models/user';
+import { AccessToken } from '@adonisjs/auth/access_tokens';
+import { inject } from '@adonisjs/core';
+import AuthRepository from './auth_query.js';
+import { CompanyService } from '../company/company_service.js';
 @inject()
 export class AuthService {
-  constructor(private authRepository: AuthRepository) {}
+  constructor(
+    private authRepository: AuthRepository,
+    private companyService: CompanyService,
+  ) {}
 
-  public async createUserWithCompany(user: Partial<User>, host: string) {
-    return this.authRepository.createUserWithCompany(user, host)
-  }
-
-  public async login(email: string, password: string) {
-    return await this.authRepository.login(email, password)
-  }
-
-  public async logout(
-    user: User & {
-      currentAccessToken: AccessToken
+  public async register(data: Partial<User>, host: string) {
+    const company = await this.companyService.getByName(host);
+    if (!company.data) {
+      throw new Error('Company does not exits');
     }
-  ) {
-    return await this.authRepository.logout(user)
+
+    return this.authRepository.createUser(data, company.data.id);
   }
 
-  public async getUser(user: User) {
-    return await this.authRepository.getUser(user)
+  public async login(data: { email: string; password: string }, host: string) {
+    const company = await this.companyService.getByName(host);
+    if (!company.data) {
+      throw new Error('Invalid company domain');
+    }
+
+    return this.authRepository.login(
+      data.email,
+      data.password,
+      company.data.id,
+    );
   }
 
-  public async getUserList() {
-    return await this.authRepository.getUserList()
+  public async logout(user: User & { currentAccessToken: AccessToken }) {
+    return this.authRepository.logout(user);
   }
 }

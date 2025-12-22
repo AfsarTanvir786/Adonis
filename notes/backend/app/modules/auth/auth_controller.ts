@@ -1,119 +1,60 @@
-import type { HttpContext } from '@adonisjs/core/http'
-import { inject } from '@adonisjs/core'
-import { AuthService } from './auth_service.js'
-import { loginValidator, registerValidator } from './auth_validator.js'
-import { CompanyService } from '../company/company_service.js'
+import type { HttpContext } from '@adonisjs/core/http';
+import { inject } from '@adonisjs/core';
+import { AuthService } from './auth_service.js';
+import { loginValidator, registerValidator } from './auth_validator.js';
+import { cookieConfig } from './cookieConfig.js';
+import { apiSuccess } from '../../utils/api_response.js';
 
 @inject()
 export default class AuthController {
-  constructor(
-    private authService: AuthService,
-    private companyService: CompanyService
-  ) {}
+  constructor(private authService: AuthService) {}
 
   public async register({ request, response }: HttpContext) {
-    const payload = await request.validateUsing(registerValidator)
-    const host = request.header('host')?.split(':')[0]
+    const payload = await request.validateUsing(registerValidator);
+    const host = this.extractHost(request);
 
-    if (!host) {
-      return response.badRequest({ message: 'Missing host header' })
-    }
-    const company = await this.companyService.getByName(host)
+    const result = await this.authService.register(payload, host);
 
-    if (!company) {
-      return response.badRequest({
-        message: 'Invalid company host. Company does not exist.',
-      })
-    }
+    response.cookie('access_token', result.token, cookieConfig());
 
-    const result = await this.authService.createUserWithCompany(payload, host)
-    if (result.success == false) {
-      return result
-    }
-
-    response.cookie('access_token', result.accessToken!.value!.release(), {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 60 * 60 * 24 * 7,
-      path: '/',
-    })
-
-    return response.created({
-      message: 'User registered successfully',
-      user: result.user,
-      access_token: result.accessToken,
-    })
+    return response.created(
+      apiSuccess('User registered successfully', result.user),
+    );
   }
 
   public async login({ request, response }: HttpContext) {
-    const { email, password } = await request.validateUsing(loginValidator)
+    const payload = await request.validateUsing(loginValidator);
+    const host = this.extractHost(request);
 
-    const host = request.header('host')?.split(':')[0]
+    const result = await this.authService.login(payload, host);
 
-    if (!host) {
-      return response.badRequest({ message: 'Missing host header' })
-    }
-    const company = await this.companyService.getByName(host)
+    response.cookie('access_token', result.token, cookieConfig());
 
-    if (!company) {
-      return response.badRequest({
-        message: 'Company not found for this domain. Cannot login.',
-      })
-    }
-    const result = await this.authService.login(email, password)
-
-    // Set HTTP-only cookie
-    response.cookie('access_token', result.accessToken.value!.release(), {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 60 * 60 * 24 * 7, // 7 days in seconds
-      path: '/',
-    })
-
-    // Don't send token in response body
-    return response.ok({
-      message: result.message,
-      user: result.user,
-      access_token: result.accessToken.value!.release(),
-    })
+    return response.ok(apiSuccess('Login successful', result.user));
   }
 
   public async logout({ auth, response }: HttpContext) {
-    try {
-      // Try to authenticate and delete token from database
-      await auth.check()
-      const user = auth.user!
-      await this.authService.logout(user)
-    } catch (error) {
-      // If authentication fails, that's okay
-      // Token might already be invalid/expired
-      console.log('Logout: Token already invalid or expired')
+    await auth.check().catch(() => null);
+
+    if (auth.user) {
+      await this.authService.logout(auth.user);
     }
 
-    // Always clear the HTTP-only cookie
-    response.clearCookie('access_token', {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      path: '/',
-    })
+    response.clearCookie('access_token', cookieConfig());
 
-    return response.ok({
-      message: 'Successfully logged out',
-    })
+    return response.ok(apiSuccess('Logged out successfully'));
   }
 
   public async profile({ auth }: HttpContext) {
-    await auth.check()
-    const user = auth.user!
-    return this.authService.getUser(user)
+    await auth.check();
+    return apiSuccess('Profile fetched', auth.user);
   }
 
-  public async getUserList({ auth }: HttpContext) {
-    await auth.check()
-
-    return this.authService.getUserList()
+  private extractHost(request: HttpContext['request']) {
+    const host = request.header('host')?.split(':')[0];
+    if (!host) {
+      throw new Error('Missing host header');
+    }
+    return host.toLowerCase();
   }
 }

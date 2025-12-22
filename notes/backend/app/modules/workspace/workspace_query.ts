@@ -1,100 +1,59 @@
-import User from '#models/user'
-import Workspace from '#models/workspace'
+import Workspace from '#models/workspace';
+import { Exception } from '@adonisjs/core/exceptions';
+import { Pagination } from '../../utils/types.js';
+
+type SelectableWorkspaceColumns = 'id' | 'name';
+type AvailableWorkspaceColumns = {
+  id: number;
+  name: string;
+  [key: string]: any;
+};
 
 export default class WorkspaceRepository {
-  async createWorkspace(data: Partial<Workspace>) {
-    const workspace = await Workspace.create(data)
-
-    return {
-      success: true,
-      message: 'Workspace created successfully',
-      data: workspace,
-    }
+  async create(data: Partial<Workspace>) {
+    return Workspace.create(data);
   }
 
-  async getWorkspace(id: number) {
+  async findById(id: number) {
     const workspace = await Workspace.query()
       .where('id', id)
       .preload('user')
       .preload('company')
-      .first()
+      .first();
 
     if (!workspace) {
-      return {
-        success: false,
-        message: 'Workspace not found.',
-      }
+      throw new Exception('Workspace not found', { status: 404 });
     }
 
-    return {
-      success: true,
-      message: 'Workspace retrieved.',
-      data: workspace,
-    }
+    return workspace;
   }
 
-  async updateWorkspace(data: Partial<Workspace>, id: number, user: User) {
-    const workspace = await Workspace.find(id)
-
-    if (!workspace) {
-      return {
-        success: false,
-        message: 'Workspace not found.',
-      }
-    }
-
-    if(workspace.companyId !== user.companyId || workspace.userId !== user.id) {
-      return {
-        success: false,
-        message: 'Access denied to this workspace.',
-      }
-    }
-
-    workspace.merge({
-      name: data.name ?? workspace.name,
-      description: data.description ?? workspace.description,
-    })
-
-    await workspace.save()
-
-    return {
-      success: true,
-      message: 'Workspace updated successfully.',
-      data: workspace,
-    }
+  async paginateByCompany(companyId: number, pagination: Pagination) {
+    return await Workspace.query()
+      .where('companyId', companyId)
+      .orderBy(pagination.sortBy, pagination.orderBy)
+      .paginate(pagination.page, pagination.limit);
   }
 
-  async getWorkspaceList(id: number) {
-    const list = await Workspace.query().where('companyId', id)
-
-    return {
-      success: true,
-      data: list,
-    }
+  async getWorkspaceList<T extends SelectableWorkspaceColumns>(
+    companyId: number,
+    columns: T[] = ['id'] as T[],
+  ): Promise<Pick<AvailableWorkspaceColumns, T>[]> {
+    const selectColumns: string[] = columns as string[];
+    return (await Workspace.query()
+      .select(selectColumns)
+      .where('companyId', companyId)) as any as Promise<
+      Pick<AvailableWorkspaceColumns, T>[]
+    >;
   }
 
-  async deleteWorkspace(id: number, user: User) {
-    const workspace = await Workspace.find(id)
+  async update(workspace: Workspace, data: Partial<Workspace>) {
+    workspace.merge(data);
+    await workspace.save();
+    return workspace;
+  }
 
-    if (!workspace) {
-      return {
-        success: false,
-        message: 'Workspace not found.',
-      }
-    }
-
-     if(workspace.companyId !== user.companyId || workspace.userId !== user.id) {
-       return {
-         success: false,
-         message: 'Access denied to this workspace.',
-       }
-     }
-
-    await workspace.delete()
-
-    return {
-      success: true,
-      message: 'Workspace deleted successfully.',
-    }
+  async delete(workspace: Workspace) {
+    await workspace.delete();
   }
 }

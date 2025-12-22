@@ -5,7 +5,7 @@ export default class extends BaseSchema {
 
   async up() {
     this.schema.createTable(this.tableName, (table) => {
-      table.increments('id')
+      table.increments('id');
       table
         .integer('note_id')
         .unsigned()
@@ -13,7 +13,7 @@ export default class extends BaseSchema {
         .inTable('notes')
         .onDelete('CASCADE')
         .onUpdate('CASCADE')
-        .notNullable()
+        .notNullable();
       table
         .integer('user_id')
         .unsigned()
@@ -21,13 +21,24 @@ export default class extends BaseSchema {
         .inTable('users')
         .onDelete('CASCADE')
         .onUpdate('CASCADE')
-        .notNullable()
-      table.string('old_title').notNullable()
-      table.text('old_content').nullable()
+        .notNullable();
+      table
+        .integer('workspace_id')
+        .unsigned()
+        .references('id')
+        .inTable('workspaces')
+        .onDelete('CASCADE')
+        .onUpdate('CASCADE')
+        .notNullable();
+      table.string('old_title').notNullable();
+      table.text('old_content').nullable();
+      table.enum('old_type', ['public', 'private']).defaultTo('private');
+      table.boolean('old_is_draft');
+      table.timestamp('old_published_at').nullable();
 
-      table.timestamp('created_at')
-      table.timestamp('updated_at')
-    })
+      table.timestamp('created_at');
+      table.timestamp('updated_at');
+    });
   }
 
   async down() {

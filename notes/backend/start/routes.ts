@@ -5,6 +5,7 @@ import '../app/modules/note/notes_route.js'
 import '../app/modules/note_history/note_history_route.js'
 import '../app/modules/note_vote/note_votes_route.js'
 import '../app/modules/tag/tags_route.js'
+import '../app/modules/dashboard/dashboard_route.js'
 import '../app/modules/workspace/workspace_route.js'
 
 router.get('/', async () => {

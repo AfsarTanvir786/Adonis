@@ -1,31 +1,38 @@
-import { inject } from '@adonisjs/core'
-import type { HttpContext } from '@adonisjs/core/http'
-import NoteVoteService from './note_votes_service.js'
+import { inject } from '@adonisjs/core';
+import type { HttpContext } from '@adonisjs/core/http';
+import NoteVoteService from './note_votes_service.js';
+import { noteVoteValidator } from './note_votes_validator.js';
 
 @inject()
 export default class NoteVoteController {
   constructor(private noteVoteService: NoteVoteService) {}
+  async create({ auth, request, response, params }: HttpContext) {
+    const payload = await request.validateUsing(noteVoteValidator);
 
-  async create({ auth, request, response }: HttpContext) {
-    const user = auth.user
+    const result = await this.noteVoteService.createNoteVote(
+      payload.vote,
+      params.id,
+      auth.user!,
+    );
 
-    if (!user) {
-      return response.unauthorized({
-        sucess: false,
-        message: 'Not authenticated',
-      })
-    }
+    return response.created(result);
+  }
 
-    const payload = request.only(['vote', 'noteId'])
+  async show({ response, params, auth }: HttpContext) {
+    const result = await this.noteVoteService.getVote(params.id, auth.user!.id);
 
-    const result = await this.noteVoteService.addVote(payload.vote, payload.noteId, user.id)
-
-    if (!result.success) return response.notFound(result)
-
-    return {
+    return response.ok({
       success: true,
-      message: 'Sucessfully vote done.',
+      message: 'get user voting',
       data: result,
-    }
+    });
+  }
+
+  async destroy({ params, response, auth }: HttpContext) {
+    await this.noteVoteService.delete(params.id, auth.user!.id);
+
+    return response.ok({
+      message: 'successfully delete note vote',
+    });
   }
 }

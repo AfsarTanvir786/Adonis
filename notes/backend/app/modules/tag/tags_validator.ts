@@ -1,4 +1,4 @@
-import vine from '@vinejs/vine'
+import vine from '@vinejs/vine';
 
 export const createTagValidator = vine.compile(
   vine.object({
@@ -8,8 +8,8 @@ export const createTagValidator = vine.compile(
       .minLength(3)
       .maxLength(255)
       .unique({ table: 'tags', column: 'name' }),
-  })
-)
+  }),
+);
 
 export const updateTagValidator = vine.compile(
   vine.object({
@@ -19,5 +19,5 @@ export const updateTagValidator = vine.compile(
       .minLength(3)
       .maxLength(255)
       .unique({ table: 'tags', column: 'name' }),
-  })
-)
+  }),
+);
