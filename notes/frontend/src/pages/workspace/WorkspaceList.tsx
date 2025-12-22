@@ -30,7 +30,7 @@ function WorkspaceList() {
   });
 
   const workspaces = data?.data ?? [];
-  const canManage = user.role === 'admin';
+  const canManage = user.role === 'admin' || user.role === 'owner';
   const meta = data?.meta;
 
   if (isLoading) return <p className="text-center mt-10">Loading...</p>;
@@ -91,7 +91,7 @@ function WorkspaceList() {
       {/* Workspace Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {workspaces.map((w) => (
-          <SingleWorkspace key={w.id} workspace={w} canManage={canManage} />
+          <SingleWorkspace key={w.id} workspace={w} />
         ))}
       </div>
 

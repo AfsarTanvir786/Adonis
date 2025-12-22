@@ -13,6 +13,10 @@ export default class WorkspacesController {
 
   async create({ auth, request, response }: HttpContext) {
     const payload = await request.validateUsing(createWorkspaceValidator);
+    if (auth.user!.role === 'member') {
+      return response.unauthorized('You have no access to create workspace');
+    }
+
     const result = await this.workspaceService.createWorkspace(
       payload,
       auth.user!,
@@ -31,7 +35,7 @@ export default class WorkspacesController {
 
   async all({ auth, response }: HttpContext) {
     const result = await this.workspaceService.getWorkspaceList(
-      auth.user!.companyId
+      auth.user!.companyId,
     );
     return response.ok(result);
   }
@@ -56,6 +60,10 @@ export default class WorkspacesController {
 
   async update({ params, request, auth, response }: HttpContext) {
     const payload = await request.validateUsing(updateWorkspaceValidator);
+    if (auth.user!.role === 'member') {
+      return response.unauthorized('You have no access to update workspace');
+    }
+
     const result = await this.workspaceService.updateWorkspace(
       Number(params.id),
       payload,
@@ -65,6 +73,10 @@ export default class WorkspacesController {
   }
 
   async destroy({ params, auth, response }: HttpContext) {
+    if (auth.user!.role === 'member') {
+      return response.unauthorized('You have no access to delete workspace');
+    }
+
     await this.workspaceService.deleteWorkspace(Number(params.id), auth.user!);
     return response.noContent();
   }

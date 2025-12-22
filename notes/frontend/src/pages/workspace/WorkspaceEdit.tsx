@@ -1,4 +1,4 @@
-import { useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -18,6 +18,9 @@ import {
 import { useWorkspace } from '@/hooks/query/workspace/useWorkspace';
 import { useEffect } from 'react';
 import { useWorkspaceUpdate } from '@/hooks/query/workspace/useWorkspaceUpdate';
+import RequireLogin from '@/utils/requireLogin';
+import { useSelector } from 'react-redux';
+import type { RootState } from '@/store';
 
 /* ---------------- Schema ---------------- */
 
@@ -32,6 +35,29 @@ type WorkspaceFormValues = z.infer<typeof workspaceSchema>;
 
 export default function WorkspaceEdit() {
   const { id } = useParams<{ id: string }>();
+  const user = useSelector((state: RootState) => state.authentication.user);
+  const navigate = useNavigate();
+
+  if (!user || user.name === 'no user') {
+    return (
+      <RequireLogin message="Please login to view this workspace list details" />
+    );
+  }
+
+  if (user.role === 'member') {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <p className="text-red-600 mb-4">
+            You don't have permission to update any workspace
+          </p>
+          <Button onClick={() => navigate('/dashboard')}>
+            Back to Dashboard
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   /* Fetch workspace */
   const { data, isLoading } = useWorkspace(Number(id));

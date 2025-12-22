@@ -1,12 +1,17 @@
-import { Card, CardContent, CardFooter, CardHeader } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from '@/components/ui/card';
 import { useWorkspace } from '@/hooks/query/workspace/useWorkspace';
 import { Link, useParams } from 'react-router-dom';
 import type { RootState } from '@/store';
 import { useSelector } from 'react-redux';
 import RequireLogin from '@/utils/requireLogin';
-import NoteListPagination from '../note/notesList';
+import NoteListPagination from '../note/NotesList';
 
-function WorkspaceDetails({ canManage }: { canManage: boolean }) {
+function WorkspaceDetails() {
   const { id } = useParams<{ id: string }>();
   const user = useSelector((state: RootState) => state.authentication.user);
 
@@ -20,11 +25,8 @@ function WorkspaceDetails({ canManage }: { canManage: boolean }) {
   if (isLoading) return <p>Loading...</p>;
   if (isError) return <p>Error fetching Workspace details</p>;
   if (!workspace || !workspace) return <p>No Workspace found</p>;
-  canManage =
-    canManage ||
-    user.role === 'admin' ||
-    user.role === 'owner' ||
-    workspace.userId === user.id;
+  const canManage = user.role === 'admin' || user.role === 'owner';
+  
   return (
     <div>
       <Card className="mt-6 w-96 m-4">
@@ -52,10 +54,7 @@ function WorkspaceDetails({ canManage }: { canManage: boolean }) {
           {canManage && (
             <div className="mt-4 flex justify-between">
               <button className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-md shadow">
-                <Link
-                  to={`/workspaces/edit/${workspace.id}`}
-                  state={canManage}
-                >
+                <Link to={`/workspaces/edit/${workspace.id}`} state={canManage}>
                   Edit
                 </Link>
               </button>
@@ -78,4 +77,4 @@ function WorkspaceDetails({ canManage }: { canManage: boolean }) {
   );
 }
 
-export default WorkspaceDetails
+export default WorkspaceDetails;

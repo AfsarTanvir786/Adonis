@@ -34,7 +34,7 @@ function NoteList() {
   );
 
   const noteList = data?.data ?? [];
-  const canManage = user.role === 'admin';
+  const canManage = true;
   const meta = data?.meta;
 
   if (isLoading) return <p className="text-center mt-10">Loading...</p>;
