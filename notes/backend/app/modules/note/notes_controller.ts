@@ -75,7 +75,7 @@ export default class NotesController {
     const result = await this.noteService.updateNote(
       payload,
       params.id,
-      auth.user!.id,
+      auth.user!,
     );
 
     if (!result.success) return response.notFound(result);
@@ -84,7 +84,7 @@ export default class NotesController {
   }
 
   async delete({ params, response, auth }: HttpContext) {
-    const result = await this.noteService.deleteNote(params.id, auth.user!.id);
+    const result = await this.noteService.deleteNote(params.id, auth.user!);
 
     if (!result.success) return response.notFound(result);
 

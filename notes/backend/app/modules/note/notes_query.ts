@@ -1,6 +1,7 @@
 import Note from '#models/note';
 import { DateTime } from 'luxon';
 import { Pagination } from '../../utils/types.js';
+import User from '#models/user';
 
 export default class NoteRepository {
   async createNote(data: Partial<Note>) {
@@ -77,7 +78,19 @@ export default class NoteRepository {
     return note;
   }
 
-  async updateNote(data: Partial<Note>, id: number, userId: number) {
+  async getNoteList(workspaceIds: number[]) {
+    const list = await Note.query()
+      .whereIn('workspace_id', workspaceIds)
+      .where('type', 'public')
+      .where('is_draft', 0);
+
+    return {
+      success: true,
+      data: list,
+    };
+  }
+
+  async updateNote(data: Partial<Note>, id: number, user: User) {
     const note = await Note.find(id);
 
     if (!note) {
@@ -87,7 +100,12 @@ export default class NoteRepository {
       };
     }
 
-    if (note.userId !== userId) {
+    if (
+      !(
+        note.userId === user.id ||
+        (user.role === 'admin' && note.type === 'public')
+      )
+    ) {
       return {
         success: false,
         message: 'Access denied to this note.',
@@ -112,19 +130,7 @@ export default class NoteRepository {
     };
   }
 
-  async getNoteList(workspaceIds: number[]) {
-    const list = await Note.query()
-      .whereIn('workspace_id', workspaceIds)
-      .where('type', 'public')
-      .where('is_draft', 0);
-
-    return {
-      success: true,
-      data: list,
-    };
-  }
-
-  async deleteNote(id: number, userId: number) {
+  async deleteNote(id: number, user: User) {
     const note = await Note.find(id);
 
     if (!note) {
@@ -134,7 +140,12 @@ export default class NoteRepository {
       };
     }
 
-    if (note.userId !== userId) {
+    if (
+      !(
+        note.userId === user.id ||
+        (user.role === 'admin' && note.type === 'public')
+      )
+    ) {
       return {
         success: false,
         message: 'Access denied to this note.',
