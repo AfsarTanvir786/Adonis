@@ -45,6 +45,7 @@ export class NoteService {
       ...data,
       userId: user.id,
       workspaceId: data.workspaceId,
+      updatedBy: user.id,
       publishedAt: Boolean(data.isDraft) ? DateTime.now() : null,
     };
 

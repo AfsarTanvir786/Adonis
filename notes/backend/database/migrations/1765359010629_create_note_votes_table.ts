@@ -24,8 +24,7 @@ export default class extends BaseSchema {
         .notNullable();
       table.enum('vote', ['up', 'down']).notNullable();
 
-      table.timestamp('created_at');
-      table.timestamp('updated_at');
+      table.timestamps(true);
 
       table.unique(['note_id', 'user_id']);
     });

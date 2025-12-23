@@ -22,6 +22,14 @@ export default class extends BaseSchema {
         .onDelete('CASCADE')
         .onUpdate('CASCADE')
         .notNullable();
+      table
+        .integer('updated_by')
+        .unsigned()
+        .references('id')
+        .inTable('users')
+        .onDelete('CASCADE')
+        .onUpdate('CASCADE')
+        .notNullable()
       table.integer('count').defaultTo(0);
       table.string('title').notNullable();
       table.text('content').nullable();
@@ -29,8 +37,7 @@ export default class extends BaseSchema {
       table.boolean('is_draft').defaultTo(true);
       table.timestamp('published_at').nullable();
 
-      table.timestamp('created_at');
-      table.timestamp('updated_at');
+      table.timestamps(true);
 
       table.index(['workspace_id']);
       table.index(['user_id']);

@@ -32,6 +32,9 @@ export default class Note extends BaseModel {
   @column({ columnName: 'user_id' })
   declare userId: number;
 
+  @column({columnName: 'updated_by'})
+  declare updatedBy: number;
+
   @belongsTo(() => User)
   declare user: BelongsTo<typeof User>;
 
@@ -78,7 +81,7 @@ export default class Note extends BaseModel {
       const original = note.$original;
       await NoteHistory.create({
         noteId: note.id,
-        userId: note.userId,
+        userId: original.updatedBy,
         workspaceId: original.workspaceId,
         oldTitle: original.title,
         oldContent: original.content,
@@ -86,6 +89,9 @@ export default class Note extends BaseModel {
         oldType: original.type,
         oldPublishedAt: original.publishedAt,
       });
+    }
+    if (note.$isLocal) {
+      note.updatedBy = note.userId;
     }
   }
 }

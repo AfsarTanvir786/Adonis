@@ -115,6 +115,7 @@ export default class NoteRepository {
     note.merge({
       workspaceId: data.workspaceId ?? data.workspaceId,
       title: data.title ?? note.title,
+      updatedBy: user.id,
       content: data.content ?? note.content,
       type: data.type ?? note.type,
       isDraft: data.isDraft ?? note.isDraft,

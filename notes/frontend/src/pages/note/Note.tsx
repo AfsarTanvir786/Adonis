@@ -53,6 +53,7 @@ function SingleNote({ note, index }: { note: Note; index?: number }) {
       <p>id: {note.id}</p>
       <p>Workspace id: {note.workspaceId}</p>
       <p>User Id: {note.userId}</p>
+      <p>Updated By: {note.updatedBy}</p>
       <p>total score: {note.count}</p>
       <div className="flex gap-3 mt-3">
         <button

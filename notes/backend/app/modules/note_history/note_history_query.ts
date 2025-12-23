@@ -20,7 +20,7 @@ export default class NoteHistoryRepository {
   async getNoteHistoryList(userId: number, noteId: number) {
     const list: NoteHistory[] = await NoteHistory.query()
       .where('noteId', noteId)
-      .where('userId', userId);
+      // .where('userId', userId);
 
     return {
       success: true,

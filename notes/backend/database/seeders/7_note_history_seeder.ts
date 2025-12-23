@@ -15,7 +15,7 @@ export default class NoteHistorySeeder extends BaseSeeder {
       for (let i = 0; i < historyCount; i++) {
         await NoteHistory.create({
           noteId: note.id,
-          userId: note.userId,
+          userId: note.updatedBy,
           workspaceId: note.workspaceId,
           oldTitle: `${note.title} (v${i + 1})`,
           oldContent: `Previous version of content for: ${note.title}`,

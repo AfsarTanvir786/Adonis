@@ -73,6 +73,7 @@ export default class NoteSeeder extends BaseSeeder {
                 title: this.getTitles()[i % this.getTitles().length],
                 content: this.getContent(),
                 count: 0,
+                updatedBy: user.id,
                 type: i % 2 === 0 ? 'public' : 'private',
                 isDraft: isDraft,
                 publishedAt: isDraft ? null : DateTime.now().minus({ days: i }),
