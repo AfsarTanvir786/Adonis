@@ -103,25 +103,6 @@ export default function NoteEdit() {
     );
   }
 
-  const note = noteData;
-  const canEdit =
-    user?.id === note?.userId ||
-    user?.role === 'admin' ||
-    user?.role === 'owner';
-
-  if (!canEdit) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="text-center">
-          <p className="text-red-600 mb-4">
-            You don't have permission to edit this note
-          </p>
-          <Button onClick={() => navigate('/notes')}>Back to Notes</Button>
-        </div>
-      </div>
-    );
-  }
-
   const workspaces = workspaceList || [];
   const tags = tagsData?.data || [];
 
