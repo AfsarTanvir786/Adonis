@@ -7,13 +7,13 @@ export default class CompanySeeder extends BaseSeeder {
       { name: 'appifylab' },
       { name: 'ezycourse' },
       { name: 'localhost' },
-      { name: 'dreaming_boys' },
+      /* { name: 'dreaming_boys' },
       { name: 'company1' },
       { name: 'company2' },
       { name: 'company3' },
       { name: 'company4' },
       { name: 'company5' },
-      { name: 'company6' },
+      { name: 'company6' }, */
     ])
   }
 }

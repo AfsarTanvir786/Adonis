@@ -16,7 +16,6 @@ import {
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import { tagService } from '@/services/api/tagService';
-import RequireLogin from '@/utils/requireLogin';
 import { z } from 'zod';
 import { useMyNoteCreate } from '@/hooks/query/my_note/useMyNoteCreate';
 import { useWorkspaceList } from '@/hooks/query/workspace/useWorkspaceList';
@@ -47,11 +46,7 @@ type CreateNoteInput = z.infer<typeof createNoteSchema>;
 export default function NoteCreate() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const user = useSelector((state: RootState) => state.authentication.user);
-
-  if (!user || user.name === 'no user') {
-    return <RequireLogin message="Please login to create your notes" />;
-  }
+  const user = useSelector((state: RootState) => state.authentication.user)!;
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [formData, setFormData] = useState({
     title: '',

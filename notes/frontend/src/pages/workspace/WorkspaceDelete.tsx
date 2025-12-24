@@ -1,20 +1,13 @@
 import { Button } from '@/components/ui/button';
 import { useWorkspaceDelete } from '@/hooks/query/workspace/useWorkspaceDelete';
 import type { RootState } from '@/store';
-import RequireLogin from '@/utils/requireLogin';
 import { useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 
 export default function WorkspaceDelete() {
   const { id } = useParams<{ id: string }>();
-  const user = useSelector((state: RootState) => state.authentication.user);
+  const user = useSelector((state: RootState) => state.authentication.user)!;
   const navigate = useNavigate();
-
-  if (!user || user.name === 'no user') {
-    return (
-      <RequireLogin message="Please login to view this workspace list details" />
-    );
-  }
 
   if (user.role === 'member') {
     return (

@@ -1,21 +1,11 @@
-import type { RootState } from '@/store';
-import { useSelector } from 'react-redux';
 import { Button } from '@/components/ui/button';
 import { Link, useParams } from 'react-router-dom';
 import { useHistoryList } from '@/hooks/query/my_note_history/useHistories';
 import SingleHistory from './History';
-import RequireLogin from '@/utils/requireLogin';
 import { ArrowLeft } from 'lucide-react';
 
 function HistoryList() {
   const { id } = useParams<{ id: string }>();
-  const user = useSelector((state: RootState) => state.authentication.user);
-
-  if (!user || user.name === 'no user') {
-    return (
-      <RequireLogin message="Please login to view your note history list" />
-    );
-  }
   const { data: historyList, isLoading, isError } = useHistoryList(Number(id));
 
   if (isLoading) return <p className="text-center mt-10">Loading...</p>;

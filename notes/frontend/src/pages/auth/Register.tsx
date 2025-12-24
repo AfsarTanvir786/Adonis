@@ -6,7 +6,6 @@ import {
   Mail,
   Lock,
   User,
-  Building2,
   FileText,
   Loader2,
 } from 'lucide-react';
@@ -18,7 +17,6 @@ export default function Register() {
     email: '',
     password: '',
     confirmPassword: '',
-    companyName: '',
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -64,7 +62,7 @@ export default function Register() {
       name: formData.name,
       email: formData.email,
       password: formData.password,
-      companyName: formData.companyName,
+      // companyName: formData.companyName,
     });
   };
 
@@ -118,31 +116,6 @@ export default function Register() {
                   required
                   className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition"
                   placeholder="John Doe"
-                />
-              </div>
-            </div>
-
-            {/* Company Name Input */}
-            <div>
-              <label
-                htmlFor="companyName"
-                className="block text-sm font-medium text-gray-700 mb-2"
-              >
-                Company name
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Building2 className="h-5 w-5 text-gray-400" />
-                </div>
-                <input
-                  id="companyName"
-                  name="companyName"
-                  type="text"
-                  value={formData.companyName}
-                  onChange={handleChange}
-                  required
-                  className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition"
-                  placeholder="Acme Inc."
                 />
               </div>
             </div>

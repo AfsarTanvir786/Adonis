@@ -17,7 +17,6 @@ import {
 import { useWorkspaceCreate } from '@/hooks/query/workspace/useWorkspaceCreate';
 import { useSelector } from 'react-redux';
 import type { RootState } from '@/store';
-import RequireLogin from '@/utils/requireLogin';
 import { useNavigate } from 'react-router-dom';
 
 /* ---------------- Schema ---------------- */
@@ -32,14 +31,8 @@ type WorkspaceFormValues = z.infer<typeof workspaceSchema>;
 /* ---------------- Component ---------------- */
 
 export default function WorkspaceCreate() {
-  const user = useSelector((state: RootState) => state.authentication.user);
+  const user = useSelector((state: RootState) => state.authentication.user)!;
   const navigate = useNavigate();
-
-  if (!user || user.name === 'no user') {
-    return (
-      <RequireLogin message="Please login to view this workspace list details" />
-    );
-  }
 
   if (user.role === 'member') {
     return (

@@ -2,19 +2,12 @@ import { useState } from 'react';
 import { useSelector } from 'react-redux';
 import type { RootState } from '@/store';
 import SingleWorkspace from './Workspace';
-import RequireLogin from '@/utils/requireLogin';
 import { useWorkspacePaginatedList } from '@/hooks/query/workspace/useWorkspacePaginatedList';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 
 function WorkspaceList() {
-  const user = useSelector((state: RootState) => state.authentication.user);
-
-  if (!user || user.name === 'no user') {
-    return (
-      <RequireLogin message="Please login to view this workspace list details" />
-    );
-  }
+  const user = useSelector((state: RootState) => state.authentication.user)!;
 
   // controlled pagination options
   const [page, setPage] = useState(1);

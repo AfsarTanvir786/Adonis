@@ -12,9 +12,15 @@ export default function RequireLogin({
 
       <Link
         to="/auth/login"
-        className="px-6 py-2 rounded-lg bg-black text-white hover:bg-gray-800 transition"
+        className="m-2 px-6 py-2 rounded-lg bg-black text-white hover:bg-gray-800 transition"
       >
         Login
+      </Link>
+      <Link
+        to="/auth/register"
+        className="m-2 px-6 py-2 rounded-lg bg-black text-white hover:bg-gray-800 transition"
+      >
+        Register
       </Link>
     </div>
   );

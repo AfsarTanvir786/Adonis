@@ -19,8 +19,7 @@ export default class extends BaseSchema {
       table.string('password').notNullable();
       table.enum('role', ['owner', 'admin', 'member']).defaultTo('member');
 
-      table.timestamp('created_at');
-      table.timestamp('updated_at');
+      table.timestamps(true);
     });
   }
 

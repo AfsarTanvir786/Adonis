@@ -1,7 +1,4 @@
-import type { RootState } from '@/store';
 import type { History } from '@/types/type';
-import RequireLogin from '@/utils/requireLogin';
-import { useSelector } from 'react-redux';
 import { format } from 'date-fns';
 import { Button } from '@/components/ui/button';
 import { useNavigate } from 'react-router-dom';
@@ -9,13 +6,6 @@ import { Calendar } from 'lucide-react';
 
 function SingleHistory({ history }: { history: History }) {
   const navigate = useNavigate();
-  const user = useSelector((state: RootState) => state.authentication.user);
-
-  if (!user || user.name === 'no user') {
-    return (
-      <RequireLogin message="Please login to view your note history details" />
-    );
-  }
   return (
     <div className="bg-white rounded-xl shadow-md p-4 border border-gray-200">
       <h3 className="text-xl font-semibold mb-3">{history.oldTitle}</h3>
@@ -30,7 +20,7 @@ function SingleHistory({ history }: { history: History }) {
         {history.noteId}
       </p>
 
-      <p>User Id: {history.userId}</p>
+      <p>updated by: {history.userId}</p>
       <p>Workspace id: {history.workspaceId}</p>
 
       <p className="mb-2 text-sm">

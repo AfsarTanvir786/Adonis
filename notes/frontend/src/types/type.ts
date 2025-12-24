@@ -35,6 +35,7 @@ export interface Note {
   id: number;
   workspaceId: number;
   userId: number;
+  updatedBy: number;
   title: string;
   content: string | null;
   type: 'public' | 'private';

@@ -45,6 +45,7 @@ export class NoteService {
       ...data,
       userId: user.id,
       workspaceId: data.workspaceId,
+      updatedBy: user.id,
       publishedAt: Boolean(data.isDraft) ? DateTime.now() : null,
     };
 
@@ -80,10 +81,6 @@ export class NoteService {
     return this.noteRepository.getNote(noteId, workspaceIds, user.id);
   }
 
-  async updateNote(note: Partial<Note>, id: number, userId: number) {
-    return this.noteRepository.updateNote(note, id, userId);
-  }
-
   async getNoteList(companyId: number) {
     const workspaceList = await this.workspaceRepository.getWorkspaceList(
       companyId,
@@ -98,8 +95,12 @@ export class NoteService {
     const workspaceIds = workspaceList.map((w) => w.id);
     return this.noteRepository.getNoteList(workspaceIds);
   }
+  
+  async updateNote(note: Partial<Note>, id: number, user: User) {
+    return this.noteRepository.updateNote(note, id, user);
+  }
 
-  async deleteNote(id: number, userId: number) {
-    return this.noteRepository.deleteNote(id, userId);
+  async deleteNote(id: number, user: User) {
+    return this.noteRepository.deleteNote(id, user);
   }
 }

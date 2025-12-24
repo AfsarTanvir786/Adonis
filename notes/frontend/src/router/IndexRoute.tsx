@@ -13,16 +13,21 @@ import { companyRoutes } from './CompanyRoute';
 import { WorkspaceRoutes } from './workspaceRoute';
 import { MyNoteRoute } from './MyNoteRoute';
 import Home from '@/pages/home/Home';
+import ProtectedRoute from './ProtectedRoute';
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<Layout />}>
       <Route path="/dashboard" element={<Home />} />
       {authRoutes}
-      {companyRoutes}
-      {WorkspaceRoutes}
-      {MyNoteRoute}
-      <Route path="/profile" element={<Profile />} />
+
+      <Route element={<ProtectedRoute redirectTo="/unauthorized" />}>
+        {companyRoutes}
+        {WorkspaceRoutes}
+        {MyNoteRoute}
+        <Route path="/profile" element={<Profile />} />
+      </Route>
+
       <Route path="/unauthorized" element={<Unauthorized />} />
       <Route path="*" element={<Error404 title="Could Not Find Page." />} />
     </Route>

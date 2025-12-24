@@ -1,15 +1,7 @@
-import type { RootState } from '@/store';
 import type { Note } from '@/types/type';
-import RequireLogin from '@/utils/requireLogin';
-import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 function SingleNote({ note, canManage }: { note: Note; canManage: boolean }) {
-  const user = useSelector((state: RootState) => state.authentication.user);
-
-  if (!user || user.name === 'no user') {
-    return <RequireLogin message="Please login to view your note details" />;
-  }
   return (
     <div className="flex flex-col h-full bg-white rounded-xl shadow-md p-4 border border-gray-200">
       <h3 className="text-xl font-semibold mb-3">{note.title}</h3>
@@ -31,6 +23,7 @@ function SingleNote({ note, canManage }: { note: Note; canManage: boolean }) {
       <p>id: {note.id}</p>
       <p>Workspace id: {note.workspaceId}</p>
       <p>User Id: {note.userId}</p>
+      <p>Updated By: {note.updatedBy}</p>
       <p>total count: {note.count}</p>
 
       {canManage && (

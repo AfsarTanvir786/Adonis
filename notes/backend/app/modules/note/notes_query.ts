@@ -1,6 +1,7 @@
 import Note from '#models/note';
 import { DateTime } from 'luxon';
 import { Pagination } from '../../utils/types.js';
+import User from '#models/user';
 
 export default class NoteRepository {
   async createNote(data: Partial<Note>) {
@@ -23,7 +24,7 @@ export default class NoteRepository {
       .where('workspace_id', workspaceId)
       .where('type', 'public')
       .where('is_draft', false)
-      .preload('votes', (v) => v.where('user_id', userId).first)
+      .preload('votes', (v) => v.where('user_id', userId).limit(1))
       .orderBy(sortColumn, pagination.orderBy)
       .paginate(pagination.page, pagination.limit);
   }
@@ -77,7 +78,19 @@ export default class NoteRepository {
     return note;
   }
 
-  async updateNote(data: Partial<Note>, id: number, userId: number) {
+  async getNoteList(workspaceIds: number[]) {
+    const list = await Note.query()
+      .whereIn('workspace_id', workspaceIds)
+      .where('type', 'public')
+      .where('is_draft', 0);
+
+    return {
+      success: true,
+      data: list,
+    };
+  }
+
+  async updateNote(data: Partial<Note>, id: number, user: User) {
     const note = await Note.find(id);
 
     if (!note) {
@@ -87,7 +100,12 @@ export default class NoteRepository {
       };
     }
 
-    if (note.userId !== userId) {
+    if (
+      !(
+        note.userId === user.id ||
+        (user.role === 'admin' && note.type === 'public')
+      )
+    ) {
       return {
         success: false,
         message: 'Access denied to this note.',
@@ -97,6 +115,7 @@ export default class NoteRepository {
     note.merge({
       workspaceId: data.workspaceId ?? data.workspaceId,
       title: data.title ?? note.title,
+      updatedBy: user.id,
       content: data.content ?? note.content,
       type: data.type ?? note.type,
       isDraft: data.isDraft ?? note.isDraft,
@@ -112,19 +131,7 @@ export default class NoteRepository {
     };
   }
 
-  async getNoteList(workspaceIds: number[]) {
-    const list = await Note.query()
-      .whereIn('workspace_id', workspaceIds)
-      .where('type', 'public')
-      .where('is_draft', 0);
-
-    return {
-      success: true,
-      data: list,
-    };
-  }
-
-  async deleteNote(id: number, userId: number) {
+  async deleteNote(id: number, user: User) {
     const note = await Note.find(id);
 
     if (!note) {
@@ -134,7 +141,12 @@ export default class NoteRepository {
       };
     }
 
-    if (note.userId !== userId) {
+    if (
+      !(
+        note.userId === user.id ||
+        (user.role === 'admin' && note.type === 'public')
+      )
+    ) {
       return {
         success: false,
         message: 'Access denied to this note.',
