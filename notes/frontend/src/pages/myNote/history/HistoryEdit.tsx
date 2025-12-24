@@ -4,7 +4,6 @@ import { useSelector } from 'react-redux';
 import type { RootState } from '@/store';
 import { ArrowLeft, Globe, Lock } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import RequireLogin from '@/utils/requireLogin';
 import { useNoteUpdate } from '@/hooks/query/my_note/useNoteUpdate';
 import { useHistoryGet } from '@/hooks/query/my_note_history/useHistoryGet';
 import { useWorkspaceList } from '@/hooks/query/workspace/useWorkspaceList';
@@ -12,13 +11,8 @@ import { useWorkspaceList } from '@/hooks/query/workspace/useWorkspaceList';
 export default function HistoryEdit() {
   const { id, id2 } = useParams<{ id: string; id2: string }>();
   const navigate = useNavigate();
-  const user = useSelector((state: RootState) => state.authentication.user);
+  const user = useSelector((state: RootState) => state.authentication.user)!;
 
-  if (!user || user.name === 'no user') {
-    return (
-      <RequireLogin message="You don't have permission to edit this note." />
-    );
-  }
   const [formData, setFormData] = useState({
     id: -1,
     noteId: -1,

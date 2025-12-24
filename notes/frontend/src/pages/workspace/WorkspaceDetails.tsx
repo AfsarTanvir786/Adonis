@@ -8,18 +8,11 @@ import { useWorkspace } from '@/hooks/query/workspace/useWorkspace';
 import { Link, useParams } from 'react-router-dom';
 import type { RootState } from '@/store';
 import { useSelector } from 'react-redux';
-import RequireLogin from '@/utils/requireLogin';
 import NoteListPagination from '../note/NotesList';
 
 function WorkspaceDetails() {
   const { id } = useParams<{ id: string }>();
-  const user = useSelector((state: RootState) => state.authentication.user);
-
-  if (!user || user.name === 'no user') {
-    return (
-      <RequireLogin message="You have to login to view this workspace details" />
-    );
-  }
+  const user = useSelector((state: RootState) => state.authentication.user)!;
   const { data: workspace, isLoading, isError } = useWorkspace(Number(id));
 
   if (isLoading) return <p>Loading...</p>;

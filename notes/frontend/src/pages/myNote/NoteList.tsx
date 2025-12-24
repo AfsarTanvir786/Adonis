@@ -3,13 +3,12 @@ import { useSelector } from 'react-redux';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 import SingleNote from './Note';
-import RequireLogin from '@/utils/requireLogin';
 import { useState } from 'react';
 import type { Note } from '@/types/type';
 import { useMyNoteList } from '@/hooks/query/my_note/useMyNoteList';
 
 function NoteList() {
-  const user = useSelector((state: RootState) => state.authentication.user);
+  const user = useSelector((state: RootState) => state.authentication.user)!;
 
   // controlled pagination options
   const [page, setPage] = useState(1);
@@ -17,10 +16,6 @@ function NoteList() {
   const [sortBy, setSortBy] = useState<'createdAt' | 'title'>('createdAt');
   const [orderBy, setOrderBy] = useState<'asc' | 'desc'>('desc');
   const [type, setType] = useState<'all' | 'public' | 'private'>('all');
-
-  if (!user || user.name === 'no user') {
-    return <RequireLogin message="Please login to view your note list" />;
-  }
 
   const { data, isLoading, isError } = useMyNoteList(
     user.id,

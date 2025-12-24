@@ -17,18 +17,13 @@ import {
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { format } from 'date-fns';
-import RequireLogin from '@/utils/requireLogin';
 import { useNoteGet } from '@/hooks/query/my_note/useNoteGet';
 import { useDeleteNote } from '@/hooks/query/my_note/useDeleteNote';
 
 export default function NoteDetails() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const user = useSelector((state: RootState) => state.authentication.user);
-
-  if (!user || user.name === 'no user') {
-    return <RequireLogin message="Please login to view your note details" />;
-  }
+  const user = useSelector((state: RootState) => state.authentication.user)!;
   const deleteMutation = useDeleteNote(user.id);
 
   // Fetch note details

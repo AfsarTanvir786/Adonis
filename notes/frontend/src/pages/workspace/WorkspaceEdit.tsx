@@ -18,7 +18,6 @@ import {
 import { useWorkspace } from '@/hooks/query/workspace/useWorkspace';
 import { useEffect } from 'react';
 import { useWorkspaceUpdate } from '@/hooks/query/workspace/useWorkspaceUpdate';
-import RequireLogin from '@/utils/requireLogin';
 import { useSelector } from 'react-redux';
 import type { RootState } from '@/store';
 
@@ -35,14 +34,8 @@ type WorkspaceFormValues = z.infer<typeof workspaceSchema>;
 
 export default function WorkspaceEdit() {
   const { id } = useParams<{ id: string }>();
-  const user = useSelector((state: RootState) => state.authentication.user);
+  const user = useSelector((state: RootState) => state.authentication.user)!;
   const navigate = useNavigate();
-
-  if (!user || user.name === 'no user') {
-    return (
-      <RequireLogin message="Please login to view this workspace list details" />
-    );
-  }
 
   if (user.role === 'member') {
     return (

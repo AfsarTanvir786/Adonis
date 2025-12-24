@@ -24,7 +24,7 @@ export default class NoteRepository {
       .where('workspace_id', workspaceId)
       .where('type', 'public')
       .where('is_draft', false)
-      .preload('votes', (v) => v.where('user_id', userId).first)
+      .preload('votes', (v) => v.where('user_id', userId).limit(1))
       .orderBy(sortColumn, pagination.orderBy)
       .paginate(pagination.page, pagination.limit);
   }

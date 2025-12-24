@@ -1,15 +1,9 @@
 import { useSelector } from 'react-redux';
 import type { RootState } from '@/store';
 import { useCompany } from '@/hooks/query/useCompany';
-import RequireLogin from '@/utils/requireLogin';
 
 function Company() {
-  const user = useSelector((state: RootState) => state.authentication.user);
-
-  if (!user || user.name === 'no user') {
-    return <RequireLogin message="Please login to view your company details" />;
-  }
-
+  const user = useSelector((state: RootState) => state.authentication.user)!;
   const { data: company, isLoading, isError } = useCompany(user.companyId);
 
   if (isLoading) {

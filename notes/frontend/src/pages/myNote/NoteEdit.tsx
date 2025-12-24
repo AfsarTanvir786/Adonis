@@ -6,7 +6,6 @@ import type { RootState } from '@/store';
 import { ArrowLeft, Save, Loader2, Lock, X, Plus, Globe } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { tagService } from '@/services/api/tagService';
-import RequireLogin from '@/utils/requireLogin';
 import { useNoteGet } from '@/hooks/query/my_note/useNoteGet';
 import { useNoteUpdate } from '@/hooks/query/my_note/useNoteUpdate';
 import { useWorkspaceList } from '@/hooks/query/workspace/useWorkspaceList';
@@ -15,13 +14,7 @@ export default function NoteEdit() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const user = useSelector((state: RootState) => state.authentication.user);
-
-  if (!user || user.name === 'no user') {
-    return (
-      <RequireLogin message="You don't have permission to edit this note." />
-    );
-  }
+  const user = useSelector((state: RootState) => state.authentication.user)!;
   const [formData, setFormData] = useState({
     title: '',
     content: '',

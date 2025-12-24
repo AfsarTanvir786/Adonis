@@ -2,16 +2,12 @@ import { useNoteVote } from '@/hooks/query/note_vote/useNoteVote';
 import { useNoteVoteDelete } from '@/hooks/query/note_vote/useNoteVoteDelete';
 import type { RootState } from '@/store';
 import type { Note } from '@/types/type';
-import RequireLogin from '@/utils/requireLogin';
 import { ArrowDownFromLine, ArrowUpFromLine } from 'lucide-react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 function SingleNote({ note, index }: { note: Note; index?: number }) {
-  const user = useSelector((state: RootState) => state.authentication.user);
-  if (!user || user.name === 'no user') {
-    return <RequireLogin message="You have no access to this note." />;
-  }
+  const user = useSelector((state: RootState) => state.authentication.user)!;
 
   const voteMutation = useNoteVote(note.id);
   const voteDelete = useNoteVoteDelete();
