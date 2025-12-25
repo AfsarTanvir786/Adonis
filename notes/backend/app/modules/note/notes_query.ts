@@ -2,6 +2,7 @@ import Note from '#models/note';
 import { DateTime } from 'luxon';
 import { Pagination } from '../../utils/types.js';
 import User from '#models/user';
+import { Exception } from '@adonisjs/core/exceptions';
 
 export default class NoteRepository {
   async createNote(data: Partial<Note>) {
@@ -56,14 +57,16 @@ export default class NoteRepository {
       .preload('workspace')
       .first();
 
+    if (!note) {
+      throw new Exception('Note not found', { status: 404 });
+    }
+
     if (
       note &&
       (!workspaceIds.includes(note.workspaceId) ||
         (note.type === 'private' && note.userId !== userId))
     ) {
-      return {
-        message: 'Access denied to this note.',
-      };
+      throw new Exception('Access denied to this note', { status: 403 });
     }
 
     return note;
@@ -91,14 +94,7 @@ export default class NoteRepository {
   }
 
   async updateNote(data: Partial<Note>, id: number, user: User) {
-    const note = await Note.find(id);
-
-    if (!note) {
-      return {
-        success: false,
-        message: 'Note not found.',
-      };
-    }
+    const note = await Note.findOrFail(id);
 
     if (
       !(
@@ -132,14 +128,7 @@ export default class NoteRepository {
   }
 
   async deleteNote(id: number, user: User) {
-    const note = await Note.find(id);
-
-    if (!note) {
-      return {
-        success: false,
-        message: 'Note not found.',
-      };
-    }
+    const note = await Note.findOrFail(id);
 
     if (
       !(
