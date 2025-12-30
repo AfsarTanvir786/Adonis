@@ -1,0 +1,18 @@
+import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
+
+function Dashboard() {
+  const navigate = useNavigate();
+  return (
+    <h1>
+      <Button className="m-4" onClick={() => navigate('/profile')}>
+        Profile
+      </Button>
+      <Button className="m-4">Admin Dashboard</Button>
+      <Button className="m-4">upload Image</Button>
+      <Button className="m-4">user Info</Button>
+    </h1>
+  );
+}
+
+export default Dashboard;

@@ -1,12 +1,5 @@
 import vine from '@vinejs/vine';
 
-export const loginValidator = vine.compile(
-  vine.object({
-    email: vine.string().trim().email().normalizeEmail(),
-    password: vine.string().minLength(1),
-  }),
-);
-
 export const uploadScreenshotValidator = vine.compile(
   vine.object({
     screenshot: vine.file({

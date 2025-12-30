@@ -29,19 +29,24 @@ export default class AuthController {
       auth.user!.currentAccessToken.identifier,
     );
 
-
     response.clearCookie('access_token');
-    
+
     return response.ok({
       message: 'Logged out successfully',
     });
   }
 
   async profile({ auth, response }: HttpContext) {
-    await auth.user!.load('company')
+    await auth.user!.load('company');
+
+    return response.ok(auth.user!);
+  }
+
+  async adminDashboard({ auth, response }: HttpContext) {
+    const users = await User.query().where('company_id', auth.user!.companyId);
 
     return response.ok({
-      data: auth.user,
+      users,
     });
   }
 }

@@ -4,7 +4,7 @@ import { companySignupValidator } from '#validators/company';
 import type { HttpContext } from '@adonisjs/core/http';
 
 export default class CompaniesController {
-  async signUp({ request, response }: HttpContext) {
+  async register({ request, response }: HttpContext) {
     const payload = await request.validateUsing(companySignupValidator);
     try {
       const company = await Company.create({
