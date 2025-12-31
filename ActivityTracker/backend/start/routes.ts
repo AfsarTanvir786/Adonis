@@ -40,6 +40,12 @@ router
           .get('/admin-dashboard', [AdminController, 'adminDashboard'])
           .use(middleware.role(['admin']));
         router
+          .get('/screenshots/min', [AdminController, 'screenshotsGrouped10Min'])
+          .use(middleware.role(['admin']));
+        router
+          .get('/screenshots/hour', [AdminController, 'screenshotsGroupedByHour'])
+          .use(middleware.role(['admin']));
+        router
           .get('/screenshots', [AdminController, 'screenshots'])
           .use(middleware.role(['admin']));
       })

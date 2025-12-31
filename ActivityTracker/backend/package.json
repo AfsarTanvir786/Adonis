@@ -58,6 +58,7 @@
     "@adonisjs/drive": "^3.4.1",
     "@adonisjs/lucid": "^21.6.1",
     "@vinejs/vine": "^3.0.1",
+    "cloudinary": "^2.8.0",
     "date-fns": "^4.1.0",
     "jsonwebtoken": "^9.0.3",
     "luxon": "^3.7.2",

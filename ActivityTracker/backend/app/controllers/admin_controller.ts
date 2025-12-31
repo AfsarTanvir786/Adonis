@@ -39,4 +39,78 @@ export default class AdminController {
       return response.badRequest({ error: 'Failed to fetch screenshots' });
     }
   }
+
+  async screenshotsGrouped10Min({ request, response, auth }: HttpContext) {
+    const { userId, date } = await request.validateUsing(
+      getScreenshotByUserValidator,
+    );
+
+    const selectedDate = DateTime.fromJSDate(new Date(date));
+    const startOfDay = selectedDate.startOf('day').toSQL()!;
+    const endOfDay = selectedDate.endOf('day').toSQL()!;
+
+    const screenshots = await ImageUpload.query()
+      .where('userId', userId)
+      .where('companyId', auth.user!.companyId)
+      .whereBetween('activityTime', [startOfDay, endOfDay])
+      .orderBy('activityTime', 'asc');
+
+    const grouped: Record<string, Record<string, ImageUpload[]>> = {};
+
+    for (const shot of screenshots) {
+      const hourKey = shot.activityTime.hour;
+      const intervalStart = Math.floor(shot.activityTime.minute / 10) * 10;
+      const intervalKey = `${shot.activityTime.toFormat('HH')}:${intervalStart
+        .toString()
+        .padStart(2, '0')}`;
+
+      if (!grouped[hourKey]) {
+        grouped[hourKey] = {};
+      }
+
+      if (!grouped[hourKey][intervalKey]) {
+        grouped[hourKey][intervalKey] = [];
+      }
+
+      grouped[hourKey][intervalKey].push(shot);
+    }
+
+    return response.ok({
+      data: grouped,
+      meta: { total: screenshots.length },
+    });
+  }
+
+  async screenshotsGroupedByHour({ request, response, auth }: HttpContext) {
+    const { userId, date } = await request.validateUsing(
+      getScreenshotByUserValidator,
+    );
+
+    const selectedDate = DateTime.fromJSDate(new Date(date));
+    const startOfDay = selectedDate.startOf('day').toSQL()!;
+    const endOfDay = selectedDate.endOf('day').toSQL()!;
+
+    const screenshots = await ImageUpload.query()
+      .where('userId', userId)
+      .where('companyId', auth.user!.companyId)
+      .whereBetween('activityTime', [startOfDay, endOfDay])
+      .orderBy('activityTime', 'asc');
+
+    const grouped: Record<string, ImageUpload[]> = {};
+
+    for (const shot of screenshots) {
+      const hourKey = shot.activityTime.hour;
+
+      if (!grouped[hourKey]) {
+        grouped[hourKey] = [];
+      }
+
+      grouped[hourKey].push(shot);
+    }
+
+    return response.ok({
+      data: grouped,
+      meta: { total: screenshots.length },
+    });
+  }
 }

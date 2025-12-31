@@ -8,22 +8,22 @@ export default class ImageUpload extends BaseModel {
   @column({ isPrimary: true })
   declare id: number;
 
-  @column({columnName: 'user_id'})
+  @column({ columnName: 'user_id' })
   declare userId: number;
 
-  @column({columnName: 'company_id'})
+  @column({ columnName: 'company_id' })
   declare companyId: number;
 
-  @column({columnName: 'file_name'})
+  @column({ columnName: 'file_name' })
   declare fileName: string;
 
-  @column({columnName: 'file_path'})
+  @column({ columnName: 'file_path' })
   declare filePath: string;
 
-  @column({columnName: 'file_size'})
+  @column({ columnName: 'file_size' })
   declare fileSize: number | null;
 
-  @column.dateTime({columnName: 'activity_time'})
+  @column.dateTime({ columnName: 'activity_time' })
   declare activityTime: DateTime;
 
   @column.dateTime({ autoCreate: true })

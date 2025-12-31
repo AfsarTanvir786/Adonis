@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Calendar, Clock, User2, ZoomIn } from 'lucide-react';
 import { api } from '@/services/api';
-import type { User } from '@/type/type';
+import { type User } from '@/type/type';
 
 // Types
 interface Screenshot {
@@ -15,12 +15,11 @@ interface Screenshot {
   activityTime: string;
   createdAt: string;
   updatedAt: string;
+  url: string;
 }
 
-interface UserType {
-  id: number;
-  name: string;
-  email: string;
+interface Data{
+  data: Screenshot[]
 }
 
 interface ScreenshotGroup {
@@ -81,82 +80,90 @@ const formatFileSize = (bytes: number): string => {
   return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
 };
 
+// ScreenshotItem Component
+const ScreenshotItem = ({
+  screenshot,
+  onSelect,
+}: {
+  screenshot: Screenshot;
+  onSelect: (url: string) => void;
+}) => {
+  const [imageError, setImageError] = useState(false);
+
+  const handleImageError = () => {
+    setImageError(true);
+  };
+
+  return (
+    <div
+      key={screenshot.id}
+      className="m-4"
+      onClick={() => onSelect(screenshot.filePath)}
+    >
+      {imageError ? (
+        <div className="aspect-video bg-red-100 flex flex-col items-center justify-center text-center p-2">
+          <p className="text-red-700 font-semibold">Image not found</p>
+          <p className="text-xs text-red-600 truncate mt-1">
+            Path: {screenshot.filePath}
+          </p>
+        </div>
+      ) : (
+        <img src={screenshot.filePath} alt={screenshot.fileName} />
+      )}
+
+      {/* Overlay */}
+      {/* {!imageError && (
+        <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-all flex items-center justify-center">
+          <ZoomIn className="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
+        </div>
+      )} */}
+
+      {/* Info */}
+      <div className="p-2 bg-white">
+        <p className="text-xs text-gray-600 truncate">{screenshot.fileName}</p>
+        <div className="flex items-center justify-between mt-1">
+          <p className="text-xs font-medium text-gray-900">
+            {formatTime(screenshot.activityTime)}
+          </p>
+          <p className="text-xs text-gray-500">
+            {formatFileSize(screenshot.fileSize)}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 function AdminDashboard() {
   const [selectedUserId, setSelectedUserId] = useState<number>(-1);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [hasSubmitted, setHasSubmitted] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
-  // Fetch users - REPLACE WITH YOUR ACTUAL API CALL
+  // Fetch users
   const { data: users, isLoading: usersLoading } = useQuery({
     queryKey: ['users'],
     queryFn: async (): Promise<User[]> => {
-      // TODO: Replace with your actual API call
       const response = await api.get('/auth/admin-dashboard');
       return response.data.users;
-
-      //   return [
-      //     { id: 21, name: 'John Doe', email: 'john@example.com' },
-      //     { id: 22, name: 'Jane Smith', email: 'jane@example.com' },
-      //   ] as UserType[];
     },
   });
 
-  // Fetch screenshots - ONLY runs when submitted
+  // Fetch screenshots
   const {
     data: screenshotsData,
     isLoading: screenshotsLoading,
     error,
   } = useQuery({
     queryKey: ['screenshots', selectedUserId, formatDateForAPI(selectedDate)],
-    queryFn: async () => {
-      // TODO: Replace with your actual API call
-      const response = await api.get('/screenshots', {
+    queryFn: async () : Promise<Data> => {
+      const response = await api.get('/auth/screenshots', {
         params: {
-          user_id: selectedUserId,
+          userId: selectedUserId,
           date: formatDateForAPI(selectedDate),
         },
       });
       return response.data;
-
-      //   return {
-      //     data: [
-      //       {
-      //         id: 12,
-      //         userId: 21,
-      //         companyId: 4,
-      //         fileName: "Screenshot 16-24-52.png",
-      //         filePath: "screenshots/4/21/2025/11/18/screenshot_1737012345000.png",
-      //         fileSize: 8993,
-      //         activityTime: "2025-11-18T16:24:52.000+00:00",
-      //         createdAt: "2025-12-30T10:41:45.000+00:00",
-      //         updatedAt: "2025-12-30T10:41:45.000+00:00"
-      //       },
-      //       {
-      //         id: 11,
-      //         userId: 21,
-      //         companyId: 4,
-      //         fileName: "Screenshot 16-23-50.png",
-      //         filePath: "screenshots/4/21/2025/11/18/screenshot_1737012346000.png",
-      //         fileSize: 22288,
-      //         activityTime: "2025-11-18T16:23:50.000+00:00",
-      //         createdAt: "2025-12-30T10:41:39.000+00:00",
-      //         updatedAt: "2025-12-30T10:41:39.000+00:00"
-      //       },
-      //       {
-      //         id: 10,
-      //         userId: 21,
-      //         companyId: 4,
-      //         fileName: "Screenshot 14-15-30.png",
-      //         filePath: "screenshots/4/21/2025/11/18/screenshot_1737012347000.png",
-      //         fileSize: 15000,
-      //         activityTime: "2025-11-18T14:15:30.000+00:00",
-      //         createdAt: "2025-12-30T10:41:27.000+00:00",
-      //         updatedAt: "2025-12-30T10:41:27.000+00:00"
-      //       }
-      //     ],
-      //     meta: { total: 3 }
-      //   };
     },
     enabled: hasSubmitted && selectedUserId !== -1,
   });
@@ -179,9 +186,12 @@ function AdminDashboard() {
   const groupedScreenshots = groupScreenshots(screenshots);
   const selectedUser = users?.find((u) => u.id === selectedUserId);
 
+  console.log(screenshots)
+
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-7xl mx-auto">
+        url
         {/* Header */}
         <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
@@ -191,7 +201,6 @@ function AdminDashboard() {
             Monitor employee screenshots and activity
           </p>
         </div>
-
         {/* Filter Panel */}
         <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
           <div className="space-y-4">
@@ -257,7 +266,6 @@ function AdminDashboard() {
             </div>
           </div>
         </div>
-
         {/* Results */}
         {hasSubmitted && (
           <div className="bg-white rounded-lg shadow-sm p-6">
@@ -287,7 +295,7 @@ function AdminDashboard() {
                 </div>
                 <div className="mt-4 text-sm">
                   <span className="font-medium">
-                    {screenshotsData?.meta?.total || 0}
+                    {screenshotsData?.data?.length || 0}
                   </span>
                   <span className="text-gray-600 ml-1">Screenshots</span>
                 </div>
@@ -371,62 +379,13 @@ function AdminDashboard() {
                             {/* Screenshots Grid */}
                             <div className="p-4 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                               {groupedScreenshots[hour][interval].map(
-                                (screenshot) => {
-                                  // Fix the path by removing duplicate "screenshots/" if exists
-                                  const fixedPath = screenshot.filePath.replace(
-                                    'screenshots/screenshots/',
-                                    'screenshots/',
-                                  );
-                                  const imageUrl = `http://localhost:3333/uploads/${fixedPath}`;
-
-                                  return (
-                                    <div
-                                      key={screenshot.id}
-                                      className="group relative bg-gray-100 rounded-lg overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
-                                      onClick={() => setSelectedImage(imageUrl)}
-                                    >
-                                      {/* Actual Image */}
-                                      <div className="aspect-video bg-linear-to-br from-blue-100 to-blue-200 flex items-center justify-center overflow-hidden">
-                                        <img
-                                          src={imageUrl}
-                                          alt={screenshot.fileName}
-                                          className="w-full h-full object-cover"
-                                          onError={(e) => {
-                                            // Fallback to emoji if image fails to load
-                                            e.currentTarget.style.display =
-                                              'none';
-                                            e.currentTarget.parentElement!.innerHTML =
-                                              '<span class="text-4xl">🖼️</span>';
-                                          }}
-                                        />
-                                      </div>
-
-                                      {/* Hover Overlay */}
-                                      <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-all flex items-center justify-center">
-                                        <ZoomIn className="w-8 h-8 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
-                                      </div>
-
-                                      {/* Info */}
-                                      <div className="p-2 bg-white">
-                                        <p className="text-xs text-gray-600 truncate">
-                                          {screenshot.fileName}
-                                        </p>
-                                        <div className="flex items-center justify-between mt-1">
-                                          <p className="text-xs font-medium text-gray-900">
-                                            {formatTime(
-                                              screenshot.activityTime,
-                                            )}
-                                          </p>
-                                          <p className="text-xs text-gray-500">
-                                            {formatFileSize(
-                                              screenshot.fileSize,
-                                            )}
-                                          </p>
-                                        </div>
-                                      </div>
-                                    </div>
-                                  );
-                                },
+                                (screenshot) => (
+                                  <ScreenshotItem
+                                    key={screenshot.id}
+                                    screenshot={screenshot}
+                                    onSelect={setSelectedImage}
+                                  />
+                                ),
                               )}
                             </div>
                           </div>
@@ -437,7 +396,6 @@ function AdminDashboard() {
             )}
           </div>
         )}
-
         {/* Image Modal */}
         {selectedImage && (
           <div
@@ -451,11 +409,7 @@ function AdminDashboard() {
               >
                 <span className="text-2xl">&times;</span>
               </button>
-              <img
-                src={selectedImage}
-                alt="Screenshot preview"
-                className="max-w-full max-h-screen object-contain"
-              />
+              <img src={selectedImage} alt="Screenshot preview" />
             </div>
           </div>
         )}
