@@ -58,9 +58,11 @@
     "@adonisjs/drive": "^3.4.1",
     "@adonisjs/lucid": "^21.6.1",
     "@vinejs/vine": "^3.0.1",
+    "date-fns": "^4.1.0",
     "jsonwebtoken": "^9.0.3",
     "luxon": "^3.7.2",
     "mysql2": "^3.16.0",
+    "react-datepicker": "^9.1.0",
     "reflect-metadata": "^0.2.2"
   },
   "hotHook": {

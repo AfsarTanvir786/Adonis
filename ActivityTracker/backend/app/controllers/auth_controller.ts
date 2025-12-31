@@ -41,12 +41,4 @@ export default class AuthController {
 
     return response.ok(auth.user!);
   }
-
-  async adminDashboard({ auth, response }: HttpContext) {
-    const users = await User.query().where('company_id', auth.user!.companyId);
-
-    return response.ok({
-      users,
-    });
-  }
 }
