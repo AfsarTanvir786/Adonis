@@ -1,5 +1,5 @@
-import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
+import { Button } from '@/components/ui/button';
+import { useNavigate } from 'react-router-dom';
 
 function Dashboard() {
   const navigate = useNavigate();
@@ -8,9 +8,15 @@ function Dashboard() {
       <Button className="m-4" onClick={() => navigate('/profile')}>
         Profile
       </Button>
-      <Button className="m-4" onClick={() => navigate('/admin-dashboard')}>Admin Dashboard</Button>
-      <Button className="m-4">upload Image</Button>
-      <Button className="m-4">user Info</Button>
+      <Button className="m-4" onClick={() => navigate('/admin-dashboard')}>
+        Admin Dashboard
+      </Button>
+      <Button className="m-4" onClick={() => navigate('/upload-image')}>
+        upload Image
+      </Button>
+      <Button className="m-4" onClick={() => navigate('/user-info')}>
+        user Info
+      </Button>
     </h1>
   );
 }

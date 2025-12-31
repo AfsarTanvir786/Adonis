@@ -143,19 +143,17 @@ export default function AdminDashboard() {
           {error && <p className="text-red-600">Failed to load</p>}
 
           {/* NO GROUP */}
-          {groupMode === 'none' &&
-            Array.isArray(data) &&
-            data.length > 0 && (
-              <div className="grid grid-cols-4 gap-4">
-                {data.map((s) => (
-                  <ScreenshotItem
-                    key={s.id}
-                    screenshot={s}
-                    onSelect={setSelectedImage}
-                  />
-                ))}
-              </div>
-            )}
+          {groupMode === 'none' && Array.isArray(data) && data.length > 0 && (
+            <div className="grid grid-cols-4 gap-4">
+              {data.map((s) => (
+                <ScreenshotItem
+                  key={s.id}
+                  screenshot={s}
+                  onSelect={setSelectedImage}
+                />
+              ))}
+            </div>
+          )}
 
           {/* HOUR */}
           {groupMode === 'hour' &&
@@ -187,9 +185,11 @@ export default function AdminDashboard() {
                 <h3 className="font-semibold mb-2">{hour}:00</h3>
 
                 {Object.entries(intervals).map(([interval, shots]) => (
-                  <div key={interval} className="mb-4">
+                  <div key={interval} className="mb-4 ml-4">
                     <p className="text-sm text-gray-600 mb-2">
-                      {interval} – {shots.length} screenshots
+                      <b>
+                        {interval} – {shots.length} screenshots
+                      </b>
                     </p>
                     <div className="grid grid-cols-4 gap-4">
                       {shots.map((s) => (
@@ -220,5 +220,5 @@ export default function AdminDashboard() {
         </div>
       )}
     </div>
-  )
+  );
 }

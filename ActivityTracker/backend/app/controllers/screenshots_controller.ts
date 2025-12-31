@@ -8,35 +8,35 @@ export default class ScreenshotController {
   /**
    * Upload single screenshot
    * POST /api/screenshots/upload
-   * 
-  */
- 
- private static extractActivityTimeFromFileName(
-   fileName: string,
- ): DateTime | null {
-   /**
-    * Matches:
-    * Screenshot from 2025-12-04 13-48-17.png
-    */
-   const regex = /(\d{4})-(\d{2})-(\d{2}) (\d{2})-(\d{2})-(\d{2})/;
- 
-   const match = fileName.match(regex);
- 
-   if (!match) {
-     return null;
-   }
- 
-   const [, year, month, day, hour, minute, second] = match;
- 
-   return DateTime.fromObject({
-     year: Number(year),
-     month: Number(month),
-     day: Number(day),
-     hour: Number(hour),
-     minute: Number(minute),
-     second: Number(second),
-   });
- }
+   *
+   */
+
+  private static extractActivityTimeFromFileName(
+    fileName: string,
+  ): DateTime | null {
+    /**
+     * Matches:
+     * Screenshot from 2025-12-04 13-48-17.png
+     */
+    const regex = /(\d{4})-(\d{2})-(\d{2}) (\d{2})-(\d{2})-(\d{2})/;
+
+    const match = fileName.match(regex);
+
+    if (!match) {
+      return null;
+    }
+
+    const [, year, month, day, hour, minute, second] = match;
+
+    return DateTime.fromObject({
+      year: Number(year),
+      month: Number(month),
+      day: Number(day),
+      hour: Number(hour),
+      minute: Number(minute),
+      second: Number(second),
+    });
+  }
 
   async upload({ request, response, auth }: HttpContext) {
     const image = request.file('image', {
@@ -52,23 +52,25 @@ export default class ScreenshotController {
       return response.badRequest(image.errors);
     }
 
-    const folderPath = `${auth.user!.companyId}/${auth.user!.id}`
-    const uploaded = await cloudinary.uploader.upload(
-      image.tmpPath!, {
-        folder: folderPath
-      }
-    );
+    const folderPath = `${auth.user!.companyId}/${auth.user!.id}`;
+    const uploaded = await cloudinary.uploader.upload(image.tmpPath!, {
+      folder: folderPath,
+    });
 
-    const activityTime = request.input('activity_time');
+    const activityTime = request.input('activityTime');
+
+    console.log("activityTime", activityTime)
 
     let parsedActivityTime: DateTime;
-    
-        if (activityTime) {
-          parsedActivityTime = DateTime.fromISO(activityTime);
-        } else {
-          parsedActivityTime =
-            ScreenshotController.extractActivityTimeFromFileName(image.clientName) ?? DateTime.now();
-        }
+
+    if (activityTime) {
+      parsedActivityTime = DateTime.fromISO(activityTime);
+    } else {
+      parsedActivityTime =
+        ScreenshotController.extractActivityTimeFromFileName(
+          image.clientName,
+        ) ?? DateTime.now();
+    }
 
     const screenshot = {
       userId: auth.user!.id,
@@ -77,7 +79,7 @@ export default class ScreenshotController {
       activityTime: parsedActivityTime,
       fileSize: image.size,
       fileName: image.clientName,
-    }
+    };
     const result = await ImageUpload.create(screenshot);
     return response.created(result);
   }

@@ -11,6 +11,7 @@ import Layout from '@/components/layout/Layout';
 import Dashboard from '@/pages/dashboard/Dashboard';
 import Profile from '@/pages/profile/Profile';
 import AdminDashboard from '@/pages/dashboard/AdminDashboard';
+import UploadImage from '@/pages/upload-image/UploadImage';
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -18,6 +19,7 @@ export const router = createBrowserRouter(
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/admin-dashboard" element={<AdminDashboard />} />
       <Route path="/profile" element={<Profile />} />
+      <Route path="/upload-image" element={<UploadImage />} />
       {authRoutes}
 
       <Route path="/unauthorized" element={<Unauthorized />} />
