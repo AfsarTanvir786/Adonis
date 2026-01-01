@@ -6,7 +6,7 @@ type AuthState = {
   isAuthenticated: boolean;
 };
 
-const savedUser = localStorage.getItem('user');
+const savedUser = localStorage.getItem('USER');
 
 const initialState: AuthState = {
   user: savedUser ? JSON.parse(savedUser) : null,

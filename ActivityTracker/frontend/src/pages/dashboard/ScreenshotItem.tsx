@@ -20,7 +20,7 @@ const formatTime = (dateString: string): string =>
     hour: '2-digit',
     minute: '2-digit',
     hour12: true,
-  })
+  });
 
 const formatFileSize = (bytes: number): string => {
   if (bytes < 1024) return `${bytes} B`

@@ -8,7 +8,7 @@ export default class UserSeeder extends BaseSeeder {
     const companies = await Company.all();
 
     if (companies.length === 0) {
-      console.log('No companies found. Please run company seeder first.');
+      // console.log('No companies found. Please run company seeder first.');
       return;
     }
 

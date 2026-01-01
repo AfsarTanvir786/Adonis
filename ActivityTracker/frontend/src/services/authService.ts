@@ -5,7 +5,6 @@ export const authService = {
   async login(payload: LoginDto) {
     try {
       const response = await api.post('/auth/login', payload);
-      console.log(response);
       if (response.data.data) {
         localStorage.setItem('USER', JSON.stringify(response.data.data));
       }
@@ -18,7 +17,6 @@ export const authService = {
   async register(payload: CompanyDto) {
     try {
       const response = await api.post('/auth/register', payload);
-      console.log(response);
       return response.data;
     } catch (error: any) {
       throw new error('Register error:', error);
@@ -28,7 +26,6 @@ export const authService = {
   async logout() {
     try {
       const response = await api.delete('/auth/logout');
-      console.log(response);
       localStorage.removeItem('USER');
       return response.data;
     } catch (error: any) {
@@ -39,7 +36,6 @@ export const authService = {
   async profile(): Promise<UserProfileResponse> {
     try {
       const response = await api.get('/auth/profile');
-      console.log(response);
       return response.data;
     } catch (error: any) {
       throw new error('profile error:', error);

@@ -59,18 +59,18 @@ export default class ScreenshotController {
 
     const activityTime = request.input('activityTime');
 
-    console.log("activityTime", activityTime)
-
     let parsedActivityTime: DateTime;
 
+    
     if (activityTime) {
       parsedActivityTime = DateTime.fromISO(activityTime);
     } else {
       parsedActivityTime =
         ScreenshotController.extractActivityTimeFromFileName(
           image.clientName,
-        ) ?? DateTime.now();
+        ) ?? DateTime.now().setZone('Asia/Dhaka');
     }
+    console.log("object", parsedActivityTime, activityTime)
 
     const screenshot = {
       userId: auth.user!.id,

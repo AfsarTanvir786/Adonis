@@ -13,8 +13,9 @@ export function useLogin() {
   return useMutation({
     mutationFn: authService.login,
     onSuccess: (data) => {
-      if (data.data) {
-        dispatch(authSlice.actions.setUser({ user: data.data }));
+      const {data: user} = data.data
+      if (user) {
+        dispatch(authSlice.actions.setUser({ user: user }));
       }
       Toast.success('Login successful 🎉');
       navigate('/dashboard', { replace: true });
