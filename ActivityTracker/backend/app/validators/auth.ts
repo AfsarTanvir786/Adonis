@@ -1,4 +1,4 @@
-import vine from '@vinejs/vine';
+import vine, { SimpleMessagesProvider } from '@vinejs/vine';
 
 export const loginValidator = vine.compile(
   vine.object({
@@ -7,12 +7,7 @@ export const loginValidator = vine.compile(
   }),
 );
 
-export const uploadScreenshotValidator = vine.compile(
-  vine.object({
-    screenshot: vine.file({
-      size: '10mb',
-      extnames: ['jpg', 'jpeg', 'png', 'webp'],
-    }),
-    activity_time: vine.string().optional()
-  })
-)
+loginValidator.messagesProvider = new SimpleMessagesProvider({
+  'email.required': 'Email is required',
+  'password.required': 'Password is required',
+});

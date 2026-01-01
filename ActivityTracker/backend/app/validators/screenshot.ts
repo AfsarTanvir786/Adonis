@@ -1,4 +1,4 @@
-import vine from '@vinejs/vine';
+import vine, { SimpleMessagesProvider } from '@vinejs/vine';
 
 export const uploadScreenshotValidator = vine.compile(
   vine.object({
@@ -9,3 +9,7 @@ export const uploadScreenshotValidator = vine.compile(
     activityTime: vine.string().optional(),
   }),
 );
+
+uploadScreenshotValidator.messagesProvider = new SimpleMessagesProvider({
+  'screenshot.required': 'screenshot is required',
+});
