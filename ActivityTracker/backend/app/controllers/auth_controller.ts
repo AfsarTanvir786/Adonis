@@ -4,14 +4,14 @@ import type { HttpContext } from '@adonisjs/core/http';
 import { cookieConfig } from '../helper/cookieConfig.js';
 
 export default class AuthController {
-  async login({ request, response }: HttpContext) {
-    const { email, password } = await request.validateUsing(loginValidator);
+  async login({ auth, request, response }: HttpContext) {
+    const { email, password } = await request.validateUsing(loginValidator)
 
     try {
-      const user = await User.verifyCredentials(email, password);
+      const user = await User.verifyCredentials(email, password)
 
-      const token = await User.accessTokens.create(user);
-      response.cookie('access_token', token.value!.release(), cookieConfig());
+      const token = await auth.use('jwt').generate(user)
+      response.cookie('access_token', token.token, cookieConfig())
       return response.ok({
         message: 'Login successful',
         data: user,
@@ -19,21 +19,16 @@ export default class AuthController {
     } catch (error) {
       return response.unauthorized({
         error: 'Invalid credentials',
-      });
+      })
     }
   }
 
-  async logout({ auth, response }: HttpContext) {
-    await User.accessTokens.delete(
-      auth.user!,
-      auth.user!.currentAccessToken.identifier,
-    );
-
-    response.clearCookie('access_token');
+  async logout({ response }: HttpContext) {
+    response.clearCookie('access_token')
 
     return response.ok({
       message: 'Logged out successfully',
-    });
+    })
   }
 
   async profile({ auth, response }: HttpContext) {
