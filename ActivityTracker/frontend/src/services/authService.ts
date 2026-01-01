@@ -6,6 +6,9 @@ export const authService = {
     try {
       const response = await api.post('/auth/login', payload);
       console.log(response);
+      if (response.data.data) {
+        localStorage.setItem('USER', JSON.stringify(response.data.data));
+      }
       return response;
     } catch (error: any) {
       throw new error('login error', error);
@@ -26,6 +29,7 @@ export const authService = {
     try {
       const response = await api.delete('/auth/logout');
       console.log(response);
+      localStorage.removeItem('USER');
       return response.data;
     } catch (error: any) {
       throw new error('logout error:', error);
