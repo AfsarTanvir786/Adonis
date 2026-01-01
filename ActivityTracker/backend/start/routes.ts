@@ -25,7 +25,7 @@ router
   .group(() => {
     router.get('/', [PlansController, 'show']);
   })
-  .prefix('/api/plan');
+  .prefix('/api/plans');
 
 /**
  * Protected routes

@@ -1,13 +1,15 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Eye, EyeOff, Mail, User, FileText, Loader2 } from 'lucide-react';
 import { useRegister } from '@/hooks/auth/useRegister';
 import {
   registerSchema,
   type RegisterFormData,
 } from '@/schemas/register.schema';
+import { Button } from '@/components/ui/button';
 
 export default function Register() {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState<RegisterFormData>({
     ownerName: '',
     ownerEmail: '',
@@ -168,6 +170,13 @@ export default function Register() {
             Sign in
           </Link>
         </p>
+        <Button
+          variant="outline"
+          className="w-110 m-5"
+          onClick={() => navigate('/plans')}
+        >
+          Show Plans
+        </Button>
       </div>
     </div>
   );

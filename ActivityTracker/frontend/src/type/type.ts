@@ -59,3 +59,10 @@ export type UserProfileResponse = {
   updateAt: Date | null | string;
   company: Company;
 };
+
+export type Plan = {
+  id: number;
+  name: string;
+  costPerSeat: string | number;
+  description: string;
+};

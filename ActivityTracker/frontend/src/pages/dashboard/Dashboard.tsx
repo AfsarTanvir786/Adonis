@@ -30,6 +30,9 @@ function Dashboard() {
       <Button className="m-4" onClick={() => navigate('/auth/logout')}>
         logout
       </Button>
+      <Button className="m-4" onClick={() => navigate('/plans')}>
+        plans
+      </Button>
     </h1>
   );
 }

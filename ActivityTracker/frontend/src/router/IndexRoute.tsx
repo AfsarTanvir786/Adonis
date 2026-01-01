@@ -13,10 +13,12 @@ import Profile from '@/pages/profile/Profile';
 import AdminDashboard from '@/pages/dashboard/AdminDashboard';
 import UploadImage from '@/pages/upload-image/UploadImage';
 import ProtectedRoute from './ProtectedRoute';
+import PlanSection from '@/pages/plan-section/PlanSection';
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<Layout />}>
+      <Route path="/plans" element={<PlanSection />} />
       {authRoutes}
       <Route element={<ProtectedRoute redirectTo="/unauthorized" />}>
         <Route path="/dashboard" element={<Dashboard />} />
