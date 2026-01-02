@@ -7,7 +7,7 @@ export const adminDashboard = {
       const response = await api.get(`/auth/admin-dashboard`);
       return response.data.users;
     } catch (error: any) {
-      throw new error('admin dashboard get users error: ', error);
+      throw error;
     }
   },
 
@@ -16,19 +16,27 @@ export const adminDashboard = {
       const response = await api.get(`/auth/screenshots`, { params });
       return response.data.users;
     } catch (error: any) {
-      throw new error('admin dashboard get users error: ', error);
+      throw error;
     }
   },
 
   async getUsersPagination(params: Partial<Pagination>) {
     try {
-      const response = await api.get<PaginatedResponse<User>>(
-        '/auth/users', { params },
-      );
-      console.log(response.data)
+      const response = await api.get<PaginatedResponse<User>>('/auth/users', {
+        params,
+      });
       return response.data;
     } catch (error: any) {
-      throw new Error('my note fetch error', error.response?.data);
+      throw error;
     }
   },
+
+  async createUser(request: {name: string; email: string; password: string; role: 'admin'|'employee'}){
+    try {
+      const response = await api.post<Partial<User>>('/auth/add-user', request);
+      return response.data;
+    } catch (error: any) {
+      throw error;
+    }
+  }
 };

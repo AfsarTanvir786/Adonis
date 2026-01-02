@@ -10,7 +10,7 @@ export const authService = {
       }
       return response;
     } catch (error: any) {
-      throw new error('login error', error);
+      throw error;
     }
   },
 
@@ -19,7 +19,7 @@ export const authService = {
       const response = await api.post('/auth/register', payload);
       return response.data;
     } catch (error: any) {
-      throw new error('Register error:', error);
+      throw error;
     }
   },
 
@@ -29,7 +29,7 @@ export const authService = {
       localStorage.removeItem('USER');
       return response.data;
     } catch (error: any) {
-      throw new error('logout error:', error);
+      throw error;
     }
   },
 
@@ -38,7 +38,7 @@ export const authService = {
       const response = await api.get('/auth/profile');
       return response.data;
     } catch (error: any) {
-      throw new error('profile error:', error);
+      throw error;
     }
   },
 };

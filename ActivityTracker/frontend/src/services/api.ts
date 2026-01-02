@@ -7,13 +7,13 @@ export const api = axios.create({
 });
 
 
-api.interceptors.response.use(
-  (res) => res,
-  (error) => {
-    const message =
-      error?.response?.data?.message ||
-      'Something went wrong';
+// api.interceptors.response.use(
+//   (res) => res,
+//   (error) => {
+//     const message =
+//       error?.response?.data?.message ||
+//       'Something went wrong';
 
-    return Promise.reject(message);
-  }
-);
+//     return Promise.reject(message);
+//   }
+// );

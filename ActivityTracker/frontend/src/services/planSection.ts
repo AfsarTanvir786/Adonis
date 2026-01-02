@@ -7,7 +7,7 @@ export const planSection = {
       const response = await api.get('/plans');
       return response.data.data;
     } catch (error: any) {
-      throw new error('plan section error', error);
+      throw error;
     }
   },
 };

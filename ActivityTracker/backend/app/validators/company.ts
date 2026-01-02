@@ -8,7 +8,7 @@ export const companySignupValidator = vine.compile(
       .trim()
       .email()
       .normalizeEmail()
-      .unique({ table: 'users', column: 'id' }),
+      .unique({ table: 'users', column: 'email' }),
     companyName: vine.string().trim().minLength(2).maxLength(255),
     password: vine.string().minLength(8).maxLength(32),
     planSectionId: vine.number().positive(),

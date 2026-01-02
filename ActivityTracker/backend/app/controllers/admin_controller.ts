@@ -5,6 +5,7 @@ import type { HttpContext } from '@adonisjs/core/http';
 import { DateTime } from 'luxon';
 import { Pagination } from '../utils/types.js';
 import { paginationValidator } from '#validators/pagination_validator';
+import { createUserValidator } from '#validators/create_user';
 
 export default class AdminController {
   async adminDashboard({ auth, response }: HttpContext) {
@@ -134,6 +135,21 @@ export default class AdminController {
       return response.ok(users);
     } catch (error) {
       return response.badRequest({ error: 'Failed to fetch screenshots' });
+    }
+  }
+
+  async addUser({ request, response, auth }: HttpContext) {
+    const payload = await request.validateUsing(createUserValidator);
+    try {
+      const user = await User.create({
+        ...payload,
+        isActive: true,
+        companyId: auth.user!.companyId,
+      });
+      return response.created(user);
+    } catch (error) {
+      console.log("afsar",error)
+      return response.badRequest({ message: `something went wrong, ${error}` });
     }
   }
 }

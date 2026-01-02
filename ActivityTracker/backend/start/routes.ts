@@ -51,6 +51,9 @@ router
         router
           .get('/users', [AdminController, 'users'])
           .use(middleware.role(['admin']));
+        router
+          .post('/add-user', [AdminController, 'addUser'])
+          .use(middleware.role(['admin']));
       })
       .prefix('/auth');
 

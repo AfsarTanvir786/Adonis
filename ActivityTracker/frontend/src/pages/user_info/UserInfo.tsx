@@ -1,12 +1,14 @@
 import { Button } from '@/components/ui/button';
 import { getUsersPagination } from '@/hooks/admin/getUsers';
 import { useState } from 'react';
+import { AddUserModal } from './AddUserModal';
 
 function UserInfo() {
   const [page, setPage] = useState(1);
   const [limit, setLimit] = useState<5 | 10 | 20>(10);
   const [sortBy, setSortBy] = useState<'lastLoginAt' | 'name'>('name');
   const [orderBy, setOrderBy] = useState<'asc' | 'desc'>('desc');
+  const [showAddUser, setShowAddUser] = useState(false);
   const { data, isLoading, isError } = getUsersPagination({
     page,
     limit,
@@ -44,7 +46,11 @@ function UserInfo() {
 
   return (
     <section className="p-4 space-y-6">
-      <h2 className="text-2xl font-semibold text-gray-900">Team Members</h2>
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <h2 className="text-2xl font-semibold">Team Members</h2>
+        <Button onClick={() => setShowAddUser(true)}>Add User</Button>
+      </div>
       {/* Filters */}
       <div className="flex flex-wrap gap-4 mb-6">
         {/* Limit */}
@@ -79,6 +85,7 @@ function UserInfo() {
         </select>
       </div>
 
+      {/* User Cards */}
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {users.map((user) => {
           const isActive = user.isActive;
@@ -128,6 +135,7 @@ function UserInfo() {
           );
         })}
       </div>
+
       {/* Pagination Controls */}
       {meta && (
         <div className="flex justify-center items-center gap-4 mt-8">
@@ -152,6 +160,8 @@ function UserInfo() {
           </Button>
         </div>
       )}
+
+      {showAddUser && <AddUserModal onClose={() => setShowAddUser(false)} />}
     </section>
   );
 }
