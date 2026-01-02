@@ -70,7 +70,6 @@ export default class ScreenshotController {
           image.clientName,
         ) ?? DateTime.now().setZone('Asia/Dhaka');
     }
-    console.log("object", parsedActivityTime, activityTime)
 
     const screenshot = {
       userId: auth.user!.id,

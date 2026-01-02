@@ -148,7 +148,6 @@ export default class AdminController {
       });
       return response.created(user);
     } catch (error) {
-      console.log("afsar",error)
       return response.badRequest({ message: `something went wrong, ${error}` });
     }
   }

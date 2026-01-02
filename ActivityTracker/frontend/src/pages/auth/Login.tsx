@@ -5,6 +5,14 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { loginSchema, type LoginSchema } from '@/schemas/login.schema';
 import { useLogin } from '@/hooks/auth/useLogin';
+import type { AxiosError } from 'axios';
+
+type BackendError = {
+  errors?: {
+    field: keyof LoginSchema;
+    message: string;
+  }[];
+};
 
 export default function Login() {
   const [showPassword, setShowPassword] = useState(false);
@@ -13,6 +21,7 @@ export default function Login() {
   const {
     register,
     handleSubmit,
+    setError,
     formState: { errors },
   } = useForm<LoginSchema>({
     resolver: zodResolver(loginSchema),
@@ -22,7 +31,25 @@ export default function Login() {
   });
 
   const onSubmit = (data: LoginSchema) => {
-    mutate(data);
+    mutate(data, {
+      onError: (error) => {
+        const axiosError = error as AxiosError<BackendError>;
+        const backendErrors = axiosError.response?.data?.errors;
+
+        if (backendErrors && backendErrors.length > 0) {
+          backendErrors.forEach((err) => {
+            setError(err.field, {
+              type: 'server',
+              message: err.message,
+            });
+          });
+        } else {
+          setError('root', {
+            message: 'Please Enter valid email and password',
+          });
+        }
+      },
+    });
   };
 
   return (
@@ -102,6 +129,12 @@ export default function Login() {
                 Forgot password?
               </Link>
             </div>
+            {/* Global error */}
+            {errors.root && (
+              <div className="rounded border border-red-200 bg-red-50 p-3 text-sm text-red-600">
+                {errors.root.message}
+              </div>
+            )}
 
             {/* Submit */}
             <button

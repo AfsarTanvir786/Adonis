@@ -1,12 +1,16 @@
 import { useLogout } from '@/hooks/auth/useLogout';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 
 function Logout() {
   const { mutate, isPending } = useLogout();
+  const hasMutated = useRef(false);
 
   useEffect(() => {
-    mutate();
-  }, [mutate]);
+    if (!hasMutated.current) {
+      mutate();
+      hasMutated.current = true;
+    }
+  }, []);
 
   return (
     <div className="flex items-center justify-center min-h-screen">

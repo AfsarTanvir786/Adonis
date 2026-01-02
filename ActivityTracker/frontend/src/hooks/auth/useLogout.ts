@@ -16,8 +16,8 @@ export function useLogout() {
     onSuccess: () => {
       queryClient.clear();
       dispatch(authSlice.actions.clearUser());
-      Toast.success('Logged out successfully');
       navigate('/auth/login', { replace: true });
+      Toast.success('Logged out successfully');
     },
     onError: (error: any) => {
       Toast.error(error?.response?.data?.message || 'Logout failed');

@@ -24,9 +24,9 @@ function Dashboard() {
       <Button className="m-4" onClick={() => navigate('/upload-image')}>
         upload Image
       </Button>
-      <Button className="m-4" onClick={() => navigate('/auth/login')}>
+      {/* <Button className="m-4" onClick={() => navigate('/auth/login')}>
         login
-      </Button>
+      </Button> */}
       <Button className="m-4" onClick={() => navigate('/auth/logout')}>
         logout
       </Button>
