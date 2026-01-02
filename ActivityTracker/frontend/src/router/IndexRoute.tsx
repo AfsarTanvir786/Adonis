@@ -14,6 +14,7 @@ import AdminDashboard from '@/pages/dashboard/AdminDashboard';
 import UploadImage from '@/pages/upload-image/UploadImage';
 import ProtectedRoute from './ProtectedRoute';
 import PlanSection from '@/pages/plan-section/PlanSection';
+import UserInfo from '@/pages/user_info/UserInfo';
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -29,6 +30,7 @@ export const router = createBrowserRouter(
         element={<ProtectedRoute redirectTo="/unauthorized" roles={["admin"]} />}
       >
         <Route path="/admin-dashboard" element={<AdminDashboard />} />
+        <Route path="/user-info" element={<UserInfo />} />
       </Route>
 
       <Route path="/unauthorized" element={<Unauthorized />} />

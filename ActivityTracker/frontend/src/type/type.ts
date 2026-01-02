@@ -66,3 +66,24 @@ export type Plan = {
   costPerSeat: string | number;
   description: string;
 };
+
+export type Pagination = {
+  page: number;
+  limit: number;
+  sortBy: 'name' | 'lastLoginAt';
+  orderBy: 'asc' | 'desc';
+};
+
+export interface PaginatedResponse<T> {
+  data: T[];
+  meta: {
+    total: number;
+    perPage: number;
+    currentPage: number;
+    lastPage: number;
+    firstPageUrl: string;
+    lastPageUrl: string;
+    nextPageUrl: null | string;
+    previousPageUrl: null | string;
+  };
+}

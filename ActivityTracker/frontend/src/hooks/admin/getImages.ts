@@ -6,7 +6,7 @@ export function getImages(params: { userId: number; date: Date }) {
   return useMutation({
     mutationFn: adminDashboard.getScreenshots,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['images', params] });
+      queryClient.invalidateQueries({ queryKey: ['IMAGES', params] });
     },
   });
 }

@@ -3,6 +3,8 @@ import User from '#models/user';
 import { getScreenshotByUserValidator } from '#validators/getScreenshotByUser';
 import type { HttpContext } from '@adonisjs/core/http';
 import { DateTime } from 'luxon';
+import { Pagination } from '../utils/types.js';
+import { paginationValidator } from '#validators/pagination_validator';
 
 export default class AdminController {
   async adminDashboard({ auth, response }: HttpContext) {
@@ -112,5 +114,26 @@ export default class AdminController {
       data: grouped,
       meta: { total: screenshots.length },
     });
+  }
+
+  async users({ request, response, auth }: HttpContext) {
+    const payload = await request.validateUsing(paginationValidator);
+    const pagination: Pagination = {
+      page: Number(payload.page) ?? 1,
+      limit: Number(payload.limit) ?? 10,
+      sortBy: payload.sortBy ?? 'name',
+      orderBy: payload.orderBy ?? 'desc',
+    };
+    try {
+      const users = await User.query()
+        .select('id', 'name', 'email', 'role', 'is_active', 'last_login_at')
+        .where('company_id', auth.user!.companyId)
+        .orderBy(pagination.sortBy, pagination.orderBy)
+        .paginate(pagination.page, pagination.limit);
+
+      return response.ok(users);
+    } catch (error) {
+      return response.badRequest({ error: 'Failed to fetch screenshots' });
+    }
   }
 }

@@ -48,6 +48,9 @@ router
         router
           .get('/screenshots', [AdminController, 'screenshots'])
           .use(middleware.role(['admin']));
+        router
+          .get('/users', [AdminController, 'users'])
+          .use(middleware.role(['admin']));
       })
       .prefix('/auth');
 

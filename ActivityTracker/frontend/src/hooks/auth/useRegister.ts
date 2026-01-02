@@ -9,8 +9,8 @@ export function useRegister() {
   return useMutation({
     mutationFn: authService.register,
     onSuccess: () => {
-      Toast.success('Register successful 🎉');
       navigate('/auth/login', { replace: true });
+      Toast.success('Register successful 🎉');
     },
     onError: (error: any) => {
       Toast.error('Register failed');
