@@ -36,6 +36,7 @@ export type Company = {
   ownerEmail: string;
   planSectionId: number;
   updatedAt: string | null;
+  createdAt: string | null;
 };
 
 export type UserResponse = {

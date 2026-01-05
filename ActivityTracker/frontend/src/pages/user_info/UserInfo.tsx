@@ -3,8 +3,9 @@ import { getUsersPagination } from '@/hooks/admin/getUsers';
 import { useState } from 'react';
 import { AddUserModal } from './AddUserModal';
 import { useDebounce } from '@/hooks/useDebounce';
-import { Search } from 'lucide-react';
+import { ArrowLeft, Search } from 'lucide-react';
 import { Input } from '@/components/common/Input';
+import { Link } from 'react-router-dom';
 
 function UserInfo() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -29,8 +30,14 @@ function UserInfo() {
 
   return (
     <section className="p-4 space-y-6">
+      <Link to="/dashboard">
+        <Button variant="outline" size="sm">
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          Back to Dashboard
+        </Button>
+      </Link>
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+      <div className="mt-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <h2 className="text-2xl font-semibold">Team Members</h2>
         <Button onClick={() => setShowAddUser(true)}>Add User</Button>
       </div>

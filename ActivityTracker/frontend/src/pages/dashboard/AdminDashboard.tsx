@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Calendar, Clock, User2 } from 'lucide-react';
+import { ArrowLeft, Calendar, Clock, User2 } from 'lucide-react';
 import { api } from '@/services/api';
 import { ScreenshotItem } from './ScreenshotItem';
 import { getUsers } from '@/hooks/admin/getUsers';
+import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
 
 /* ================= TYPES ================= */
 
@@ -80,8 +82,14 @@ export default function AdminDashboard() {
   return (
     <div className="p-6 max-w-7xl mx-auto">
       <div className="max-w-7xl mx-auto">
+        <Link to="/dashboard">
+          <Button variant="outline" size="sm">
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Back to Dashboard
+          </Button>
+        </Link>
         {/* Header */}
-        <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
+        <div className="mt-4 bg-white rounded-lg shadow-sm p-6 mb-6">
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
             Activity Dashboard
           </h1>

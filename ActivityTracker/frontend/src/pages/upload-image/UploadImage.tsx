@@ -1,5 +1,8 @@
 import { useState } from 'react';
 import { api } from '@/services/api';
+import { Link } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import { ArrowLeft } from 'lucide-react';
 
 function UploadImage() {
   const [file, setFile] = useState<File | null>(null);
@@ -64,7 +67,13 @@ function UploadImage() {
 
   return (
     <div className="max-w-md mx-auto bg-white p-6 rounded shadow">
-      <h1 className="text-xl font-semibold mb-4">Upload Screenshot</h1>
+      <Link to="/dashboard">
+        <Button variant="outline" size="sm">
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          Back to Dashboard
+        </Button>
+      </Link>
+      <h1 className="mt-4 text-xl font-semibold mb-4">Upload Screenshot</h1>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Image */}
