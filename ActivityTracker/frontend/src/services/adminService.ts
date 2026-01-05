@@ -31,12 +31,17 @@ export const adminDashboard = {
     }
   },
 
-  async createUser(request: {name: string; email: string; password: string; role: 'admin'|'employee'}){
+  async createUser(request: {
+    name: string;
+    email: string;
+    password: string;
+    role: 'admin' | 'employee';
+  }) {
     try {
       const response = await api.post<Partial<User>>('/auth/add-user', request);
       return response.data;
     } catch (error: any) {
       throw error;
     }
-  }
+  },
 };

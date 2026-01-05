@@ -124,11 +124,18 @@ export default class AdminController {
       limit: Number(payload.limit) ?? 10,
       sortBy: payload.sortBy ?? 'name',
       orderBy: payload.orderBy ?? 'desc',
+      search: payload.search,
     };
     try {
-      const users = await User.query()
+      const query = User.query()
         .select('id', 'name', 'email', 'role', 'is_active', 'last_login_at')
-        .where('company_id', auth.user!.companyId)
+        .where('company_id', auth.user!.companyId);
+
+      if (pagination.search) {
+        query.where('name', 'like', `%${pagination.search}%`);
+      }
+
+      const users = await query
         .orderBy(pagination.sortBy, pagination.orderBy)
         .paginate(pagination.page, pagination.limit);
 

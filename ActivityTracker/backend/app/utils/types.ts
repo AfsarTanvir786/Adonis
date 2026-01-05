@@ -3,5 +3,6 @@ export type Pagination = {
   limit: number;
   sortBy: 'lastLoginAt' | 'name';
   orderBy: 'asc' | 'desc';
+  search?: string;
 };
 

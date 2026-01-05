@@ -72,6 +72,7 @@ export type Pagination = {
   limit: number;
   sortBy: 'name' | 'lastLoginAt';
   orderBy: 'asc' | 'desc';
+  search: string | null;
 };
 
 export interface PaginatedResponse<T> {
