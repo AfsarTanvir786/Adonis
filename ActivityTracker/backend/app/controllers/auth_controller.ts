@@ -2,6 +2,7 @@ import User from '#models/user';
 import { loginValidator } from '#validators/auth';
 import type { HttpContext } from '@adonisjs/core/http';
 import { cookieConfig } from '../helper/cookieConfig.js';
+import { DateTime } from 'luxon';
 
 export default class AuthController {
   async login({ auth, request, response }: HttpContext) {
@@ -9,6 +10,9 @@ export default class AuthController {
 
     try {
       const user = await User.verifyCredentials(email, password)
+
+      user.lastLoginAt = DateTime.now()
+      await user.save();
 
       const token = await auth.use('jwt').generate(user)
       response.cookie('access_token', token.token, cookieConfig())

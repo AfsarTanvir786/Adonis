@@ -158,4 +158,44 @@ export default class AdminController {
       return response.badRequest({ message: `something went wrong, ${error}` });
     }
   }
+
+  async destroy({ params, response, auth }: HttpContext) {
+    try {
+      const userId = Number(params.id);
+
+      if (Number.isNaN(userId)) {
+        return response.badRequest({ message: 'Invalid user id' });
+      }
+
+      const owner = auth.user!;
+      await owner.load('company');
+
+      if (owner.email !== owner.company.ownerEmail) {
+        return response.forbidden({
+          message: 'You are not allowed to do this',
+        });
+      }
+
+      const employee = await User.query()
+        .where('id', userId)
+        .where('company_id', owner.companyId)
+        .first();
+
+      if (!employee) {
+        return response.notFound({ message: 'User not found' });
+      }
+
+      if (employee.id === owner.id) {
+        return response.badRequest({
+          message: 'You cannot delete your own account',
+        });
+      }
+
+      await employee.delete();
+
+      return response.noContent();
+    } catch (error) {
+      return response.badRequest({ message: `something went wrong, ${error}` });
+    }
+  }
 }

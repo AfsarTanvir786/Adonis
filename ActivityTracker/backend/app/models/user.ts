@@ -46,7 +46,7 @@ export default class User extends compose(BaseModel, AuthFinder) {
   @column({ columnName: 'is_active' })
   declare isActive: boolean;
 
-  @column({ columnName: 'last_login_at' })
+  @column.dateTime({ columnName: 'last_login_at' })
   declare lastLoginAt: DateTime | null;
 
   @column.dateTime({ autoCreate: true })
