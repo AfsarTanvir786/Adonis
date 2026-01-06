@@ -63,10 +63,10 @@ router
     router
       .group(() => {
         router.post('/upload', [ScreenshotController, 'upload']);
-        router.post('/bulk-upload', [ScreenshotController, 'bulkUpload']);
-        router.get('/', [ScreenshotController, 'list']);
-        router.get('/grouped', [ScreenshotController, 'grouped']);
-        router.delete('/:id', [ScreenshotController, 'delete']);
+        // router.post('/bulk-upload', [ScreenshotController, 'bulkUpload']);
+        // router.get('/', [ScreenshotController, 'list']);
+        // router.get('/grouped', [ScreenshotController, 'grouped']);
+        // router.delete('/:id', [ScreenshotController, 'delete']);
       })
       .prefix('/screenshots');
   })
