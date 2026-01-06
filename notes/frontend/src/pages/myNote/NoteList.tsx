@@ -29,7 +29,6 @@ function NoteList() {
   );
 
   const noteList = data?.data ?? [];
-  const canManage = true;
   const meta = data?.meta;
 
   if (isLoading) return <p className="text-center mt-10">Loading...</p>;
@@ -101,7 +100,7 @@ function NoteList() {
       {/* Notes grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {noteList?.map((note: Note) => (
-          <SingleNote key={note.id} note={note} canManage={canManage} />
+          <SingleNote key={note.id} note={note} />
         ))}
       </div>
 

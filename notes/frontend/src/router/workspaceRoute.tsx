@@ -6,14 +6,18 @@ import WorkspaceDetails from '@/pages/workspace/WorkspaceDetails';
 import WorkspaceEdit from '@/pages/workspace/WorkspaceEdit';
 import WorkspaceDelete from '@/pages/workspace/WorkspaceDelete';
 import WorkspaceCreate from '@/pages/workspace/WorkspaceCreate';
+import WorkspaceProtectedRoute from './WorkspaceProtectedRoute';
 
 export const WorkspaceRoutes = (
   <Route path="workspaces" element={<Index />}>
     <Route index element={<WorkspaceList />} />
-    <Route path="edit/:id" element={<WorkspaceEdit />} />
-    <Route path="delete/:id" element={<WorkspaceDelete />} />
-    <Route path="create" element={<WorkspaceCreate />} />
     <Route path="details/:id" element={<WorkspaceDetails />} />
+
+    <Route element={<WorkspaceProtectedRoute />}>
+      <Route path="edit/:id" element={<WorkspaceEdit />} />
+      <Route path="delete/:id" element={<WorkspaceDelete />} />
+      <Route path="create" element={<WorkspaceCreate />} />
+    </Route>
     <Route path="*" element={<Error404 title="Could Not Find Workspace." />} />
   </Route>
 );

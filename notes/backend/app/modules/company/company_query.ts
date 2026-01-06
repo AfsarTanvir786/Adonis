@@ -41,14 +41,7 @@ export default class CompanyRepository {
   }
 
   async updateCompany(data: Partial<Company>, id: number) {
-    const company = await Company.find(id);
-
-    if (!company) {
-      return {
-        success: false,
-        message: 'Company not found.',
-      };
-    }
+    const company = await Company.findOrFail(id);
 
     company.merge({
       name: data.name ?? company.name,
@@ -73,14 +66,7 @@ export default class CompanyRepository {
   }
 
   async deleteCompany(id: number) {
-    const company = await Company.find(id);
-
-    if (!company) {
-      return {
-        success: false,
-        message: 'Company not found.',
-      };
-    }
+    const company = await Company.findOrFail(id);
 
     await company.delete();
 

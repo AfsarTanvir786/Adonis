@@ -30,14 +30,7 @@ export default class NoteHistoryRepository {
   }
 
   async deleteNoteHistory(id: number) {
-    const noteHistory = await NoteHistory.find(id);
-
-    if (!noteHistory) {
-      return {
-        success: false,
-        message: 'Note History not found.',
-      };
-    }
+    const noteHistory = await NoteHistory.findOrFail(id);
 
     await noteHistory.delete();
 

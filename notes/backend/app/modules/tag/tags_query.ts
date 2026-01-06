@@ -29,14 +29,7 @@ export default class TagRepository {
   }
 
   async updateTag(data: Partial<Tag>, id: number) {
-    const tag = await Tag.find(id);
-
-    if (!tag) {
-      return {
-        success: false,
-        message: 'Tag not found.',
-      };
-    }
+    const tag = await Tag.findOrFail(id);
 
     tag.merge({
       name: data.name ?? tag.name,
@@ -61,14 +54,7 @@ export default class TagRepository {
   }
 
   async deleteTag(id: number) {
-    const tag = await Tag.find(id);
-
-    if (!tag) {
-      return {
-        success: false,
-        message: 'Tag not found.',
-      };
-    }
+    const tag = await Tag.findOrFail(id);
 
     await tag.delete();
 

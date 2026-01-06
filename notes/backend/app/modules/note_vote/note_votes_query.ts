@@ -3,10 +3,7 @@ import NoteVote from '#models/note_vote';
 
 export default class NoteVoteRepository {
   async createNoteVote(vote: 'up' | 'down', noteId: number, userId: number) {
-    const note = await Note.find(noteId);
-    if (!note) {
-      throw new Error('note does not exists');
-    }
+    const note = await Note.findOrFail(noteId);
 
     const noteVote = await NoteVote.create({
       userId: userId,
@@ -34,7 +31,7 @@ export default class NoteVoteRepository {
   }
 
   async deleteNoteVote(noteId: number, userId: number) {
-    const note = await Note.find(noteId);
+    const note = await Note.findOrFail(noteId);
     const noteVote = await NoteVote.query()
       .where('note_id', noteId)
       .where('user_id', userId)
