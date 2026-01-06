@@ -3,9 +3,11 @@ import { getUsersPagination } from '@/hooks/admin/getUsers';
 import { useState } from 'react';
 import { AddUserModal } from './AddUserModal';
 import { useDebounce } from '@/hooks/useDebounce';
-import { ArrowLeft, Search } from 'lucide-react';
+import { ArrowLeft, Search, Trash2 } from 'lucide-react';
 import { Input } from '@/components/common/Input';
 import { Link } from 'react-router-dom';
+import { useProfile } from '@/hooks/useProfile';
+import { useUserDelete } from '@/hooks/admin/useUserDelete';
 
 function UserInfo() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -16,6 +18,7 @@ function UserInfo() {
   const [sortBy, setSortBy] = useState<'lastLoginAt' | 'name'>('name');
   const [orderBy, setOrderBy] = useState<'asc' | 'desc'>('desc');
   const [showAddUser, setShowAddUser] = useState(false);
+  const deleteMutation = useUserDelete();
 
   const { data, isLoading, isError } = getUsersPagination({
     page,
@@ -25,8 +28,18 @@ function UserInfo() {
     search,
   });
 
+  const { data: user } = useProfile();
+
   const users = data?.data ?? [];
   const meta = data?.meta;
+
+  const canDelete = user && user?.company.ownerEmail === user.email;
+
+  const handleDelete = (id: number) => {
+    if (!confirm('Are you sure you want to delete this user?')) return;
+
+    deleteMutation.mutate(id);
+  };
 
   return (
     <section className="p-4 space-y-6">
@@ -120,44 +133,75 @@ function UserInfo() {
         </div>
       )}
 
-      {/* User Cards */}
+      {/* User List */}
       {!isLoading && users.length > 0 && (
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="space-y-4">
           {users.map((user) => (
             <div
               key={user.id}
-              className="rounded-2xl border bg-white p-6 shadow-sm hover:shadow-md transition"
+              className="flex flex-col sm:flex-row sm:items-center
+                   justify-between gap-4
+                   rounded-2xl border bg-white p-5
+                   shadow-sm hover:shadow-md transition"
             >
-              <div className="flex justify-between">
-                <div>
-                  <h3 className="text-lg font-semibold">{user.name}</h3>
-                  <p className="text-sm text-gray-500">{user.email}</p>
+              {/* Left: User info */}
+              <div className="flex items-center gap-4">
+                {/* Avatar */}
+                <div
+                  className="flex h-12 w-12 items-center justify-center
+                          rounded-full bg-gray-100 text-gray-700
+                          font-semibold uppercase"
+                >
+                  {user.name?.charAt(0)}
                 </div>
 
+                <div>
+                  <h3 className="text-base font-semibold text-gray-900">
+                    {user.name}
+                  </h3>
+                  <p className="text-sm text-gray-500">{user.email}</p>
+
+                  <div className="mt-1 flex flex-wrap gap-3 text-xs text-gray-500">
+                    <span className="capitalize">Role: {user.role}</span>
+                    <span>
+                      Last login:{' '}
+                      {user.lastLoginAt
+                        ? new Date(user.lastLoginAt).toLocaleString()
+                        : 'Never'}
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Right: Status + Actions */}
+              <div className="flex items-center gap-4">
+                {/* Status */}
                 <span
-                  className={`inline-flex items-center rounded-full px-3 py-1 text-xs font-medium ${
-                    user.isActive
-                      ? 'bg-green-100 text-green-700'
-                      : 'bg-red-100 text-red-700'
-                  }`}
+                  className={`inline-flex items-center rounded-full px-3 py-1
+                        text-xs font-medium ${
+                          user.isActive
+                            ? 'bg-green-100 text-green-700'
+                            : 'bg-red-100 text-red-700'
+                        }`}
                 >
                   {user.isActive ? 'Active' : 'Inactive'}
                 </span>
-              </div>
 
-              <div className="mt-4 text-sm text-gray-600 space-y-1">
-                <div className="flex justify-between">
-                  <span>Role</span>
-                  <span className="capitalize">{user.role}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Last login</span>
-                  <span>
-                    {user.lastLoginAt
-                      ? new Date(user.lastLoginAt).toLocaleString()
-                      : 'Never'}
-                  </span>
-                </div>
+                {/* Actions */}
+                {canDelete && (
+                  <button
+                    onClick={() => handleDelete(user.id)}
+                    disabled={deleteMutation.isPending}
+                    className="flex items-center gap-2 rounded-md
+                         border border-red-200 px-3 py-1.5
+                         text-sm text-red-600
+                         hover:bg-red-50
+                         disabled:opacity-50"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                    {deleteMutation.isPending ? 'Deleting...' : 'Delete'}
+                  </button>
+                )}
               </div>
             </div>
           ))}

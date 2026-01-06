@@ -55,7 +55,7 @@ router
           .post('/add-user', [AdminController, 'addUser'])
           .use(middleware.role(['admin']));
         router
-          .delete('/admin/:id', [AdminController, 'destroy'])
+          .delete('/admin/user/:id', [AdminController, 'destroy'])
           .use(middleware.role(['admin']));
       })
       .prefix('/auth');

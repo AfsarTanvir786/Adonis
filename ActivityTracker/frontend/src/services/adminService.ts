@@ -44,4 +44,13 @@ export const adminDashboard = {
       throw error;
     }
   },
+
+  async removeUser(id: number){
+    try {
+      const response = await api.delete(`/auth/admin/user/${id}`);
+      return response.data;
+    } catch (error: any) {
+      throw error;
+    }
+  }
 };
