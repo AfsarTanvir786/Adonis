@@ -36,26 +36,21 @@ router
       .group(() => {
         router.get('/profile', [AuthController, 'profile']);
         router.delete('/logout', [AuthController, 'logout']);
+
         router
-          .get('/admin-dashboard', [AdminController, 'adminDashboard'])
-          .use(middleware.role(['admin']));
-        router
-          .get('/screenshots/min', [AdminController, 'screenshotsGrouped10Min'])
-          .use(middleware.role(['admin']));
-        router
-          .get('/screenshots/hour', [AdminController, 'screenshotsGroupedByHour'])
-          .use(middleware.role(['admin']));
-        router
-          .get('/screenshots', [AdminController, 'screenshots'])
-          .use(middleware.role(['admin']));
-        router
-          .get('/users', [AdminController, 'users'])
-          .use(middleware.role(['admin']));
-        router
-          .post('/add-user', [AdminController, 'addUser'])
-          .use(middleware.role(['admin']));
-        router
-          .delete('/admin/user/:id', [AdminController, 'destroy'])
+          .group(() => {
+            router
+              .group(() => {
+                router.get('/min', [AdminController,'screenshotsGrouped10Min']);
+                router.get('/hour', [AdminController,'screenshotsGroupedByHour']);
+                router.get('/', [AdminController, 'screenshots']);
+              })
+              .prefix('/screenshots');
+            router.get('/users', [AdminController, 'users']);
+            router.post('/add-user', [AdminController, 'addUser']);
+            router.get('/admin-dashboard', [AdminController, 'adminDashboard']);
+            router.delete('/admin/user/:id', [AdminController, 'destroy']);
+          })
           .use(middleware.role(['admin']));
       })
       .prefix('/auth');
@@ -63,10 +58,6 @@ router
     router
       .group(() => {
         router.post('/upload', [ScreenshotController, 'upload']);
-        // router.post('/bulk-upload', [ScreenshotController, 'bulkUpload']);
-        // router.get('/', [ScreenshotController, 'list']);
-        // router.get('/grouped', [ScreenshotController, 'grouped']);
-        // router.delete('/:id', [ScreenshotController, 'delete']);
       })
       .prefix('/screenshots');
   })
