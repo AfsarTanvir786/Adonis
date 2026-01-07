@@ -3,28 +3,20 @@ import Company from '#models/company';
 
 export default class CompanySeeder extends BaseSeeder {
   async run() {
-    await Company.updateOrCreateMany('name', [
-      {
-        name: 'Appifylab',
-        ownerName: 'John Doe',
-        ownerEmail: 'owner@appifylab.com',
-        planSectionId: 1,
+    const companies = [];
+
+    for (let i = 1; i <= 100; i++) {
+      const index = i.toString().padStart(4, '0');
+
+      companies.push({
+        planSectionId: Math.floor(Math.random() * 4) + 1, // 1–4
+        name: `company${index}`,
+        ownerName: `owner_company${index}`,
+        ownerEmail: `owner@company${index}.com`,
         isActive: true,
-      },
-      {
-        name: 'Ezycourse',
-        ownerName: 'Jane Smith',
-        ownerEmail: 'owner@ezycourse.com',
-        planSectionId: 2,
-        isActive: true,
-      },
-      {
-        name: 'localhost',
-        ownerName: 'Afsar Tanvir',
-        ownerEmail: 'owner@localhost.com',
-        planSectionId: 4,
-        isActive: true,
-      },
-    ]);
+      });
+    }
+
+    await Company.createMany(companies);
   }
 }
